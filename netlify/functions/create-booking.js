@@ -46,6 +46,39 @@ exports.handler = async (event) => {
     const endDate  = new Date(y, m - 1, d, h, min + 15);
     const endISO   = `${data.date}T${String(endDate.getHours()).padStart(2,'0')}:${String(endDate.getMinutes()).padStart(2,'0')}:00`;
 
+    // Mapeos de valores a texto legible
+    const situationMap = {
+      active: 'Tengo portafolio activo y quiero optimizarlo',
+      losses: 'Tengo inversiones en pérdidas y necesito orientación',
+      new:    'Soy nuevo, quiero empezar desde cero',
+    };
+    const experienceMap = {
+      active:    'Ya tenemos un proyecto blockchain activo',
+      idea:      'Tenemos la idea pero no sabemos por dónde empezar',
+      exploring: 'Solo estamos explorando posibilidades',
+    };
+    const budgetMap = {
+      small:  'Menos de $5,000',
+      medium: '$5,000 – $20,000',
+      large:  '$20,000 – $100,000',
+      xlarge: 'Más de $100,000',
+    };
+    const goalsMap = {
+      dca:       'Estrategia de inversión a largo plazo (DCA, Bitcoin)',
+      trading:   'Trading y análisis técnico',
+      security:  'Seguridad y custodia de activos',
+      diversify: 'Diversificación de portafolio',
+      tokenize:  'Tokenizar un activo o empresa',
+      payments:  'Aceptar pagos en criptomonedas',
+      nft:       'Lanzar NFTs / colección digital',
+      coin:      'Crear su propia criptomoneda',
+      rwa:       'Activos del mundo real (RWA)',
+      consulting:'Consultoría blockchain general',
+    };
+    const situationText = situationMap[data.situation] || experienceMap[data.experience] || data.situation || data.experience || '-';
+    const budgetText    = budgetMap[data.budget] || data.budget || '-';
+    const goalsText     = (data.goals || '-').split(', ').map(g => goalsMap[g] || g).join(', ');
+
     // 3. Crear evento con Google Meet
     const calRes = await fetch(
       'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=all',
@@ -61,11 +94,12 @@ exports.handler = async (event) => {
             `👤 Nombre: ${data.name}`,
             `📧 Email: ${data.email}`,
             `📱 Teléfono: ${data.phone || '-'}`,
-            `🏷️ Tipo: ${data.clientType || '-'}`,
-            `📋 Situación: ${data.situation || data.experience || '-'}`,
-            `🎯 Objetivos: ${data.goals || '-'}`,
-            `💰 Presupuesto: ${data.budget || '-'}`,
-          ].join('\n'),
+            `🏷️ Tipo: ${data.clientType === 'empresa' ? 'Empresa' : 'Persona/Individuo'}`,
+            data.companyName ? `🏢 Empresa: ${data.companyName}` : '',
+            `📋 Situación: ${situationText}`,
+            `🎯 Objetivos: ${goalsText}`,
+            `💰 Presupuesto: ${budgetText}`,
+          ].filter(Boolean).join('\n'),
           start: {
             dateTime: startISO,
             timeZone: 'America/Santiago',
@@ -104,39 +138,6 @@ exports.handler = async (event) => {
     const meetLink = calData.conferenceData?.entryPoints?.[0]?.uri || '';
 
     // 4. Enviar email de notificación inmediata a juliam
-    const situationMap = {
-      active: 'Tengo portafolio activo y quiero optimizarlo',
-      losses: 'Tengo inversiones en pérdidas y necesito orientación',
-      new:    'Soy nuevo, quiero empezar desde cero',
-    };
-    const experienceMap = {
-      active:    'Ya tenemos un proyecto blockchain activo',
-      idea:      'Tenemos la idea pero no sabemos por dónde empezar',
-      exploring: 'Solo estamos explorando posibilidades',
-    };
-    const budgetMap = {
-      small:  'Menos de $5,000',
-      medium: '$5,000 – $20,000',
-      large:  '$20,000 – $100,000',
-      xlarge: 'Más de $100,000',
-    };
-    const goalsMap = {
-      dca:       'Estrategia de inversión a largo plazo (DCA, Bitcoin)',
-      trading:   'Trading y análisis técnico',
-      security:  'Seguridad y custodia de activos',
-      diversify: 'Diversificación de portafolio',
-      tokenize:  'Tokenizar un activo o empresa',
-      payments:  'Aceptar pagos en criptomonedas',
-      nft:       'Lanzar NFTs / colección digital',
-      coin:      'Crear su propia criptomoneda',
-      rwa:       'Activos del mundo real (RWA)',
-      consulting:'Consultoría blockchain general',
-    };
-
-    const situationText = situationMap[data.situation] || experienceMap[data.experience] || data.situation || data.experience || '-';
-    const budgetText    = budgetMap[data.budget] || data.budget || '-';
-    const goalsText     = (data.goals || '-').split(', ').map(g => goalsMap[g] || g).join(', ');
-
     const emailBody = [
       `🔔 NUEVA RESERVA - Madrid Crypto Capital`,
       ``,
