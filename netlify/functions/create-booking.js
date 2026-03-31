@@ -103,6 +103,42 @@ exports.handler = async (event) => {
 
     const meetLink = calData.conferenceData?.entryPoints?.[0]?.uri || '';
 
+    // 4. Enviar email de notificación inmediata a juliam
+    const emailBody = [
+      `Nueva reserva recibida en Madrid Crypto Capital`,
+      ``,
+      `👤 Nombre: ${data.name}`,
+      `📧 Email: ${data.email}`,
+      `📱 Teléfono: ${data.phone || '-'}`,
+      `🏷️ Tipo: ${data.clientType || '-'}`,
+      `📋 Situación: ${data.situation || data.experience || '-'}`,
+      `🎯 Objetivos: ${data.goals || '-'}`,
+      `💰 Presupuesto: ${data.budget || '-'}`,
+      ``,
+      `📅 Fecha: ${data.date}`,
+      `🕐 Hora: ${data.time} (Hora Chile)`,
+      `🎥 Google Meet: ${meetLink}`,
+    ].join('\n');
+
+    const emailRaw = [
+      `To: juliam.madrid7@gmail.com`,
+      `Subject: Nueva reserva: ${data.name} - ${data.date} ${data.time}`,
+      `Content-Type: text/plain; charset=utf-8`,
+      ``,
+      emailBody,
+    ].join('\n');
+
+    const encodedEmail = Buffer.from(emailRaw).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ raw: encodedEmail }),
+    });
+
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true, eventId: calData.id, meetLink }),
