@@ -104,21 +104,55 @@ exports.handler = async (event) => {
     const meetLink = calData.conferenceData?.entryPoints?.[0]?.uri || '';
 
     // 4. Enviar email de notificación inmediata a juliam
+    const situationMap = {
+      active: 'Tengo portafolio activo y quiero optimizarlo',
+      losses: 'Tengo inversiones en pérdidas y necesito orientación',
+      new:    'Soy nuevo, quiero empezar desde cero',
+    };
+    const experienceMap = {
+      active:    'Ya tenemos un proyecto blockchain activo',
+      idea:      'Tenemos la idea pero no sabemos por dónde empezar',
+      exploring: 'Solo estamos explorando posibilidades',
+    };
+    const budgetMap = {
+      small:  'Menos de $5,000',
+      medium: '$5,000 – $20,000',
+      large:  '$20,000 – $100,000',
+      xlarge: 'Más de $100,000',
+    };
+    const goalsMap = {
+      dca:       'Estrategia de inversión a largo plazo (DCA, Bitcoin)',
+      trading:   'Trading y análisis técnico',
+      security:  'Seguridad y custodia de activos',
+      diversify: 'Diversificación de portafolio',
+      tokenize:  'Tokenizar un activo o empresa',
+      payments:  'Aceptar pagos en criptomonedas',
+      nft:       'Lanzar NFTs / colección digital',
+      coin:      'Crear su propia criptomoneda',
+      rwa:       'Activos del mundo real (RWA)',
+      consulting:'Consultoría blockchain general',
+    };
+
+    const situationText = situationMap[data.situation] || experienceMap[data.experience] || data.situation || data.experience || '-';
+    const budgetText    = budgetMap[data.budget] || data.budget || '-';
+    const goalsText     = (data.goals || '-').split(', ').map(g => goalsMap[g] || g).join(', ');
+
     const emailBody = [
-      `Nueva reserva recibida en Madrid Crypto Capital`,
+      `🔔 NUEVA RESERVA - Madrid Crypto Capital`,
       ``,
       `👤 Nombre: ${data.name}`,
       `📧 Email: ${data.email}`,
       `📱 Teléfono: ${data.phone || '-'}`,
-      `🏷️ Tipo: ${data.clientType || '-'}`,
-      `📋 Situación: ${data.situation || data.experience || '-'}`,
-      `🎯 Objetivos: ${data.goals || '-'}`,
-      `💰 Presupuesto: ${data.budget || '-'}`,
+      `🏷️ Tipo de cliente: ${data.clientType === 'empresa' ? 'Empresa' : 'Persona/Individuo'}`,
+      `${data.companyName ? `🏢 Empresa: ${data.companyName}` : ''}`,
+      `📋 Situación: ${situationText}`,
+      `🎯 Objetivos: ${goalsText}`,
+      `💰 Presupuesto: ${budgetText}`,
       ``,
       `📅 Fecha: ${data.date}`,
-      `🕐 Hora: ${data.time} (Hora Chile)`,
+      `🕐 Hora: ${data.time} hrs (Hora Chile)`,
       `🎥 Google Meet: ${meetLink}`,
-    ].join('\n');
+    ].filter(Boolean).join('\n');
 
     const emailRaw = [
       `To: juliam.madrid7@gmail.com`,
