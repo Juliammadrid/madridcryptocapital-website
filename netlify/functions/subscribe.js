@@ -29,7 +29,7 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify({
           email,
-          reactivate_existing: false,
+          reactivate_existing: true,
           send_welcome_email:  true,
         }),
       }
