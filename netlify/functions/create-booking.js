@@ -77,7 +77,8 @@ exports.handler = async (event) => {
     };
     const situationText = situationMap[data.situation] || experienceMap[data.experience] || data.situation || data.experience || '-';
     const budgetText    = budgetMap[data.budget] || data.budget || '-';
-    const goalsText     = (data.goals || '-').split(', ').map(g => goalsMap[g] || g).join(', ');
+    const rawGoals  = data.goals || data.projectType || '-';
+    const goalsText = rawGoals.split(', ').map(g => goalsMap[g] || g).join(', ');
 
     // 3. Crear evento con Google Meet
     const calRes = await fetch(
@@ -145,7 +146,7 @@ exports.handler = async (event) => {
       `📧 Email: ${data.email}`,
       `📱 Teléfono: ${data.phone || '-'}`,
       `🏷️ Tipo de cliente: ${data.clientType === 'empresa' ? 'Empresa' : 'Persona/Individuo'}`,
-      `${data.companyName ? `🏢 Empresa: ${data.companyName}` : ''}`,
+      data.companyName ? `🏢 Empresa: ${data.companyName}` : '',
       `📋 Situación: ${situationText}`,
       `🎯 Objetivos: ${goalsText}`,
       `💰 Presupuesto: ${budgetText}`,
