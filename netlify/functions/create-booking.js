@@ -76,6 +76,7 @@ exports.handler = async (event) => {
           },
           attendees: [
             { email: data.email },
+            { email: 'juliam.madrid7@gmail.com', responseStatus: 'accepted' },
           ],
           conferenceData: {
             createRequest: {
