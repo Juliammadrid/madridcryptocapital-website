@@ -15,8 +15,8 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Email requerido' }) };
   }
 
-  const pubId  = process.env.BEEHIIV_PUBLICATION_ID;
-  const apiKey = process.env.BEEHIIV_API_KEY;
+  const pubId  = process.env.BEEHIIV_PUBLICATION_ID  || 'pub_2491035b-0741-43f9-beb9-9f2b474069fc';
+  const apiKey = process.env.BEEHIIV_API_KEY || 'Bw1UapS1ifi3S5RC1h9xUoAy39mNh5BCxyo9LPzF94N6ra6AN6bfHoWH5tEaiIJa';
 
   try {
     const res = await fetch(
