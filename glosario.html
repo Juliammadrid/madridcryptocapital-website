@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glosario Cripto · Madrid Crypto Capital</title>
+<meta name="description" content="Diccionario completo de criptomonedas y blockchain. Más de 200 términos explicados con claridad por Madrid Crypto Capital.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0052FF;
+  --blue-h:#0044dd;
+  --bg:#08090f;
+  --navy:#0d0f1a;
+  --card:#111320;
+  --border:rgba(255,255,255,.08);
+  --text:rgba(255,255,255,.85);
+  --muted:rgba(255,255,255,.45);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Geist',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-top:100px}
+a{text-decoration:none;color:inherit}
+
+/* ── TICKER ── */
+.ticker{background:#000;border-bottom:1px solid var(--border);height:36px;display:flex;align-items:center;overflow:hidden;gap:0}
+.ticker-pill{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:0 16px;font-size:11px;font-weight:600;letter-spacing:.08em;color:rgba(255,255,255,.55);border-right:1px solid var(--border)}
+.tdot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.ticker-scroll{flex:1;overflow:hidden;position:relative}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:scroll 32s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;border-right:1px solid var(--border);height:36px}
+.t-sym{font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em}
+.t-prc{font-size:11px;color:rgba(255,255,255,.6)}
+.t-chg{font-size:11px;font-weight:600}
+.t-chg.up{color:#22c55e}.t-chg.dn{color:#ef4444}
+
+/* ── NAV ── */
+.page-header{position:fixed;top:0;left:0;right:0;z-index:500;width:100%}
+nav{background:#000;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.nav-inner{max-width:1320px;margin:0 auto;height:66px;display:flex;align-items:center;padding:0 32px}
+.nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;margin-right:56px;padding-left:8px}
+.brand-logo-img{width:200px;height:52px;object-fit:cover;object-position:center 50%;display:block}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{position:relative;height:66px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;border:none;background:none;letter-spacing:-.01em;white-space:nowrap;transition:color .15s}
+.nav-link:hover{color:#fff}
+.nav-link::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:2px;background:#0052FF;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav-link:hover::after,.nav-link.act::after{transform:scaleX(1)}
+.nav-link.act{color:#fff}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-cta{height:42px;padding:0 24px;background:#0052FF;border:none;border-radius:100px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:8px;transition:background .15s,transform .15s}
+.nav-cta:hover{background:#0044dd;transform:translateY(-1px)}
+.nav-cta svg{width:15px;height:15px;flex-shrink:0}
+.ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:8px;cursor:pointer;margin-left:12px}
+.ham-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px}
+@media(max-width:860px){
+  body{padding-top:90px}
+  .nav-inner{padding:0 16px;height:56px}
+  .nav-logo{margin-right:auto}
+  .nav-links{display:none}
+  .nav-cta{display:none}
+  .ham-btn{display:flex}
+}
+.mob-menu{display:none;position:fixed;inset:0;background:#000;z-index:9000;flex-direction:column;overflow-y:auto}
+.mob-menu.open{display:flex}
+.mob-close{align-self:flex-end;background:none;border:none;font-size:30px;color:rgba(255,255,255,.5);padding:20px 24px 10px;line-height:1;cursor:pointer}
+.mob-menu a{font-size:22px;font-weight:500;color:rgba(255,255,255,.7);padding:22px 28px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);display:block}
+.mob-menu a:hover{color:#fff}
+.mob-menu .mob-cta{color:var(--blue);font-weight:700;border-bottom:none;margin-top:12px}
+
+/* ── HERO ── */
+.gl-hero{padding:80px 32px 48px;text-align:center;border-bottom:1px solid var(--border)}
+.gl-hero-inner{max-width:700px;margin:0 auto}
+.gl-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(0,82,255,.12);border:1px solid rgba(0,82,255,.25);color:var(--blue);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:24px}
+.gl-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,88px);line-height:1;letter-spacing:-.01em;color:#fff;margin-bottom:16px}
+.gl-title em{color:var(--blue);font-style:normal}
+.gl-sub{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 36px}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;max-width:480px;margin:0 auto}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+#gl-search{width:100%;height:50px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:#fff;font-size:15px;font-family:inherit;padding:0 16px 0 44px;outline:none;transition:border .2s}
+#gl-search::placeholder{color:var(--muted)}
+#gl-search:focus{border-color:var(--blue)}
+.search-count{margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
+
+/* ── ALPHABET NAV ── */
+.alpha-nav{max-width:1180px;margin:0 auto;padding:28px 32px 0;display:flex;flex-wrap:wrap;gap:8px}
+.alpha-btn{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:inherit}
+.alpha-btn:hover,.alpha-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.alpha-btn.empty{opacity:.3;cursor:default;pointer-events:none}
+
+/* ── GLOSSARY CONTENT ── */
+.gl-content{max-width:1180px;margin:0 auto;padding:32px 32px 80px}
+.gl-section{margin-bottom:48px}
+.gl-section-letter{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blue);margin-bottom:16px;letter-spacing:.02em;line-height:1}
+.gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.gl-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;transition:border .2s,transform .2s}
+.gl-card:hover{border-color:rgba(0,82,255,.35);transform:translateY(-1px)}
+.gl-term{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
+.gl-term-badge{flex-shrink:0;margin-top:2px;background:rgba(0,82,255,.15);border:1px solid rgba(0,82,255,.3);color:var(--blue);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+.gl-def{font-size:13.5px;color:var(--muted);line-height:1.65}
+.gl-empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px;display:none}
+
+/* ── FOOTER ── */
+.site-footer{background:#000;color:rgba(255,255,255,.65);padding:72px 32px 0;margin-top:0;border-top:1px solid var(--border)}
+.footer-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 2.6fr;gap:48px;padding-bottom:56px;border-bottom:1px solid var(--border)}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;text-decoration:none;padding-left:0}
+.footer-tagline{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:28px;max-width:240px}
+.footer-social{display:flex;gap:8px}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s;flex-shrink:0}
+.social-btn svg{width:15px;height:15px;fill:currentColor}
+.social-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);text-decoration:none;margin-bottom:11px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1180px;margin:0 auto;padding:22px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:13px;color:rgba(255,255,255,.3)}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,.3);transition:color .2s}
+.footer-bottom-links a:hover{color:rgba(255,255,255,.7)}
+@media(max-width:900px){
+  .footer-inner{grid-template-columns:1fr;gap:40px}
+  .footer-cols{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .footer-cols{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+  .gl-hero{padding:56px 16px 36px}
+  .gl-content{padding:24px 16px 60px}
+  .alpha-nav{padding:20px 16px 0}
+  .gl-grid{grid-template-columns:1fr}
+}
+
+/* ── HIGHLIGHT ── */
+mark{background:rgba(0,82,255,.25);color:#fff;border-radius:2px;padding:0 2px}
+
+/* ── SCROLL TO TOP ── */
+.scroll-top{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:50%;background:var(--blue);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:50}
+.scroll-top.show{opacity:1;pointer-events:auto}
+.scroll-top:hover{transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+<div class="ticker">
+  <div class="ticker-pill"><div class="tdot"></div>En vivo</div>
+  <div class="ticker-scroll"><div class="ticker-track" id="ticker-track"></div></div>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img"></a>
+    <div class="nav-links">
+      <a href="personas.html" class="nav-link">Individuo</a>
+      <a href="empresas.html" class="nav-link">Empresa</a>
+    </div>
+    <div class="nav-right">
+      <a href="agenda.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="15" r="1.5" fill="currentColor"></circle></svg>
+        Agenda asesoría
+      </a>
+      <button class="ham-btn" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="toggleMenu()">✕</button>
+  <a href="personas.html" onclick="toggleMenu()">Individuo</a>
+  <a href="empresas.html" onclick="toggleMenu()">Empresa</a>
+  <a href="agenda.html" class="mob-cta" onclick="toggleMenu()">Agenda asesoría →</a>
+</div>
+
+<!-- HERO -->
+<section class="gl-hero">
+  <div class="gl-hero-inner">
+    <div class="gl-eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" width="13" height="13"><path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Recurso gratuito
+    </div>
+    <h1 class="gl-title">Glosario <em>Cripto</em></h1>
+    <p class="gl-sub">Más de 200 términos del mundo de las criptomonedas y blockchain explicados con claridad.</p>
+    <div class="search-wrap">
+      <div class="search-icon">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <input type="search" id="gl-search" placeholder="Buscar término… ej: DeFi, wallet, staking">
+    </div>
+    <p class="search-count" id="search-count">208 términos disponibles</p>
+  </div>
+</section>
+
+<!-- ALPHABET NAV -->
+<div class="alpha-nav" id="alpha-nav"></div>
+
+<!-- GLOSSARY -->
+<div class="gl-content">
+  <div id="gl-empty" class="gl-empty">No se encontraron términos para "<span id="empty-q"></span>"</div>
+  <div id="gl-sections"></div>
+</div>
+
+<!-- ===== EMAIL CTA ===== -->
+<section style="background:#fff;padding:80px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:64px;flex-wrap:wrap;">
+
+    <!-- LEFT: texto + formulario -->
+    <div style="flex:1;min-width:280px;">
+      <h2 style="font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;color:#0a0e1a;line-height:1.1;margin:0 0 16px;letter-spacing:-1.5px;">Toma el control<br>de tu dinero</h2>
+      <p style="font-size:1.05rem;color:#4b5563;margin:0 0 28px;max-width:460px;line-height:1.6;">Recibe análisis de mercado, alertas cripto y estrategias de inversión directamente en tu correo.</p>
+      <form id="gl-sub-form" onsubmit="handleGlSubscribe(event)" name="newsletter" data-netlify="true" style="display:flex;gap:10px;flex-wrap:wrap;max-width:500px;">
+        <input type="hidden" name="form-name" value="newsletter">
+        <input id="gl-sub-email" name="email" type="email" placeholder="satoshi@nakamoto.com" required autocomplete="email"
+          style="flex:1;min-width:200px;padding:14px 18px;border:2px solid #e5e7eb;border-radius:12px;font-size:1rem;color:#0a0e1a;background:#f9fafb;outline:none;font-family:inherit;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#0052FF'" onblur="this.style.borderColor='#e5e7eb'">
+        <button type="submit" id="gl-sub-btn"
+          style="padding:14px 28px;background:#0052FF;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;transition:background .2s;">
+          Suscribirse →
+        </button>
+      </form>
+      <p id="gl-sub-note" style="font-size:.85rem;color:#9ca3af;margin:10px 0 16px;">Sin spam. Cancela cuando quieras.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:.82rem;color:#6b7280;">
+        <span>🔒 Datos protegidos</span><span>·</span>
+        <span>+1000 inversores activos</span><span>·</span>
+        <span>Gratis para siempre</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: cluster de coins -->
+    <div style="flex:0 0 auto;">
+      <div style="display:grid;grid-template-rows:auto auto auto;gap:16px;align-items:center;">
+        <div style="display:flex;gap:16px;justify-content:center;">
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/bitcoin.png" alt="BTC" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/ethereum.png" alt="ETH" style="width:100%;height:100%;object-fit:cover;"></div>
+        </div>
+        <div style="display:flex;gap:16px;justify-content:center;">
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/ripple.png" alt="XRP" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);background:#0a0e1a;padding:12px;box-sizing:border-box;"><img src="logo.png" alt="Madrid Crypto" style="width:100%;height:100%;object-fit:contain;"></div>
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/solana.png" alt="SOL" style="width:100%;height:100%;object-fit:cover;"></div>
+        </div>
+        <div style="display:flex;gap:16px;justify-content:center;">
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/binancecoin.png" alt="BNB" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);"><img src="coins/cardano.png" alt="ADA" style="width:100%;height:100%;object-fit:cover;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function handleGlSubscribe(e){
+  e.preventDefault();
+  var btn=document.getElementById('gl-sub-btn');
+  var note=document.getElementById('gl-sub-note');
+  var email=document.getElementById('gl-sub-email').value.trim();
+  btn.disabled=true; btn.textContent='Enviando...';
+  fetch('/.netlify/functions/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success){note.textContent='✅ ¡Suscrito! Revisa tu correo.';note.style.color='#16a34a';btn.textContent='¡Listo!';}
+      else{note.textContent='Error: '+(d.error||'Intenta de nuevo');note.style.color='#dc2626';btn.disabled=false;btn.textContent='Suscribirse →';}
+    }).catch(function(){
+      note.textContent='Hubo un error. Intenta de nuevo.';
+      note.style.color='#dc2626';
+      btn.disabled=false; btn.textContent='Suscribirse →';
+    });
+}
+</script>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">
+        <img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img">
+      </a>
+      <p class="footer-tagline">Tu puerta al mundo de las criptomonedas. Asesoría profesional desde Chile para toda Latinoamérica y el mundo.</p>
+      <div class="footer-social">
+        <a href="https://x.com/MadridCrypto" target="_blank" class="social-btn" aria-label="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/company/madrid-crypto-capital" target="_blank" class="social-btn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://facebook.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://instagram.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@MadridCryptoCapital" target="_blank" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios Gratuitos</div>
+        <a href="dca.html">Calculadora Bitcoin DCA</a>
+        <a href="mercado.html">Mercado en Vivo</a>
+        <a href="glosario.html">Glosario Cripto</a>
+        <a href="fear-greed.html">Índice de Codicia y Miedo</a>
+        <a href="https://chatgpt.com/g/g-69c6acf9bf3c8191b7ee6dfaf076032c-asesor-digital-madrid-crypto-capital" target="_blank" rel="noopener">Asesor IA gratuito</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Empresa</div>
+        <a href="personas.html">Individuo</a>
+        <a href="empresas.html">Empresa</a>
+        <a href="agenda.html">Agendar asesoría</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Política de cookies</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:Contacto@madridcryptocapital.com">Contacto@madridcryptocapital.com</a>
+        <a href="tel:+56944717233">+56 9 4471 7233</a>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;line-height:1.6;">Manquehue Sur 350, of. 201<br>Santiago, Chile 🇨🇱</p>
+        <a href="https://wa.me/56944717233" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2021 Madrid Crypto Capital · Todos los derechos reservados</p>
+    <div class="footer-bottom-links">
+      <a href="politica-privacidad.html">Política de privacidad</a>
+      <a href="politica-cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script>
+// ── GLOSSARY DATA ──
+const TERMS = [
+  // A
+  {t:"Airdrop",l:"A",c:"DeFi",d:"Distribución gratuita de tokens a direcciones de wallet que cumplen ciertos requisitos, usada como estrategia de marketing o recompensa a la comunidad de un proyecto."},
+  {t:"Altcoin",l:"A",c:"General",d:"Cualquier criptomoneda distinta a Bitcoin. El término proviene de 'alternative coin'. Incluye Ethereum, Solana, XRP y miles de proyectos más."},
+  {t:"AMM",l:"A",c:"DeFi",d:"Automated Market Maker. Protocolo descentralizado que usa fórmulas matemáticas para fijar el precio de los activos en un pool de liquidez, sin necesidad de libro de órdenes tradicional."},
+  {t:"Analisis on-chain",l:"A",c:"Trading",d:"Estudio de los datos registrados directamente en la blockchain, como flujos de wallets, volumen de transacciones y comportamiento de holders, para tomar decisiones de inversión."},
+  {t:"ATH",l:"A",c:"Trading",d:"All-Time High. El precio máximo histórico alcanzado por una criptomoneda. Es un indicador relevante para traders y analistas de mercado."},
+  {t:"ATL",l:"A",c:"Trading",d:"All-Time Low. El precio mínimo histórico de un activo digital. Su distancia respecto al precio actual puede indicar el potencial de recuperación."},
+  {t:"Atomic Swap",l:"A",c:"Blockchain",d:"Intercambio directo entre criptomonedas de diferentes blockchains sin intermediarios, ejecutado automáticamente mediante contratos inteligentes."},
+  {t:"API",l:"A",c:"Tecnología",d:"Application Programming Interface. Conjunto de protocolos que permite a diferentes aplicaciones comunicarse entre sí, fundamental para conectar plataformas cripto con servicios externos."},
+
+  // B
+  {t:"Bear Market",l:"B",c:"Trading",d:"Mercado bajista prolongado en el que los precios caen un 20% o más desde sus máximos. En cripto suele ir acompañado de baja actividad y pesimismo generalizado."},
+  {t:"Bitcoin (BTC)",l:"B",c:"General",d:"Primera criptomoneda descentralizada, creada en 2009 por Satoshi Nakamoto. Opera sin banco central, su emisión está limitada a 21 millones de unidades y es la de mayor capitalización."},
+  {t:"Blockchain",l:"B",c:"Tecnología",d:"Registro distribuido e inmutable formado por bloques de transacciones encadenados criptográficamente. Funciona sin autoridad central y es la base tecnológica de las criptomonedas."},
+  {t:"Block",l:"B",c:"Tecnología",d:"Unidad de almacenamiento de transacciones en una blockchain. Cada bloque contiene un conjunto de operaciones validadas y un hash del bloque anterior, formando una cadena."},
+  {t:"Block Reward",l:"B",c:"Minería",d:"Recompensa que recibe un minero o validador por añadir un nuevo bloque a la blockchain. En Bitcoin incluye nuevos BTC emitidos más las comisiones de transacción."},
+  {t:"Bridge",l:"B",c:"DeFi",d:"Protocolo que permite transferir activos entre dos blockchains distintas. Es esencial para la interoperabilidad del ecosistema cripto pero también supone un punto de riesgo si no está bien auditado."},
+  {t:"Bull Market",l:"B",c:"Trading",d:"Mercado alcista en el que los precios suben sostenidamente. En cripto suele caracterizarse por alta especulación, nuevos máximos históricos y entrada masiva de capital."},
+  {t:"Burn",l:"B",c:"Tokenomía",d:"Destrucción permanente de tokens enviándolos a una dirección inaccesible. Se usa para reducir el suministro circulante y generar presión deflacionaria sobre el precio."},
+
+  // C
+  {t:"CEX",l:"C",c:"Exchange",d:"Centralized Exchange. Plataforma de intercambio de criptomonedas gestionada por una empresa central, como Binance o Coinbase. Requiere KYC y custodia los fondos del usuario."},
+  {t:"Cold Wallet",l:"C",c:"Seguridad",d:"Billetera que almacena claves privadas sin conexión a internet, como un dispositivo hardware (Ledger, Trezor). Es la forma más segura de custodiar criptoactivos a largo plazo."},
+  {t:"Contrato Inteligente",l:"C",c:"Tecnología",d:"Programa autoejecutado que vive en la blockchain y cumple automáticamente sus condiciones cuando se satisfacen ciertos criterios, sin necesidad de intermediarios."},
+  {t:"Criptomoneda",l:"C",c:"General",d:"Moneda digital que usa criptografía para asegurar transacciones y controlar la emisión de nuevas unidades. Opera en redes descentralizadas basadas en blockchain."},
+  {t:"Criptografía",l:"C",c:"Tecnología",d:"Ciencia de cifrar información para protegerla. En blockchain se usa para asegurar transacciones, generar direcciones y firmar operaciones sin revelar claves privadas."},
+  {t:"CBDC",l:"C",c:"General",d:"Central Bank Digital Currency. Moneda digital emitida y controlada por un banco central. A diferencia de las criptos, es centralizada y puede ser programable por el gobierno."},
+  {t:"Capitalización de mercado",l:"C",c:"Trading",d:"Market Cap. Valor total de una criptomoneda en circulación, calculado multiplicando el precio por el número de tokens en circulación. Indicador clave del tamaño de un proyecto."},
+  {t:"Custodia",l:"C",c:"Seguridad",d:"Control sobre las claves privadas de una wallet. La auto-custodia significa que el usuario guarda sus propias claves; la custodia delegada implica que un tercero (exchange) las controla."},
+
+  // D
+  {t:"DAO",l:"D",c:"DeFi",d:"Decentralized Autonomous Organization. Organización gobernada por smart contracts y votación de sus miembros mediante tokens. Las decisiones se toman de forma descentralizada y transparente."},
+  {t:"DCA",l:"D",c:"Estrategia",d:"Dollar Cost Averaging. Estrategia de inversión que consiste en comprar un activo de forma periódica con una cantidad fija, independientemente del precio, reduciendo el impacto de la volatilidad."},
+  {t:"DeFi",l:"D",c:"DeFi",d:"Decentralized Finance. Ecosistema de aplicaciones financieras construidas sobre blockchains públicas que operan sin intermediarios bancarios: préstamos, intercambios, derivados y más."},
+  {t:"DEX",l:"D",c:"Exchange",d:"Decentralized Exchange. Plataforma de intercambio sin custodia central que opera mediante contratos inteligentes. El usuario mantiene el control de sus fondos en todo momento."},
+  {t:"Dominancia de Bitcoin",l:"D",c:"Trading",d:"Porcentaje del market cap total de criptomonedas que corresponde a Bitcoin. Un aumento suele indicar huida hacia activos más seguros; una caída puede señalar temporada de altcoins."},
+  {t:"Double Spending",l:"D",c:"Tecnología",d:"El problema de gastar la misma unidad digital dos veces. Bitcoin fue el primer sistema en resolver este problema de forma descentralizada mediante el mecanismo de consenso Proof of Work."},
+  {t:"DYOR",l:"D",c:"General",d:"Do Your Own Research. Principio fundamental en el mundo cripto que insta a los inversores a investigar por su cuenta antes de tomar decisiones, sin depender únicamente de terceros."},
+
+  // E
+  {t:"Emisión",l:"E",c:"Tokenomía",d:"Proceso de creación y puesta en circulación de nuevos tokens o criptomonedas. Puede ser inflacionaria (continua) o deflacionaria (limitada o con burn asociado)."},
+  {t:"ERC-20",l:"E",c:"Tecnología",d:"Estándar de token más popular en la red Ethereum. Define un conjunto de reglas que los tokens deben seguir para ser compatibles con la mayoría de wallets y exchanges del ecosistema."},
+  {t:"ERC-721",l:"E",c:"NFT",d:"Estándar de token no fungible (NFT) en Ethereum. Cada token es único e indivisible, lo que lo hace adecuado para representar obras de arte digital, coleccionables y activos únicos."},
+  {t:"Ethereum (ETH)",l:"E",c:"General",d:"Blockchain programable con contratos inteligentes, creada por Vitalik Buterin en 2015. Es la plataforma líder de DeFi y NFTs. Migró de Proof of Work a Proof of Stake en 2022 (The Merge)."},
+  {t:"Exchange",l:"E",c:"Exchange",d:"Plataforma donde se compran, venden e intercambian criptomonedas. Pueden ser centralizadas (CEX) o descentralizadas (DEX), con diferentes modelos de custodia y liquidez."},
+
+  // F
+  {t:"Farming",l:"F",c:"DeFi",d:"Yield Farming. Estrategia DeFi en la que se depositan activos en protocolos de liquidez a cambio de recompensas en tokens. Puede generar altos rendimientos pero conlleva riesgos como el impermanent loss."},
+  {t:"Fiat",l:"F",c:"General",d:"Moneda emitida por un gobierno (USD, EUR, CLP) sin respaldo en commodity físico. En cripto se usa para referirse a las monedas tradicionales en contraste con los activos digitales."},
+  {t:"Flash Loan",l:"F",c:"DeFi",d:"Préstamo sin colateral disponible en DeFi que debe ser obtenido y devuelto en la misma transacción blockchain. Se usa para arbitraje y liquidaciones, pero también ha sido explotado."},
+  {t:"Fork",l:"F",c:"Blockchain",d:"División del código de una blockchain que crea dos caminos distintos. Un soft fork es compatible hacia atrás; un hard fork genera una nueva cadena independiente, como Bitcoin Cash surgió de Bitcoin."},
+  {t:"FOMO",l:"F",c:"Trading",d:"Fear of Missing Out. Miedo a quedarse fuera de una subida de precio. Es uno de los principales desencadenantes de decisiones emocionales en los mercados cripto."},
+  {t:"FUD",l:"F",c:"Trading",d:"Fear, Uncertainty and Doubt. Noticias negativas, rumores o información falsa que generan miedo e incertidumbre en el mercado, a menudo usados para manipular el precio a la baja."},
+  {t:"Fungibilidad",l:"F",c:"General",d:"Propiedad de un activo donde cada unidad es idéntica e intercambiable con otra. Bitcoin es fungible (1 BTC = 1 BTC); los NFTs no lo son porque cada uno es único."},
+
+  // G
+  {t:"Gas",l:"G",c:"Tecnología",d:"Unidad que mide el trabajo computacional necesario para ejecutar operaciones en Ethereum. El usuario paga una tarifa en ETH proporcional al gas consumido para compensar a los validadores."},
+  {t:"Gas Fee",l:"G",c:"Tecnología",d:"Comisión pagada en ETH para ejecutar transacciones o contratos en Ethereum. Varía según la congestión de la red; en momentos de alta demanda puede ser significativamente elevada."},
+  {t:"Genesis Block",l:"G",c:"Blockchain",d:"El primer bloque de una blockchain. Para Bitcoin, fue minado por Satoshi Nakamoto el 3 de enero de 2009 con el mensaje: 'The Times 03/Jan/2009 Chancellor on brink of second bailout for banks'."},
+  {t:"Gobernanza",l:"G",c:"DeFi",d:"Sistema mediante el cual los poseedores de tokens de un protocolo votan sobre cambios en el código, parámetros del protocolo o destino de los fondos del tesoro."},
+
+  // H
+  {t:"Halving",l:"H",c:"Bitcoin",d:"Evento programado que reduce a la mitad la recompensa por bloque minado en Bitcoin, ocurriendo aproximadamente cada 4 años (cada 210.000 bloques). Históricamente precede a ciclos alcistas."},
+  {t:"Hash",l:"H",c:"Tecnología",d:"Función criptográfica que convierte cualquier input en una cadena de longitud fija e irreversible. Es fundamental para asegurar la integridad de los datos en blockchain."},
+  {t:"Hashrate",l:"H",c:"Minería",d:"Poder computacional total dedicado a minar en una red blockchain. Un hashrate alto indica mayor seguridad de la red, ya que sería más costoso para un atacante tomar el control."},
+  {t:"HODL",l:"H",c:"Estrategia",d:"Estrategia de inversión que consiste en comprar y mantener criptomonedas a largo plazo sin vender, independientemente de la volatilidad del mercado. Surgió de un error tipográfico de 'hold'."},
+  {t:"Hot Wallet",l:"H",c:"Seguridad",d:"Billetera conectada a internet, como una app móvil o extensión de navegador. Es conveniente para uso diario pero más vulnerable a hackeos que una cold wallet."},
+
+  // I
+  {t:"ICO",l:"I",c:"General",d:"Initial Coin Offering. Método de financiación en el que un proyecto vende tokens nuevos al público para recaudar capital. Popular en 2017-2018, hoy regulado o reemplazado por IDO e IEO."},
+  {t:"IDO",l:"I",c:"DeFi",d:"Initial DEX Offering. Lanzamiento de tokens directamente en un exchange descentralizado. Permite mayor acceso al público desde el primer momento, sin intermediarios centralizados."},
+  {t:"Impermanent Loss",l:"I",c:"DeFi",d:"Pérdida temporal que experimentan los proveedores de liquidez en AMMs cuando el precio de sus activos cambia respecto al momento del depósito. Se hace permanente al retirar liquidez."},
+  {t:"Inflación",l:"I",c:"Tokenomía",d:"En cripto, aumento del suministro circulante de un token con el tiempo. Algunos proyectos son inflacionarios para incentivar la participación; otros tienen suministro fijo o mecanismos de burn."},
+  {t:"Interoperabilidad",l:"I",c:"Blockchain",d:"Capacidad de diferentes blockchains para comunicarse y transferir información o activos entre sí. Proyectos como Polkadot y Cosmos buscan crear un ecosistema multichain interoperable."},
+
+  // K
+  {t:"KYC",l:"K",c:"Regulación",d:"Know Your Customer. Proceso de verificación de identidad que los exchanges centralizados exigen a sus usuarios para cumplir con normativas contra el lavado de dinero y financiamiento del terrorismo."},
+  {t:"Keys (Claves)",l:"K",c:"Seguridad",d:"Par criptográfico formado por una clave pública (dirección visible para enviar fondos) y una clave privada (contraseña secreta para firmar transacciones). Quien controla las claves, controla los fondos."},
+
+  // L
+  {t:"Layer 1",l:"L",c:"Blockchain",d:"La blockchain base o principal, como Bitcoin o Ethereum. Es la capa fundamental que procesa y finaliza las transacciones directamente en la cadena principal."},
+  {t:"Layer 2",l:"L",c:"Blockchain",d:"Solución construida sobre una Layer 1 para escalar su capacidad. Procesa transacciones fuera de la cadena principal y las liquida en lotes, reduciendo costos y aumentando velocidad."},
+  {t:"Ledger",l:"L",c:"Blockchain",d:"Registro contable. En blockchain, es el libro distribuido e inmutable donde se registran todas las transacciones. También es el nombre de un popular fabricante de hardware wallets."},
+  {t:"Liquidez",l:"L",c:"Trading",d:"Facilidad con la que un activo puede comprarse o venderse sin afectar significativamente su precio. Alta liquidez implica mercados eficientes; baja liquidez puede causar grandes slippages."},
+  {t:"Liquidación",l:"L",c:"Trading",d:"Cierre forzado de una posición de trading cuando el margen disponible cae por debajo del nivel mínimo requerido. En cripto apalancado, puede suponer la pérdida total del capital depositado."},
+  {t:"Long",l:"L",c:"Trading",d:"Posición que apuesta al alza de un activo. Un trader que está 'long' en Bitcoin espera que su precio suba para obtener beneficios."},
+
+  // M
+  {t:"Market Maker",l:"M",c:"Trading",d:"Entidad que proporciona liquidez en un mercado publicando órdenes de compra y venta. En DeFi, los AMMs automatizan esta función mediante algoritmos matemáticos."},
+  {t:"Mempool",l:"M",c:"Tecnología",d:"Memory Pool. Área de espera donde se almacenan las transacciones pendientes de ser incluidas en un bloque. Los mineros priorizan las de mayor comisión."},
+  {t:"Metaverso",l:"M",c:"Web3",d:"Entorno virtual tridimensional persistente donde los usuarios interactúan mediante avatares. En cripto, los metaversos usan NFTs y tokens para la propiedad de activos digitales."},
+  {t:"Minería",l:"M",c:"Minería",d:"Proceso de validar transacciones y añadir nuevos bloques a una blockchain Proof of Work. Los mineros compiten resolviendo problemas matemáticos y reciben una recompensa por el bloque encontrado."},
+  {t:"Multisig",l:"M",c:"Seguridad",d:"Multi-signature. Wallet que requiere múltiples firmas para autorizar una transacción. Se usa en empresas y DAOs para mayor seguridad, evitando que una sola persona controle los fondos."},
+  {t:"Moon",l:"M",c:"General",d:"Expresión coloquial en la comunidad cripto para describir un aumento drástico del precio de un activo. 'Going to the moon' significa que el activo está subiendo de precio exponencialmente."},
+
+  // N
+  {t:"NFT",l:"N",c:"NFT",d:"Non-Fungible Token. Token único e indivisible que certifica la propiedad de un activo digital. Cada NFT tiene propiedades únicas que lo distinguen de cualquier otro token."},
+  {t:"Nodo",l:"N",c:"Blockchain",d:"Computadora que participa en una red blockchain descentralizada, almacenando una copia del historial de transacciones y validando nuevas operaciones según las reglas del protocolo."},
+  {t:"Nonce",l:"N",c:"Tecnología",d:"Número arbitrario usado solo una vez. En minería Bitcoin, los mineros buscan un nonce que haga que el hash del bloque sea inferior al objetivo de dificultad de la red."},
+
+  // O
+  {t:"Oracle",l:"O",c:"DeFi",d:"Servicio que conecta los contratos inteligentes con datos del mundo real (precios, clima, resultados deportivos). Chainlink es el oráculo descentralizado más utilizado en el ecosistema DeFi."},
+  {t:"Order Book",l:"O",c:"Trading",d:"Lista de órdenes de compra y venta pendientes en un exchange. La diferencia entre la mejor orden de compra y venta se llama spread y es un indicador de la liquidez del mercado."},
+  {t:"OTC",l:"O",c:"Trading",d:"Over The Counter. Operaciones de compraventa de criptomonedas realizadas directamente entre partes sin pasar por un exchange, generalmente para grandes volúmenes con menor impacto en el mercado."},
+
+  // P
+  {t:"P2P",l:"P",c:"Tecnología",d:"Peer-to-Peer. Red o transacción directa entre dos partes sin intermediarios centrales. Es el principio fundamental de Bitcoin y la mayoría de blockchains públicas."},
+  {t:"Palancamiento",l:"P",c:"Trading",d:"Uso de capital prestado para amplificar el tamaño de una posición. Un apalancamiento de 10x con $100 controla $1.000. Multiplica ganancias pero también pérdidas y riesgo de liquidación."},
+  {t:"Permissionless",l:"P",c:"Blockchain",d:"Sin permiso. Característica de los protocolos blockchain públicos que permite a cualquier persona participar sin necesidad de aprobación de ninguna autoridad central."},
+  {t:"Pool de Liquidez",l:"P",c:"DeFi",d:"Reserva de tokens bloqueados en un contrato inteligente que proporciona liquidez para swaps en un DEX. Los aportantes de liquidez reciben comisiones proporcionales a su participación."},
+  {t:"Portfolio",l:"P",c:"Inversión",d:"Conjunto de activos cripto que posee un inversor. Una estrategia de portfolio diversificado busca equilibrar riesgo y rendimiento entre distintos activos con diferentes perfiles de riesgo."},
+  {t:"PoS",l:"P",c:"Tecnología",d:"Proof of Stake. Mecanismo de consenso donde los validadores depositan tokens como colateral para proponer y validar bloques. Es más eficiente energéticamente que Proof of Work."},
+  {t:"PoW",l:"P",c:"Tecnología",d:"Proof of Work. Mecanismo de consenso donde los mineros compiten resolviendo problemas matemáticos para validar transacciones. Bitcoin usa PoW. Requiere gran consumo computacional y energético."},
+  {t:"Privacidad",l:"P",c:"Blockchain",d:"En cripto, se refiere a la capacidad de realizar transacciones sin revelar la identidad o los detalles del usuario. Monero y Zcash son ejemplos de criptomonedas enfocadas en privacidad."},
+  {t:"Protocolo",l:"P",c:"Tecnología",d:"Conjunto de reglas que rigen el funcionamiento de una red blockchain o aplicación descentralizada. Define cómo se validan transacciones, se emiten tokens y se toman decisiones de gobernanza."},
+
+  // R
+  {t:"Rally",l:"R",c:"Trading",d:"Subida pronunciada y sostenida del precio de un activo. En cripto, los rallies suelen venir impulsados por catalizadores como el halving, aprobaciones regulatorias o adopción institucional."},
+  {t:"Rebase",l:"R",c:"Tokenomía",d:"Mecanismo que ajusta automáticamente el suministro de un token para mantener un precio objetivo. El balance en la wallet del usuario cambia, pero su porcentaje de participación se mantiene."},
+  {t:"Regulación",l:"R",c:"Regulación",d:"Marco legal que gobierna el uso, emisión y negociación de criptomonedas. Varía significativamente por país: desde su prohibición total hasta su reconocimiento como activo legal de curso."},
+  {t:"Rekt",l:"R",c:"General",d:"Término coloquial para describir pérdidas severas en el mercado cripto, derivado de 'wrecked' (destrozado). Un trader 'rekt' ha perdido la mayor parte o la totalidad de su inversión."},
+  {t:"Rendimiento (Yield)",l:"R",c:"DeFi",d:"Retorno generado por activos cripto depositados en protocolos DeFi, staking o pools de liquidez. Se expresa en APY (Annual Percentage Yield) e incluye comisiones y recompensas en tokens."},
+  {t:"Resistencia",l:"R",c:"Trading",d:"Nivel de precio donde la presión vendedora supera a la compradora, dificultando que el precio siga subiendo. Si se rompe al alza, suele convertirse en soporte."},
+  {t:"ROI",l:"R",c:"Inversión",d:"Return on Investment. Métrica que mide el beneficio o pérdida de una inversión en relación a su costo. En cripto: ((precio actual - precio compra) / precio compra) × 100."},
+  {t:"Rugpull",l:"R",c:"Seguridad",d:"Estafa en la que los creadores de un proyecto cripto retiran la liquidez o abandonan el proyecto repentinamente, dejando a los inversores con tokens sin valor. Frecuente en proyectos DeFi no auditados."},
+  {t:"RWA",l:"R",c:"DeFi",d:"Real World Assets. Tokenización de activos del mundo real como inmuebles, deuda, commodities o arte sobre blockchain, para hacerlos más accesibles, divisibles y negociables globalmente."},
+
+  // S
+  {t:"Satoshi",l:"S",c:"Bitcoin",d:"La unidad más pequeña de Bitcoin: 0.00000001 BTC (un cienmillonésimo). Se usa para expresar cantidades muy pequeñas. También es el seudónimo del creador de Bitcoin: Satoshi Nakamoto."},
+  {t:"Seed Phrase",l:"S",c:"Seguridad",d:"Frase semilla. Serie de 12 o 24 palabras que sirve como copia de seguridad maestra de una wallet. Quien la posee tiene control total sobre los fondos. Nunca debe compartirse ni almacenarse digitalmente."},
+  {t:"Shitcoin",l:"S",c:"General",d:"Término despectivo para criptomonedas sin utilidad real, fundamentos sólidos o equipo legítimo. Muchas tienen alta volatilidad a corto plazo y luego pierden prácticamente todo su valor."},
+  {t:"Slippage",l:"S",c:"Trading",d:"Diferencia entre el precio esperado de una orden y el precio al que se ejecuta realmente. Ocurre en mercados de baja liquidez o con órdenes muy grandes respecto al volumen disponible."},
+  {t:"Smart Contract",l:"S",c:"Tecnología",d:"Contrato inteligente. Programa autoejecutado en blockchain que define y cumple sus condiciones automáticamente sin intermediarios. Son la base de DeFi, NFTs y las aplicaciones Web3."},
+  {t:"Snapshot",l:"S",c:"Blockchain",d:"Captura del estado de una blockchain en un momento específico: quién posee qué. Se usa para airdrops, gobernanza on-chain y bifurcaciones para determinar elegibilidad de nuevos tokens."},
+  {t:"Solana (SOL)",l:"S",c:"General",d:"Blockchain de alta velocidad que procesa miles de transacciones por segundo con costos mínimos. Es popular en NFTs, DeFi y aplicaciones gaming gracias a su escalabilidad y velocidad."},
+  {t:"Soporte",l:"S",c:"Trading",d:"Nivel de precio donde la demanda supera a la oferta, evitando que el precio caiga más. Si se rompe a la baja, suele convertirse en resistencia."},
+  {t:"Stablecoin",l:"S",c:"DeFi",d:"Criptomoneda diseñada para mantener un valor estable, generalmente anclada al dólar. Ejemplos: USDT, USDC (respaldadas por fiat) o DAI (algorítmica y colateralizada por cripto)."},
+  {t:"Staking",l:"S",c:"DeFi",d:"Proceso de bloquear tokens en una red Proof of Stake para participar en la validación de transacciones a cambio de recompensas. También puede referirse a depositar tokens en protocolos DeFi para obtener rendimientos."},
+  {t:"Supply",l:"S",c:"Tokenomía",d:"Cantidad total de tokens de una criptomoneda. El Max Supply es el límite máximo, el Total Supply es el emitido y el Circulating Supply es el que circula activamente en el mercado."},
+  {t:"Swap",l:"S",c:"DeFi",d:"Intercambio directo de una criptomoneda por otra. En DEXs como Uniswap, el swap se ejecuta directamente desde la wallet del usuario contra un pool de liquidez, sin libros de órdenes."},
+
+  // T
+  {t:"Token",l:"T",c:"General",d:"Unidad digital de valor creada sobre una blockchain existente. A diferencia de las monedas nativas de cada red, los tokens se construyen usando estándares como ERC-20 sobre Ethereum."},
+  {t:"Tokenomía",l:"T",c:"Tokenomía",d:"Conjunto de reglas económicas que rigen un token: supply máximo, distribución inicial, inflación, mecanismos de quema, vesting de inversores y cómo se generan incentivos dentro del protocolo."},
+  {t:"TPS",l:"T",c:"Tecnología",d:"Transactions Per Second. Métrica de rendimiento de una blockchain. Bitcoin procesa ~7 TPS, Ethereum ~30 TPS, mientras Solana puede superar 65.000 TPS en condiciones óptimas."},
+  {t:"Trading",l:"T",c:"Trading",d:"Compraventa activa de activos con el objetivo de obtener beneficios de los movimientos de precio a corto, medio o largo plazo, a diferencia del HODL que es una estrategia pasiva."},
+  {t:"TVL",l:"T",c:"DeFi",d:"Total Value Locked. Valor total de activos depositados en un protocolo DeFi. Es el indicador principal para medir el tamaño y la salud de un protocolo de finanzas descentralizadas."},
+
+  // U
+  {t:"Utilidad (Token)",l:"U",c:"General",d:"Un token tiene utilidad cuando cumple una función dentro de su ecosistema: pagar comisiones, acceder a servicios, votar en gobernanza o incentivar comportamientos específicos en el protocolo."},
+  {t:"USDT / Tether",l:"U",c:"DeFi",d:"La stablecoin de mayor capitalización del mercado, emitida por Tether. Está anclada al dólar americano y es ampliamente usada para trading y transferencias en todo el ecosistema cripto."},
+  {t:"USDC",l:"U",c:"DeFi",d:"USD Coin. Stablecoin respaldada por dólares reales, emitida por Circle y Coinbase. Considerada más transparente que Tether gracias a auditorías regulares de sus reservas."},
+
+  // V
+  {t:"Validador",l:"V",c:"Blockchain",d:"Participante de una red Proof of Stake que valida transacciones y propone nuevos bloques. Debe depositar tokens como colateral (stake) y puede ser penalizado (slashing) por comportamiento deshonesto."},
+  {t:"Vesting",l:"V",c:"Tokenomía",d:"Período de tiempo durante el cual los tokens asignados a fundadores, inversores o equipo van siendo liberados gradualmente. Protege a la comunidad contra ventas masivas repentinas."},
+  {t:"Volatilidad",l:"V",c:"Trading",d:"Medida de la variación del precio de un activo en el tiempo. Las criptomonedas son conocidas por su alta volatilidad: pueden subir o bajar un 20-50% en días, lo que genera oportunidades y riesgos."},
+  {t:"Volume",l:"V",c:"Trading",d:"Cantidad total de un activo negociado en un período. El volumen alto confirma la dirección de una tendencia; el bajo puede indicar movimientos falsos o poco interés del mercado."},
+
+  // W
+  {t:"Wallet",l:"W",c:"Seguridad",d:"Billetera digital que almacena las claves criptográficas para acceder y gestionar criptomonedas. No guarda los fondos directamente, sino las claves que dan control sobre ellos en la blockchain."},
+  {t:"Web3",l:"W",c:"Web3",d:"Nueva iteración de internet basada en tecnología blockchain y descentralización. Promete dar a los usuarios propiedad sobre sus datos, identidad digital y activos, en oposición al modelo Web2 centralizado."},
+  {t:"Whitepaper",l:"W",c:"General",d:"Documento técnico que describe el funcionamiento, propósito, tecnología y economía de un proyecto cripto. El Bitcoin Whitepaper de Satoshi (2008) es el más influyente de la industria."},
+  {t:"Whale",l:"W",c:"Trading",d:"Término para inversores o entidades que poseen cantidades muy grandes de una criptomoneda. Sus movimientos pueden influir significativamente en el precio de mercado."},
+
+  // X
+  {t:"XRP",l:"X",c:"General",d:"Token nativo de la red Ripple (XRP Ledger), diseñado para transferencias internacionales rápidas y baratas. Es uno de los activos cripto más conocidos, aunque ha tenido disputas legales con la SEC."},
+
+  // Z
+  {t:"Zero-Knowledge Proof",l:"Z",c:"Tecnología",d:"Protocolo criptográfico que permite a una parte demostrar que conoce una información sin revelarla. Usado en blockchains de privacidad y en soluciones Layer 2 (ZK-Rollups) para mayor seguridad y escalabilidad."},
+  {t:"ZK-Rollup",l:"Z",c:"Blockchain",d:"Solución Layer 2 que agrupa miles de transacciones fuera de la cadena principal y las verifica en Ethereum mediante pruebas criptográficas de conocimiento cero, reduciendo costos y aumentando velocidad."},
+
+  // Additional terms to reach 208
+  {t:"Acumulación",l:"A",c:"Trading",d:"Fase del mercado donde los grandes inversores compran gradualmente sin mover demasiado el precio. Generalmente ocurre cerca de mínimos del ciclo y precede a movimientos alcistas importantes."},
+  {t:"Adopción",l:"A",c:"General",d:"Grado en que individuos, empresas y gobiernos usan y aceptan criptomonedas. La adopción masiva es uno de los factores más importantes para el crecimiento sostenido del ecosistema."},
+  {t:"Arbitraje",l:"A",c:"Trading",d:"Estrategia que aprovecha diferencias de precio de un mismo activo en distintos exchanges o mercados para obtener beneficios sin riesgo de mercado, comprando barato y vendiendo caro simultáneamente."},
+  {t:"Bloque génesis",l:"B",c:"Blockchain",d:"El primer bloque de una cadena de bloques. En Bitcoin fue minado el 3 de enero de 2009 por Satoshi Nakamoto y contiene el famoso mensaje sobre el rescate bancario en el Times de ese día."},
+  {t:"Cartera fría",l:"C",c:"Seguridad",d:"Hardware wallet o cold storage. Dispositivo físico que almacena claves privadas sin conexión a internet, como Ledger o Trezor. Máxima seguridad para grandes cantidades de criptoactivos."},
+  {t:"Ciclo del mercado",l:"C",c:"Trading",d:"Patrón repetitivo de expansión y contracción en el mercado cripto, influenciado por el halving de Bitcoin. Suele incluir fases de acumulación, bull market, distribución y bear market."},
+  {t:"Colateral",l:"C",c:"DeFi",d:"Activo depositado como garantía para obtener un préstamo en DeFi. Si el valor del colateral cae por debajo del umbral de liquidación, el protocolo lo vende automáticamente para cubrir la deuda."},
+  {t:"Comisión",l:"C",c:"General",d:"Fee cobrado por exchanges o redes blockchain para ejecutar transacciones. En DEXs suele ser un porcentaje del swap; en redes congestionadas como Ethereum puede ser muy elevada."},
+  {t:"Consenso",l:"C",c:"Tecnología",d:"Mecanismo por el cual todos los nodos de una red blockchain se ponen de acuerdo sobre el estado válido del registro. Los más usados son Proof of Work y Proof of Stake."},
+  {t:"Corrección",l:"C",c:"Trading",d:"Caída temporal del precio de un activo después de una subida. Generalmente entre 10-20%. Es considerada saludable dentro de una tendencia alcista y puede ser oportunidad de compra."},
+  {t:"Descentralización",l:"D",c:"Blockchain",d:"Principio que distribuye el control y la toma de decisiones entre múltiples participantes en lugar de concentrarlo en una sola entidad. Es el núcleo filosófico y técnico del ecosistema cripto."},
+  {t:"Dirección",l:"D",c:"Seguridad",d:"Identificador único en la blockchain, derivado de la clave pública, que sirve para recibir criptomonedas. Es público y visible para todos, como un número de cuenta bancaria."},
+  {t:"Distribución",l:"D",c:"Tokenomía",d:"Reparto inicial de tokens entre fundadores, inversores, equipo, comunidad y reservas del protocolo. Una distribución justa y bien diseñada es señal de alineación de incentivos a largo plazo."},
+  {t:"Ecosistema",l:"E",c:"General",d:"Conjunto de proyectos, aplicaciones, herramientas y comunidades construidas sobre una blockchain. Un ecosistema sólido como el de Ethereum refleja mayor utilidad y adopción del activo subyacente."},
+  {t:"Firma digital",l:"F",c:"Tecnología",d:"Mecanismo criptográfico que verifica la autenticidad de una transacción. El usuario firma con su clave privada y cualquiera puede verificar con la clave pública que el firmante es legítimo."},
+  {t:"Finanzas descentralizadas",l:"F",c:"DeFi",d:"Conjunto de aplicaciones financieras construidas sobre blockchain sin intermediarios tradicionales. Incluye préstamos, staking, trading, derivados y seguros descentralizados accesibles a cualquier usuario."},
+  {t:"HODLER",l:"H",c:"Estrategia",d:"Inversor que mantiene sus criptomonedas a largo plazo sin importar la volatilidad del mercado. La estrategia hodl ha demostrado ser históricamente efectiva para Bitcoin a plazos de 4+ años."},
+  {t:"Inflación tokenaria",l:"I",c:"Tokenomía",d:"Aumento del suministro circulante de un token. Puede diluir el valor si no va acompañado de demanda creciente. Muchos protocolos DeFi emiten tokens como recompensa, lo que genera inflación."},
+  {t:"IEO",l:"I",c:"Exchange",d:"Initial Exchange Offering. Lanzamiento de tokens a través de un exchange centralizado que actúa como intermediario y realiza la due diligence del proyecto antes de listarlo."},
+  {t:"Intercambio atómico",l:"I",c:"Blockchain",d:"Atomic swap. Protocolo que permite intercambiar criptomonedas entre diferentes blockchains directamente, sin exchange ni terceros, usando contratos de tiempo bloqueados (HTLC)."},
+  {t:"KYC / AML",l:"K",c:"Regulación",d:"Know Your Customer / Anti-Money Laundering. Procesos regulatorios que los exchanges deben cumplir para verificar la identidad de los usuarios y prevenir el lavado de dinero."},
+  {t:"Libro de órdenes",l:"L",c:"Trading",d:"Order book. Lista de órdenes de compra y venta en un exchange. Refleja la demanda y oferta en tiempo real para un par de trading. Los DEXs sustituyen el libro de órdenes por AMMs."},
+  {t:"Liquidity Mining",l:"L",c:"DeFi",d:"Provisión de liquidez a un protocolo DeFi a cambio de recompensas en tokens nativos. Es el mecanismo principal para atraer capital a los nuevos protocolos descentralizados."},
+  {t:"Mainet",l:"M",c:"Tecnología",d:"Red principal de una blockchain, en producción real con valor económico. Se diferencia de la testnet, que es una red de pruebas sin valor real usada por desarrolladores."},
+  {t:"Mercado bajista",l:"M",c:"Trading",d:"Bear market. Período prolongado de caída de precios con pesimismo generalizado. En cripto, los mercados bajistas suelen durar 1-2 años y pueden suponer caídas del 80-90% desde los máximos."},
+  {t:"Mercado alcista",l:"M",c:"Trading",d:"Bull market. Período de subidas sostenidas impulsado por optimismo y mayor demanda. En Bitcoin, los bull markets suelen comenzar después del halving y pueden llevar el precio a nuevos ATH."},
+  {t:"Metadatos",l:"M",c:"NFT",d:"Información asociada a un NFT que describe sus atributos (nombre, imagen, propiedades). Pueden almacenarse on-chain o en servicios externos como IPFS."},
+  {t:"Mining Pool",l:"M",c:"Minería",d:"Agrupación de mineros que combinan su poder computacional para aumentar la probabilidad de encontrar bloques y compartir las recompensas proporcionalmente a su aportación de hashrate."},
+  {t:"Nativa (moneda)",l:"N",c:"General",d:"Token principal de una blockchain, como ETH en Ethereum o SOL en Solana. Se usa para pagar comisiones de red y suele ser el activo más líquido del ecosistema de esa cadena."},
+  {t:"Off-chain",l:"O",c:"Blockchain",d:"Transacciones o datos procesados fuera de la blockchain principal. Las soluciones Layer 2 operan off-chain para luego liquidar en la cadena principal, reduciendo congestión y costos."},
+  {t:"On-chain",l:"O",c:"Blockchain",d:"Operaciones registradas directamente en la blockchain principal, visibles y verificables por cualquier persona. Son más seguras e inmutables, pero más lentas y costosas que las off-chain."},
+  {t:"Open Source",l:"O",c:"Tecnología",d:"Software con código fuente público y accesible para cualquiera. La mayoría de los protocolos blockchain son open source, lo que permite auditorías independientes y contribuciones de la comunidad."},
+  {t:"Oportunidad de mercado",l:"O",c:"Inversión",d:"Momento o activo que ofrece una relación riesgo/recompensa favorable. En cripto, pueden surgir tras correcciones, eventos como el halving o lanzamiento de nuevos productos en proyectos sólidos."},
+  {t:"Peg",l:"P",c:"DeFi",d:"Anclaje del precio de una stablecoin al activo de referencia, generalmente el dólar. Cuando una stablecoin pierde su peg (desancla), puede colapsar como ocurrió con TerraUSD en 2022."},
+  {t:"Posición corta",l:"P",c:"Trading",d:"Short. Apuesta a la baja del precio de un activo. El trader vende el activo (prestado) con la expectativa de recomprarlo más barato en el futuro y obtener la diferencia como beneficio."},
+  {t:"Posición larga",l:"P",c:"Trading",d:"Long. Posición que se beneficia cuando el precio de un activo sube. Comprar bitcoin esperando que su precio aumente es una posición larga simple sin apalancamiento."},
+  {t:"Proof of Stake",l:"P",c:"Tecnología",d:"Mecanismo de consenso donde los validadores bloquean tokens como garantía para validar transacciones. Ethereum migró a PoS en 2022, reduciendo su consumo energético en más de un 99%."},
+  {t:"Pump and Dump",l:"P",c:"Seguridad",d:"Manipulación de mercado donde se sube artificialmente el precio de un activo mediante compras coordinadas y promoción masiva (pump) para después vender todo y provocar el colapso del precio (dump)."},
+  {t:"Rebalanceo",l:"R",c:"Inversión",d:"Ajuste periódico de la composición de un portfolio para mantener la asignación de activos deseada. En cripto, implica vender los que más han subido y comprar los que más han bajado."},
+  {t:"Red principal",l:"R",c:"Tecnología",d:"Mainnet. La blockchain en producción con valor económico real. Contrasta con la testnet, usada para pruebas de desarrollo sin consecuencias financieras."},
+  {t:"Reinversión",l:"R",c:"Estrategia",d:"Uso de ganancias generadas (staking, yield farming) para aumentar la posición de inversión. El efecto del interés compuesto puede ser poderoso a largo plazo en activos con alta demanda."},
+  {t:"Revisión de código",l:"R",c:"Seguridad",d:"Auditoría del smart contract de un protocolo realizada por empresas especializadas. Reduce el riesgo de bugs y exploits. Proyectos auditados por firmas reconocidas ofrecen mayor seguridad."},
+  {t:"Scalability",l:"S",c:"Blockchain",d:"Escalabilidad. Capacidad de una blockchain para manejar mayor volumen de transacciones sin degradar su rendimiento. Es uno de los trilemmas del blockchain junto a seguridad y descentralización."},
+  {t:"Sector cripto",l:"S",c:"General",d:"Conjunto de industrias relacionadas con criptomonedas: exchanges, DeFi, NFTs, gaming, infraestructura, pagos y servicios financieros construidos sobre tecnología blockchain."},
+  {t:"Seguridad de red",l:"S",c:"Seguridad",d:"Resistencia de una blockchain a ataques. Se mide por el hashrate (en PoW) o por el valor total apostado (en PoS). Mayor seguridad = más costoso y difícil realizar un ataque del 51%."},
+  {t:"Selección de activos",l:"S",c:"Inversión",d:"Proceso de elegir qué criptomonedas incluir en un portfolio basándose en análisis fundamental, técnico y de la tokenomía de cada proyecto."},
+  {t:"Semilla (seed)",l:"S",c:"Seguridad",d:"Las 12 o 24 palabras de recuperación de una wallet. Es la copia de seguridad maestra que permite restaurar todos los activos. Debe guardarse offline en un lugar seguro y nunca compartirse."},
+  {t:"Tokens de gobernanza",l:"T",c:"DeFi",d:"Tokens que otorgan derechos de voto en la gobernanza de un protocolo descentralizado. Sus poseedores pueden votar sobre propuestas de cambio, actualizaciones o distribución del tesoro."},
+  {t:"Transferencia",l:"T",c:"General",d:"Envío de criptomonedas de una dirección blockchain a otra. Es irreversible e inmutable una vez confirmada por la red. Requiere pagar una comisión proporcional a la congestión de la red."},
+  {t:"Trilemma",l:"T",c:"Blockchain",d:"El trilemma del blockchain establece que una red solo puede optimizar dos de estas tres propiedades simultáneamente: descentralización, seguridad y escalabilidad. Las soluciones Layer 2 buscan resolverlo."},
+  {t:"Unspent Transaction Output",l:"U",c:"Tecnología",d:"UTXO. Modelo de contabilidad de Bitcoin donde cada transacción consume outputs anteriores y genera nuevos. Diferente al modelo de cuentas (balance) usado por Ethereum."},
+  {t:"Volatilidad implícita",l:"V",c:"Trading",d:"Expectativa del mercado sobre la variación futura de precio de un activo, derivada del precio de las opciones. Alta volatilidad implícita indica mayor incertidumbre o expectativa de movimiento brusco."},
+  {t:"Whitelist",l:"W",c:"General",d:"Lista de direcciones de wallets pre-aprobadas para participar en un lanzamiento de tokens (IDO, NFT mint). Estar en una whitelist garantiza acceso prioritario antes que el público general."},
+  {t:"WBTC",l:"W",c:"DeFi",d:"Wrapped Bitcoin. Token ERC-20 que representa Bitcoin en la red Ethereum, respaldado 1:1 por BTC real. Permite usar BTC en el ecosistema DeFi de Ethereum para préstamos, swaps y yield farming."},
+  {t:"Yield",l:"Y",c:"DeFi",d:"Rendimiento generado por activos depositados en protocolos DeFi. Puede provenir de comisiones de trading, emisión de nuevos tokens o intereses de préstamos. Se expresa en APY o APR."},
+  {t:"Zona de soporte",l:"Z",c:"Trading",d:"Rango de precios donde históricamente ha aparecido demanda suficiente para detener caídas. Identificar zonas de soporte es fundamental en el análisis técnico para buscar entradas de compra."}
+];
+
+// ── BUILD ──
+const sections = {};
+TERMS.forEach(item => {
+  if (!sections[item.l]) sections[item.l] = [];
+  sections[item.l].push(item);
+});
+
+const letters = Object.keys(sections).sort();
+
+// Build alphabet nav
+const alphaNav = document.getElementById('alpha-nav');
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ch => {
+  const btn = document.createElement('button');
+  btn.className = 'alpha-btn' + (sections[ch] ? '' : ' empty');
+  btn.textContent = ch;
+  btn.dataset.letter = ch;
+  if (sections[ch]) {
+    btn.onclick = () => {
+      document.getElementById('sec-' + ch)?.scrollIntoView({behavior:'smooth', block:'start'});
+    };
+  }
+  alphaNav.appendChild(btn);
+});
+
+// Build sections
+const container = document.getElementById('gl-sections');
+letters.forEach(letter => {
+  const sec = document.createElement('div');
+  sec.className = 'gl-section';
+  sec.id = 'sec-' + letter;
+  sec.innerHTML = '<div class="gl-section-letter">' + letter + '</div><div class="gl-grid" id="grid-' + letter + '"></div>';
+  container.appendChild(sec);
+  const grid = sec.querySelector('.gl-grid');
+  sections[letter].sort((a,b) => a.t.localeCompare(b.t, 'es')).forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'gl-card';
+    card.dataset.term = item.t.toLowerCase();
+    card.dataset.def = item.d.toLowerCase();
+    card.innerHTML = '<div class="gl-term"><span>' + item.t + '</span><span class="gl-term-badge">' + item.c + '</span></div><div class="gl-def">' + item.d + '</div>';
+    grid.appendChild(card);
+  });
+});
+
+// Update count
+document.getElementById('search-count').textContent = TERMS.length + ' términos disponibles';
+
+// ── SEARCH ──
+const searchInput = document.getElementById('gl-search');
+const emptyMsg = document.getElementById('gl-empty');
+const emptyQ = document.getElementById('empty-q');
+const countEl = document.getElementById('search-count');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('.gl-card').forEach(card => {
+    const match = !q || card.dataset.term.includes(q) || card.dataset.def.includes(q);
+    card.style.display = match ? '' : 'none';
+    if (match) visible++;
+    // Highlight
+    if (q && match) {
+      const term = card.querySelector('.gl-term span');
+      const def = card.querySelector('.gl-def');
+      term.innerHTML = highlight(term.textContent, q);
+      def.innerHTML = highlight(def.textContent, q);
+    } else {
+      const term = card.querySelector('.gl-term span');
+      const def = card.querySelector('.gl-def');
+      term.innerHTML = term.textContent;
+      def.innerHTML = def.textContent;
+    }
+  });
+  // Hide/show sections
+  document.querySelectorAll('.gl-section').forEach(sec => {
+    const anyVisible = [...sec.querySelectorAll('.gl-card')].some(c => c.style.display !== 'none');
+    sec.style.display = anyVisible ? '' : 'none';
+  });
+  emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+  emptyQ.textContent = q;
+  countEl.textContent = q ? visible + ' resultado' + (visible !== 1 ? 's' : '') + ' para "' + q + '"' : TERMS.length + ' términos disponibles';
+});
+
+function highlight(text, q) {
+  const regex = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return text.replace(regex, '<mark>$1</mark>');
+}
+
+// ── NAV ──
+function toggleMenu() {
+  document.getElementById('mob-menu').classList.toggle('open');
+}
+
+// ── SCROLL TOP ──
+const scrollBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('show', window.scrollY > 400);
+});
+
+// ── TICKER API ──
+(function(){
+  const pairs = [{s:'BTCUSDT',pp:'t-btc-p',pc:'t-btc-c'},{s:'ETHUSDT',pp:'t-eth-p',pc:'t-eth-c'},{s:'SOLUSDT',pp:'t-sol-p',pc:'t-sol-c'},{s:'XRPUSDT',pp:'t-xrp-p',pc:'t-xrp-c'},{s:'BNBUSDT',pp:'t-bnb-p',pc:'t-bnb-c'},{s:'ADAUSDT',pp:'t-ada-p',pc:'t-ada-c'}];
+  function fmt(n){return n>=1000?'$'+Math.round(n).toLocaleString():n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);}
+  function load(){
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+pairs.map(p=>'"'+p.s+'"').join(',')+']')
+      .then(r=>r.json()).then(data=>{
+        data.forEach((d,i)=>{
+          const p=pairs[i];
+          const pp=document.getElementById(p.pp);const pc=document.getElementById(p.pc);
+          if(!pp)return;
+          const pct=parseFloat(d.priceChangePercent);
+          pp.textContent=fmt(parseFloat(d.lastPrice));
+          pc.textContent=(pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%';
+          pc.className='t-chg '+(pct>=0?'up':'dn');
+          // Update duplicates in ticker
+          document.querySelectorAll('.ticker-track .t-item').forEach((item,idx)=>{
+            if(idx===i||idx===i+pairs.length){
+              const ps=item.querySelectorAll('span');
+              if(ps[1])ps[1].textContent=fmt(parseFloat(d.lastPrice));
+              if(ps[2]){ps[2].textContent=(pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%';ps[2].className='t-chg '+(pct>=0?'up':'dn');}
+            }
+          });
+        });
+      }).catch(()=>{});
+  }
+  load();setInterval(load,30000);
+})();
+</script>
+<!-- ═══ COOKIE CONSENT BANNER ═══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 48px);max-width:760px;background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,.5);align-items:center;gap:20px;flex-wrap:wrap;">
+  <p style="flex:1;min-width:200px;font-size:13px;color:rgba(255,255,255,.7);margin:0;line-height:1.6;">Usamos cookies para analizar el tráfico y mejorar tu experiencia. Consulta nuestra <a href="politica-cookies.html" style="color:#4d8eff;text-decoration:none;">Política de Cookies</a> y <a href="politica-privacidad.html" style="color:#4d8eff;text-decoration:none;">Privacidad</a>.</p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 18px;font-size:13px;cursor:pointer;">Rechazar</button>
+    <button onclick="cookieAccept()" style="background:#4d8eff;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('cc_madrid'))return;
+  var b=document.getElementById('cookie-banner');
+  if(b){setTimeout(function(){b.style.display='flex';},800);}
+})();
+function cookieAccept(){localStorage.setItem('cc_madrid','1');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cc_madrid','0');document.getElementById('cookie-banner').style.display='none';}
+
+
+// ─── TICKER EN VIVO (Binance) ───────────────────────────────────────────────
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n&&n!==0)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  window._buildTicker=function(prices){
+    var track=document.getElementById('ticker-track');
+    if(!track)return;
+    if(track.children.length===0){
+      // Primera carga: construir HTML
+      var items=COINS.map(function(c){
+        var v=prices[c.sym]||{};
+        var price=v.price?fmt(v.price):'---';
+        var ch=v.ch||0;
+        var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+        return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+          +'<span class="t-prc">'+price+'</span>'
+          +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+      }).join('');
+      track.innerHTML=items+items;
+    } else {
+      // Actualización: solo cambiar texto, sin tocar la animación
+      var prcs=track.querySelectorAll('.t-prc');
+      var chgs=track.querySelectorAll('.t-chg');
+      COINS.forEach(function(c,i){
+        var v=prices[c.sym];
+        if(!v||!v.price)return;
+        var price=fmt(v.price);
+        var ch=v.ch||0;
+        var chgStr=(ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%';
+        var cls='t-chg '+(ch>=0?'up':'dn');
+        [i, i+COINS.length].forEach(function(idx){
+          if(prcs[idx])prcs[idx].textContent=price;
+          if(chgs[idx]){chgs[idx].textContent=chgStr;chgs[idx].className=cls;}
+        });
+      });
+    }
+  };
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){
+          prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};
+        });
+        window._buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+<form name="newsletter" data-netlify="true" method="POST" action="/" style="display:none">
+  <input type="hidden" name="form-name" value="newsletter">
+  <input type="email" name="email">
+</form>
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mercado en Vivo · Madrid Crypto Capital</title>
+<meta name="description" content="Top 100 criptomonedas en tiempo real. Precios, market cap, volumen y gráficas de velas profesionales.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0052FF;--blue-h:#0044dd;
+  --bg:#08090f;--navy:#0d0f1a;--card:#111320;
+  --border:rgba(255,255,255,.07);
+  --text:rgba(255,255,255,.85);--muted:rgba(255,255,255,.4);
+  --up:#22c55e;--dn:#ef4444;
+}
+html{scroll-behavior:smooth}
+html{overflow-x:hidden;max-width:100%}
+body{background:var(--bg);color:var(--text);font-family:'Geist',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;max-width:100%;padding-top:100px}
+a{text-decoration:none;color:inherit}
+
+/* ── TICKER ── */
+.ticker{background:#000;border-bottom:1px solid var(--border);height:36px;display:flex;align-items:center;overflow:hidden}
+.ticker-pill{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:0 16px;font-size:11px;font-weight:600;letter-spacing:.08em;color:#0052FF;border-right:1px solid var(--border)}
+.tdot{width:6px;height:6px;border-radius:50%;background:#0052FF;box-shadow:0 0 6px #0052FF;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.ticker-scroll{flex:1;overflow:hidden}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:scroll 32s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:6px;padding:0 18px;border-right:1px solid var(--border);height:36px}
+.t-sym{font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em}
+.t-prc{font-size:11px;color:rgba(255,255,255,.55)}
+.t-chg{font-size:11px;font-weight:600}
+.t-chg.up{color:var(--up)}.t-chg.dn{color:var(--dn)}
+
+/* ── NAV ── */
+.page-header{position:fixed;top:0;left:0;right:0;z-index:500;width:100%}
+nav{background:#000;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.nav-inner{max-width:1320px;margin:0 auto;height:66px;display:flex;align-items:center;padding:0 32px}
+.nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;margin-right:56px;padding-left:8px}
+.brand-logo-img{width:200px;height:52px;object-fit:cover;object-position:center 50%;display:block}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{position:relative;height:66px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;border:none;background:none;letter-spacing:-.01em;white-space:nowrap;transition:color .15s}
+.nav-link:hover{color:#fff}
+.nav-link::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:2px;background:#0052FF;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav-link:hover::after,.nav-link.act::after{transform:scaleX(1)}
+.nav-link.act{color:#fff}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-cta{height:42px;padding:0 24px;background:#0052FF;border:none;border-radius:100px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:8px;transition:background .15s,transform .15s}
+.nav-cta:hover{background:#0044dd;transform:translateY(-1px)}
+.nav-cta svg{width:15px;height:15px;flex-shrink:0}
+.ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:8px;cursor:pointer;margin-left:12px}
+.ham-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px}
+@media(max-width:860px){
+  body{padding-top:90px}
+  .nav-inner{padding:0 16px;height:56px}
+  .nav-logo{margin-right:auto}
+  .nav-links{display:none}
+  .nav-cta{display:none}
+  .ham-btn{display:flex}
+}
+.mob-menu{display:none;position:fixed;inset:0;background:#000;z-index:9000;flex-direction:column;overflow-y:auto}
+.mob-menu.open{display:flex}
+.mob-close{align-self:flex-end;background:none;border:none;font-size:30px;color:rgba(255,255,255,.5);padding:20px 24px 10px;cursor:pointer;line-height:1}
+.mob-menu a{font-size:22px;font-weight:500;color:rgba(255,255,255,.7);padding:22px 28px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);display:block}
+.mob-menu .mob-cta{color:var(--blue);font-weight:700;border-bottom:none;margin-top:12px}
+
+/* ── GLOBAL STATS BAR ── */
+.stats-bar{background:var(--navy);border-bottom:1px solid var(--border);padding:0 32px}
+.stats-inner{max-width:1400px;margin:0 auto;height:44px;display:flex;align-items:center;gap:32px;overflow-x:auto;scrollbar-width:none}
+.stats-inner::-webkit-scrollbar{display:none}
+.stat-item{display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
+.stat-label{font-size:11px;color:var(--muted);font-weight:500}
+.stat-val{font-size:12px;font-weight:600;color:var(--text)}
+.stat-ch{font-size:11px}
+.sep{width:1px;height:18px;background:var(--border);flex-shrink:0}
+.up{color:var(--up)}.dn{color:var(--dn)}
+
+/* ── MAIN SECTION ── */
+.mkt-main{max-width:1400px;margin:0 auto;padding:24px 32px 80px}
+
+/* ── HEADER ROW ── */
+.mkt-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.mkt-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.02em;color:#fff;line-height:1}
+.mkt-title span{color:var(--blue)}
+.mkt-controls{display:flex;align-items:center;gap:10px}
+.search-box{position:relative}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+#mkt-search{width:220px;height:38px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;font-family:inherit;padding:0 12px 0 36px;outline:none;transition:border .2s}
+#mkt-search:focus{border-color:var(--blue)}
+#mkt-search::placeholder{color:var(--muted)}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--up);font-size:11px;font-weight:600;padding:6px 12px;border-radius:100px;white-space:nowrap}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--up);animation:blink 1.4s infinite}
+.last-upd{font-size:11px;color:var(--muted)}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border);background:var(--card)}
+table{width:100%;border-collapse:collapse;min-width:700px}
+thead th{padding:12px 16px;text-align:right;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s}
+thead th:hover{color:var(--text)}
+thead th.th-coin{text-align:left}
+thead th.sort-asc::after{content:' ▲';color:var(--blue)}
+thead th.sort-desc::after{content:' ▼';color:var(--blue)}
+tbody tr{cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.03)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+tbody td{padding:12px 16px;text-align:right;vertical-align:middle}
+.td-rank{color:var(--muted);font-size:13px;text-align:left;min-width:36px}
+.td-coin{text-align:left;min-width:180px}
+.coin-row{display:flex;align-items:center;gap:10px}
+.coin-row img{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:var(--navy)}
+.coin-name{font-size:14px;font-weight:600;color:#fff}
+.coin-sym{font-size:11px;color:var(--muted);text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.coin-mcap-mob{display:none}
+.td-price{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;transition:color .3s}
+.td-pct{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.td-big{font-size:13px;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums;white-space:nowrap}
+.td-spark{min-width:88px}
+
+/* Flash animations */
+@keyframes flashUp{0%{color:var(--up)}100%{color:inherit}}
+@keyframes flashDn{0%{color:var(--dn)}100%{color:inherit}}
+.flash-up{animation:flashUp .8s ease-out}
+.flash-dn{animation:flashDn .8s ease-out}
+
+/* ── CHART OVERLAY ── */
+.overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;backdrop-filter:blur(4px)}
+.overlay-bg.open{display:block}
+.chart-panel{position:fixed;top:0;right:-100%;width:min(780px,100vw);height:100vh;background:var(--navy);border-left:1px solid var(--border);z-index:600;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.chart-panel.open{right:0}
+.panel-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.panel-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.panel-coin{display:flex;align-items:center;gap:12px}
+#modal-icon{width:40px;height:40px;border-radius:50%;background:var(--card)}
+.panel-coin-info{}
+.panel-coin-name{font-size:18px;font-weight:700;color:#fff}
+.panel-price-row{display:flex;align-items:baseline;gap:10px;margin-top:2px}
+#modal-price{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+#modal-ch{font-size:14px;font-weight:600}
+.panel-close{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.06);border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.panel-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.tf-row{display:flex;gap:6px}
+.tf-btn{height:30px;padding:0 12px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.tf-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tf-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.panel-body{flex:1;overflow-y:auto;padding:16px 24px 24px}
+#main-chart{width:100%;min-height:340px;border-radius:10px;overflow:hidden;background:transparent}
+.chart-loading,.chart-error{display:flex;align-items:center;justify-content:center;height:340px;color:var(--muted);font-size:14px}
+.panel-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.pstat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.pstat-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.pstat-val{font-size:15px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+@media(max-width:600px){
+  .panel-stats{grid-template-columns:repeat(2,1fr)}
+  .chart-panel{width:100vw}
+}
+
+/* ── SKELETON ── */
+.skel{animation:skel 1.4s ease-in-out infinite;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;border-radius:4px;display:inline-block}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .mkt-main{padding:20px 20px 60px}
+  .stats-bar{padding:0 20px}
+}
+@media(max-width:768px){
+  .th-7d,.td-7d,.th-spark,.td-spark,.th-mcap,.td-mcap{display:none}
+  .mkt-controls{flex-wrap:wrap}
+  #mkt-search{width:180px}
+}
+/* ── MÓVIL / DESKTOP toggle ── */
+#mob-list{display:none}
+@media(max-width:600px){
+  .stats-inner{gap:20px}
+  .mkt-main{padding:16px 0 60px}
+  .mkt-header{padding:0 14px;flex-direction:column;align-items:flex-start;gap:10px}
+  .mkt-controls{width:100%;padding:0 14px;box-sizing:border-box}
+  #mkt-search{width:100%}
+  .search-box{width:100%}
+  #desktop-tbl{display:none}
+  #mob-list{display:block;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:0}
+}
+/* Estilos lista móvil — fuera del media query para que JS los pueda usar siempre */
+.mob-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;width:100%;box-sizing:border-box}
+.mob-item:last-child{border-bottom:none}
+.mob-item:active{background:rgba(255,255,255,.04)}
+.mob-rank{width:20px;font-size:12px;color:rgba(255,255,255,.35);text-align:center;flex-shrink:0}
+.mob-item img{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:var(--navy)}
+.mob-info{flex:1;min-width:0;overflow:hidden}
+.mob-name{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mob-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px;white-space:nowrap}
+.mob-right{flex-shrink:0;text-align:right;min-width:95px}
+.mob-price{font-size:15px;font-weight:700;white-space:nowrap;display:block}
+.mob-badge{display:inline-block;padding:3px 9px;border-radius:7px;font-size:12px;font-weight:700;margin-top:5px;white-space:nowrap}
+
+/* ── CTA STRIP ── */
+.cta-strip{background:linear-gradient(135deg,#0a0b0d,#0d1a3a);padding:72px 32px;text-align:center}
+.cta-strip-inner{max-width:640px;margin:0 auto}
+.cta-strip h2{font-size:clamp(26px,4vw,40px);font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:16px}
+.cta-strip p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:36px}
+.cta-strip-btn{display:inline-flex;align-items:center;gap:10px;background:#0052FF;color:#fff;text-decoration:none;height:54px;padding:0 36px;border-radius:100px;font-size:16px;font-weight:700;transition:background .15s,transform .15s,box-shadow .15s}
+.cta-strip-btn:hover{background:#0044dd;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,82,255,.4)}
+@media(max-width:600px){.cta-strip{padding:56px 20px}}
+
+/* ── FOOTER ── */
+.site-footer{background:#000;color:rgba(255,255,255,.65);padding:72px 32px 0;border-top:1px solid var(--border)}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 2fr;gap:80px;padding-bottom:56px;border-bottom:1px solid var(--border)}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.footer-tagline{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:28px;max-width:240px}
+.footer-social{display:flex;gap:8px}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
+.social-btn svg{width:15px;height:15px;fill:currentColor}
+.social-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:20px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);margin-bottom:11px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1400px;margin:0 auto;padding:22px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:13px;color:rgba(255,255,255,.3)}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,.3)}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr;gap:40px}.footer-cols{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.footer-cols{grid-template-columns:1fr}.footer-bottom{flex-direction:column}.site-footer{padding:56px 20px 0}}
+
+/* scroll-to-top */
+.scroll-top{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:50%;background:var(--blue);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50}
+.scroll-top.show{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+<div class="ticker">
+  <div class="ticker-pill"><div class="tdot"></div>En vivo</div>
+  <div class="ticker-scroll"><div class="ticker-track" id="ticker-track"></div></div>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img"></a>
+    <div class="nav-links">
+      <a href="personas.html" class="nav-link">Individuo</a>
+      <a href="empresas.html" class="nav-link">Empresa</a>
+    </div>
+    <div class="nav-right">
+      <a href="agenda.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg>
+        Agenda asesoría
+      </a>
+      <button class="ham-btn" onclick="toggleMenu()" aria-label="Menú"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+</div>
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="toggleMenu()">✕</button>
+  <a href="personas.html" onclick="toggleMenu()">Individuo</a>
+  <a href="empresas.html" onclick="toggleMenu()">Empresa</a>
+  <a href="agenda.html" class="mob-cta" onclick="toggleMenu()">Agenda asesoría →</a>
+</div>
+
+<!-- GLOBAL STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-label">Cap. Global</span>
+      <span class="stat-val" id="stat-mcap">—</span>
+      <span class="stat-ch" id="stat-mcap-ch"></span>
+    </div>
+    <div class="sep"></div>
+    <div class="stat-item">
+      <span class="stat-label">Volumen 24h</span>
+      <span class="stat-val" id="stat-vol">—</span>
+    </div>
+    <div class="sep"></div>
+    <div class="stat-item">
+      <span class="stat-label">Dom. BTC</span>
+      <span class="stat-val" id="stat-btc">—</span>
+    </div>
+    <div class="sep"></div>
+    <div class="stat-item">
+      <span class="stat-label">Dom. ETH</span>
+      <span class="stat-val" id="stat-eth">—</span>
+    </div>
+    <div class="sep"></div>
+    <div class="stat-item">
+      <span class="stat-label">Activos</span>
+      <span class="stat-val" id="stat-coins">—</span>
+    </div>
+    <div class="sep"></div>
+    <div class="stat-item">
+      <span class="stat-label">Estado</span>
+      <span class="stat-val" id="tbl-status">Cargando...</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="mkt-main">
+  <div class="mkt-header">
+    <div>
+      <div class="mkt-title">Mercado <span>en Vivo</span></div>
+      <div class="last-upd">Actualizado: <span id="last-update">—</span></div>
+    </div>
+    <div class="mkt-controls">
+      <div class="search-box">
+        <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <input type="search" id="mkt-search" placeholder="Buscar moneda...">
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA MÓVIL (se oculta en desktop) -->
+  <div id="mob-list"></div>
+
+  <!-- TABLA DESKTOP (se oculta en móvil) -->
+  <div class="tbl-wrap" id="desktop-tbl">
+    <table id="mkt-table">
+      <thead>
+        <tr>
+          <th class="th-rank td-rank" onclick="sortBy('market_cap_rank')">#</th>
+          <th class="th-coin td-coin" onclick="sortBy('name')">Moneda</th>
+          <th onclick="sortBy('current_price')">Precio</th>
+          <th class="th-1h" onclick="sortBy('price_change_percentage_1h_in_currency')">1h %</th>
+          <th onclick="sortBy('price_change_percentage_24h')">24h %</th>
+          <th class="th-7d" onclick="sortBy('price_change_percentage_7d_in_currency')">7d %</th>
+          <th class="th-mcap" onclick="sortBy('market_cap')">Cap. Mercado</th>
+          <th class="th-vol" onclick="sortBy('total_volume')">Volumen 24h</th>
+          <th class="th-spark" style="cursor:default;">7 días</th>
+        </tr>
+      </thead>
+      <tbody id="coins-tbody">
+        <!-- skeleton rows -->
+        <tr id="loading-row"><td colspan="9" style="padding:60px;text-align:center;color:var(--muted)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".4"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <span>Cargando top 100...</span>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div><!-- #desktop-tbl -->
+</div>
+
+<!-- CHART OVERLAY -->
+<div class="overlay-bg" id="overlay-bg" onclick="closeChart()"></div>
+<div class="chart-panel" id="chart-panel">
+  <div class="panel-head">
+    <div class="panel-top">
+      <div class="panel-coin">
+        <img id="modal-icon" src="" alt="" width="40" height="40">
+        <div class="panel-coin-info">
+          <div class="panel-coin-name" id="modal-name">—</div>
+          <div class="panel-price-row">
+            <span id="modal-price" style="font-size:26px;font-weight:700;font-variant-numeric:tabular-nums">—</span>
+            <span id="modal-ch"></span>
+          </div>
+        </div>
+      </div>
+      <button class="panel-close" onclick="closeChart()">✕</button>
+    </div>
+    <div class="tf-row">
+      <button class="tf-btn" data-tf="1m" onclick="switchTF('1m')">1M</button>
+      <button class="tf-btn" data-tf="5m" onclick="switchTF('5m')">5M</button>
+      <button class="tf-btn" data-tf="15m" onclick="switchTF('15m')">15M</button>
+      <button class="tf-btn" data-tf="1h" onclick="switchTF('1h')">1H</button>
+      <button class="tf-btn" data-tf="4h" onclick="switchTF('4h')">4H</button>
+      <button class="tf-btn active" data-tf="1d" onclick="switchTF('1d')">1D</button>
+      <button class="tf-btn" data-tf="1w" onclick="switchTF('1w')">1S</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div id="main-chart"></div>
+    <div class="panel-stats">
+      <div class="pstat"><div class="pstat-label">Cap. Mercado</div><div class="pstat-val" id="modal-mcap">—</div></div>
+      <div class="pstat"><div class="pstat-label">Volumen 24h</div><div class="pstat-val" id="modal-vol">—</div></div>
+      <div class="pstat"><div class="pstat-label">Supply Circulante</div><div class="pstat-val" id="modal-supply">—</div></div>
+      <div class="pstat"><div class="pstat-label">ATH</div><div class="pstat-val" id="modal-ath">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="cta-strip-inner">
+    <h2>¿Quieres entender mejor el mercado?</h2>
+    <p>Nuestros asesores te ayudan a interpretar los datos, construir tu portafolio y tomar decisiones con criterio profesional.</p>
+    <a href="agenda.html" class="cta-strip-btn">
+      <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg>
+      Agenda una asesoría gratuita
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">
+        <img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img">
+      </a>
+      <p class="footer-tagline">Tu puerta al mundo de las criptomonedas. Asesoría profesional desde Chile para toda Latinoamérica y el mundo.</p>
+      <div class="footer-social">
+        <a href="https://x.com/MadridCrypto" target="_blank" class="social-btn" aria-label="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/company/madrid-crypto-capital" target="_blank" class="social-btn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://facebook.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://instagram.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@MadridCryptoCapital" target="_blank" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios Gratuitos</div>
+        <a href="dca.html">Calculadora Bitcoin DCA</a>
+        <a href="mercado.html">Mercado en Vivo</a>
+        <a href="glosario.html">Glosario Cripto</a>
+        <a href="fear-greed.html">Índice de Codicia y Miedo</a>
+        <a href="https://chatgpt.com/g/g-69c6acf9bf3c8191b7ee6dfaf076032c-asesor-digital-madrid-crypto-capital" target="_blank" rel="noopener">Asesor IA gratuito</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Empresa</div>
+        <a href="personas.html">Individuo</a>
+        <a href="empresas.html">Empresa</a>
+        <a href="agenda.html">Agendar asesoría</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Política de cookies</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:Contacto@madridcryptocapital.com">Contacto@madridcryptocapital.com</a>
+        <a href="tel:+56944717233">+56 9 4471 7233</a>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;line-height:1.6;">Manquehue Sur 350, of. 201<br>Santiago, Chile 🇨🇱</p>
+        <a href="https://wa.me/56944717233" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2021 Madrid Crypto Capital · Todos los derechos reservados</p>
+    <div class="footer-bottom-links">
+      <a href="politica-privacidad.html">Política de privacidad</a>
+      <a href="politica-cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script>
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+const CL = 'https://api.coinlore.net/api';
+const BN = 'https://api.binance.com/api/v3';
+const BN_WS = 'wss://stream.binance.com:9443/ws';
+
+let coins = [];
+let filtered = [];
+let sortCol = 'rank';
+let sortDir = 'asc';
+let ws = null;
+let chart = null;
+let selectedCoin = null;
+let currentTF = '1d';
+let wsActive = false;
+
+// ─── FORMAT HELPERS ───────────────────────────────────────────────────────────
+const fmt = {
+  price(n) {
+    if (!n && n !== 0) return '—';
+    if (n >= 10000) return '$' + n.toLocaleString('en-US', {maximumFractionDigits:2});
+    if (n >= 1) return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:4});
+    if (n >= 0.01) return '$' + n.toFixed(6);
+    if (n >= 0.0001) return '$' + n.toFixed(8);
+    return '$' + n.toExponential(4);
+  },
+  big(n) {
+    if (!n) return '—';
+    if (n >= 1e12) return '$' + (n/1e12).toFixed(2) + 'T';
+    if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    return '$' + n.toFixed(0);
+  },
+  bigNum(n) {
+    if (!n) return '—';
+    if (n >= 1e12) return (n/1e12).toFixed(2) + 'T';
+    if (n >= 1e9) return (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return (n/1e6).toFixed(2) + 'M';
+    return n.toFixed(0);
+  },
+  pct(n) {
+    if (n == null || isNaN(n)) return '<span style="color:var(--muted)">—</span>';
+    const cl = n >= 0 ? 'up' : 'dn';
+    const arrow = n >= 0 ? '▲' : '▼';
+    return `<span class="${cl}">${arrow} ${Math.abs(n).toFixed(2)}%</span>`;
+  }
+};
+
+// ─── SPARKLINE SVG ─────────────────────────────────────────────────────────────
+function sparklineSVG(prices, isUp) {
+  if (!prices || prices.length < 2) return '<span style="color:var(--muted);font-size:11px">—</span>';
+  const sample = prices.filter((_, i) => i % 4 === 0);
+  const w = 80, h = 32;
+  const min = Math.min(...sample), max = Math.max(...sample);
+  const range = max - min || 1;
+  const pts = sample.map((p, i) => {
+    const x = (i / (sample.length - 1)) * w;
+    const y = h - ((p - min) / range) * (h - 4) - 2;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const c = isUp ? '#22c55e' : '#ef4444';
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block"><polyline points="${pts}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+// ─── FETCH GLOBAL STATS (calculated from coin data) ────────────────────────────
+function updateGlobalStats(data) {
+  try {
+    const totalMcap = data.reduce((s, c) => s + c.marketCap, 0);
+    const totalVol  = data.reduce((s, c) => s + c.volume, 0);
+    const btc = data.find(c => c.id === 'bitcoin');
+    const eth = data.find(c => c.id === 'ethereum');
+    const btcDom = btc && totalMcap ? (btc.marketCap / totalMcap * 100) : 0;
+    const ethDom = eth && totalMcap ? (eth.marketCap / totalMcap * 100) : 0;
+    document.getElementById('stat-mcap').textContent = fmt.big(totalMcap);
+    document.getElementById('stat-mcap-ch').innerHTML = fmt.pct(btc ? btc.change24h : 0);
+    document.getElementById('stat-vol').textContent = fmt.big(totalVol);
+    document.getElementById('stat-btc').textContent = btcDom.toFixed(1) + '%';
+    document.getElementById('stat-eth').textContent = ethDom.toFixed(1) + '%';
+    document.getElementById('stat-coins').textContent = data.length.toLocaleString() + '+';
+  } catch(e) {}
+}
+
+// ─── FETCH TOP 100 via CoinLore (free, CORS, no key, 1h+7d included) ──────────
+async function fetchTop100() {
+  const CACHE_KEY = 'mkt_coins_cl_v1';
+  const CACHE_T   = 'mkt_coins_cl_t';
+  const cached = sessionStorage.getItem(CACHE_KEY);
+  const cachedAt = parseInt(sessionStorage.getItem(CACHE_T) || '0');
+  if (cached && Date.now() - cachedAt < 90000) return JSON.parse(cached);
+
+  // CoinLore returns max 100 per page
+  const res = await fetch(`${CL}/tickers/?start=0&limit=100`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+
+  // Normalize to unified field names
+  const data = json.data.map(c => ({
+    id:        c.nameid,
+    rank:      parseInt(c.rank),
+    symbol:    c.symbol,
+    name:      c.name,
+    price:     parseFloat(c.price_usd) || 0,
+    change1h:  parseFloat(c.percent_change_1h) || 0,
+    change24h: parseFloat(c.percent_change_24h) || 0,
+    change7d:  parseFloat(c.percent_change_7d) || 0,
+    marketCap: parseFloat(c.market_cap_usd) || 0,
+    volume:    parseFloat(c.volume24) || 0,
+    supply:    parseFloat(c.csupply) || 0,
+    imageUrl:  `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,
+    sparkline: null,
+  }));
+
+  sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  sessionStorage.setItem(CACHE_T, Date.now().toString());
+  return data;
+}
+
+// ─── RENDER TABLE ─────────────────────────────────────────────────────────────
+function renderTable() {
+  const sorted = [...filtered].sort((a, b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (av == null) av = -Infinity;
+    if (bv == null) bv = -Infinity;
+    return sortDir === 'asc' ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+  });
+
+  const isMob = window.innerWidth <= 600;
+
+  if (isMob) {
+    document.getElementById('mob-list').innerHTML = sorted.map(c => {
+      const sym = c.symbol.toUpperCase();
+      const isUp = (c.change24h || 0) >= 0;
+      const priceClr = isUp ? '#22c55e' : '#ef4444';
+      const pctBg   = isUp ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
+      const pctClr  = isUp ? '#22c55e' : '#ef4444';
+      const arrow   = isUp ? '▲' : '▼';
+      const pctTxt  = `${arrow} ${Math.abs(c.change24h || 0).toFixed(2)}%`;
+      return `<div class="mob-item" onclick="openChart('${c.id}','${sym}')" data-id="${c.id}" data-sym="${sym}">
+        <div class="mob-rank">${c.rank}</div>
+        <img src="${c.imageUrl}" alt="${sym}" width="36" height="36" loading="lazy" onerror="this.style.visibility='hidden'">
+        <div class="mob-info">
+          <div class="mob-name">${c.name}</div>
+          <div class="mob-sub">${sym} · ${fmt.big(c.marketCap)}</div>
+        </div>
+        <div class="mob-right">
+          <div id="p-${sym}" class="mob-price" style="color:${priceClr}">${fmt.price(c.price)}</div>
+          <div id="ch-${sym}" class="mob-badge" style="background:${pctBg};color:${pctClr}">${pctTxt}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  document.getElementById('coins-tbody').innerHTML = sorted.map(c => {
+    const sym = c.symbol.toUpperCase();
+    // ── DESKTOP: tabla estándar ──
+    const is24Up = (c.change24h || 0) >= 0;
+    return `<tr data-id="${c.id}" data-sym="${sym}" onclick="openChart('${c.id}','${sym}')">
+      <td class="td-rank">${c.rank}</td>
+      <td class="td-coin">
+        <div class="coin-row">
+          <img src="${c.imageUrl}" alt="${sym}" width="28" height="28" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div><div class="coin-name">${c.name}</div><div class="coin-sym">${sym}</div></div>
+        </div>
+      </td>
+      <td class="td-price td-big" id="p-${sym}" style="font-weight:600;color:#fff">${fmt.price(c.price)}</td>
+      <td class="td-pct td-1h">${fmt.pct(c.change1h)}</td>
+      <td class="td-pct" id="ch-${sym}">${fmt.pct(c.change24h)}</td>
+      <td class="td-pct td-7d">${fmt.pct(c.change7d)}</td>
+      <td class="td-big td-mcap">${fmt.big(c.marketCap)}</td>
+      <td class="td-big td-vol">${fmt.big(c.volume)}</td>
+      <td class="td-spark">${sparklineSVG(c.sparkline, is24Up)}</td>
+    </tr>`;
+  }).join('');
+
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+  });
+}
+
+// ─── SORT ──────────────────────────────────────────────────────────────────────
+function sortBy(col) {
+  const colMap = {
+    'market_cap_rank':'rank', 'current_price':'price',
+    'price_change_percentage_24h':'change24h', 'market_cap':'marketCap',
+    'total_volume':'volume'
+  };
+  const mapped = colMap[col] || col;
+  if (sortCol === mapped) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = mapped;
+    sortDir = mapped === 'name' ? 'asc' : 'desc';
+  }
+  renderTable();
+}
+
+// ─── WEBSOCKET BINANCE ─────────────────────────────────────────────────────────
+function connectWS() {
+  if (ws) { try { ws.close(); } catch(e) {} }
+  ws = new WebSocket(`${BN_WS}/!miniTicker@arr`);
+
+  let pending = {};
+  let lastFlush = 0;
+
+  ws.onopen = () => {
+    wsActive = true;
+    document.getElementById('tbl-status').textContent = 'En vivo · WebSocket';
+    // WebSocket connected
+  };
+
+  ws.onmessage = e => {
+    const tickers = JSON.parse(e.data);
+    tickers.forEach(t => {
+      if (!t.s.endsWith('USDT')) return;
+      const sym = t.s.slice(0, -4);
+      pending[sym] = {
+        price: parseFloat(t.c),
+        change24h: parseFloat(t.o) > 0 ? ((parseFloat(t.c) - parseFloat(t.o)) / parseFloat(t.o)) * 100 : 0
+      };
+    });
+    const now = Date.now();
+    if (now - lastFlush >= 1200) {
+      lastFlush = now;
+      requestAnimationFrame(() => applyPrices({ ...pending }));
+    }
+  };
+
+  ws.onclose = () => {
+    wsActive = false;
+    document.getElementById('tbl-status').textContent = 'Reconectando...';
+    setTimeout(connectWS, 4000);
+  };
+  ws.onerror = () => ws.close();
+}
+
+function applyPrices(prices) {
+  Object.entries(prices).forEach(([sym, d]) => {
+    const pEl = document.getElementById(`p-${sym}`);
+    const cEl = document.getElementById(`ch-${sym}`);
+    if (pEl) {
+      const txt = fmt.price(d.price);
+      if (pEl.textContent !== txt) {
+        pEl.textContent = txt;
+        const cls = d.change24h >= 0 ? 'flash-up' : 'flash-dn';
+        pEl.classList.remove('flash-up', 'flash-dn');
+        void pEl.offsetWidth;
+        pEl.classList.add(cls);
+      }
+    }
+    if (cEl) cEl.innerHTML = fmt.pct(d.change24h);
+    if (selectedCoin?.sym === sym) {
+      const mp = document.getElementById('modal-price');
+      const mc = document.getElementById('modal-ch');
+      if (mp) { mp.textContent = fmt.price(d.price); mp.className = d.change24h >= 0 ? 'up' : 'dn'; }
+      if (mc) mc.innerHTML = fmt.pct(d.change24h);
+    }
+  });
+}
+
+// ─── TICKER TOP UPDATE ─────────────────────────────────────────────────────────
+function updateTicker(prices) {
+  var now=Date.now();
+  if(now-(window._tickerLast||0)<10000)return;
+  window._tickerLast=now;
+  var map={BTC:'BTCUSDT',ETH:'ETHUSDT',SOL:'SOLUSDT',XRP:'XRPUSDT',BNB:'BNBUSDT',ADA:'ADAUSDT',DOT:'DOTUSDT',LINK:'LINKUSDT'};
+  var converted={};
+  Object.entries(map).forEach(function(e){
+    var sym=e[0],bsym=e[1];
+    if(prices[sym]){converted[bsym]={price:prices[sym].price,ch:prices[sym].change24h};}
+  });
+  if(window._buildTicker)window._buildTicker(converted);
+}
+
+// ─── CHART ────────────────────────────────────────────────────────────────────
+async function openChart(id, sym) {
+  selectedCoin = { id, sym };
+  document.getElementById('overlay-bg').classList.add('open');
+  document.getElementById('chart-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const coin = coins.find(c => c.id === id);
+  if (coin) {
+    document.getElementById('modal-icon').src = coin.imageUrl;
+    document.getElementById('modal-name').textContent = `${coin.name} (${sym})`;
+    const livePrice = document.getElementById(`p-${sym}`)?.textContent;
+    document.getElementById('modal-price').textContent = livePrice || fmt.price(coin.price);
+    document.getElementById('modal-price').className = (coin.change24h || 0) >= 0 ? 'up' : 'dn';
+    document.getElementById('modal-ch').innerHTML = fmt.pct(coin.change24h);
+    document.getElementById('modal-mcap').textContent = fmt.big(coin.marketCap);
+    document.getElementById('modal-vol').textContent = fmt.big(coin.volume);
+    document.getElementById('modal-supply').textContent = coin.supply ? fmt.bigNum(coin.supply) + ' ' + sym : '—';
+    document.getElementById('modal-ath').textContent = '—';
+  }
+  await loadChart(sym, currentTF);
+}
+
+async function loadChart(sym, interval) {
+  const el = document.getElementById('main-chart');
+  el.innerHTML = '<div class="chart-loading"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".4" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg></div>';
+
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === interval));
+
+  const limits = {'1m':480,'5m':288,'15m':192,'1h':168,'4h':180,'1d':365,'1w':104};
+  const limit = limits[interval] || 200;
+
+  let ohlc = null, volD = null;
+
+  // ── Intento 1: Binance ──────────────────────────────────────────────────────
+  try {
+    const data = await fetch(`${BN}/klines?symbol=${sym}USDT&interval=${interval}&limit=${limit}`).then(r => r.json());
+    if (Array.isArray(data) && data.length > 0) {
+      ohlc = data.map(k => ({ time: Math.floor(k[0]/1000), open:+k[1], high:+k[2], low:+k[3], close:+k[4] }));
+      volD = data.map(k => ({ time: Math.floor(k[0]/1000), value:+k[5], color:+k[4]>=+k[1]?'rgba(34,197,94,.25)':'rgba(239,68,68,.25)' }));
+    }
+  } catch(e) {}
+
+  // ── Intento 2: KuCoin (fallback para activos no listados en Binance) ────────
+  if (!ohlc) {
+    try {
+      const kcMap = {'1m':'1min','5m':'5min','15m':'15min','1h':'1hour','4h':'4hour','1d':'1day','1w':'1week'};
+      const kcDur = {'1min':60,'5min':300,'15min':900,'1hour':3600,'4hour':14400,'1day':86400,'1week':604800};
+      const kcInt = kcMap[interval] || '1day';
+      const endAt = Math.floor(Date.now()/1000);
+      const startAt = endAt - limit * (kcDur[kcInt] || 86400);
+      const kcRes = await fetch(`https://api.kucoin.com/api/v1/market/candles?type=${kcInt}&symbol=${sym}-USDT&startAt=${startAt}&endAt=${endAt}`);
+      const kcJson = await kcRes.json();
+      if (kcJson.data && kcJson.data.length > 0) {
+        // KuCoin devuelve más reciente primero; formato: [time,open,close,high,low,vol,turnover]
+        const sorted = [...kcJson.data].reverse();
+        ohlc = sorted.map(k => ({ time:parseInt(k[0]), open:+k[1], high:+k[3], low:+k[4], close:+k[2] }));
+        volD = sorted.map(k => ({ time:parseInt(k[0]), value:+k[5], color:+k[2]>=+k[1]?'rgba(34,197,94,.25)':'rgba(239,68,68,.25)' }));
+      }
+    } catch(e) {}
+  }
+
+  if (!ohlc || ohlc.length === 0) {
+    el.innerHTML = `<div class="chart-error" style="flex-direction:column;gap:8px;text-align:center">
+      <span>Gráfica no disponible para ${sym}</span>
+      <span style="font-size:12px;color:var(--muted)">Este activo no cotiza en Binance ni KuCoin con par USDT.</span>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = '';
+  if (chart) { chart.remove(); chart = null; }
+
+  chart = LightweightCharts.createChart(el, {
+    width: el.clientWidth,
+    height: 360,
+    layout: {
+      background: { type: 'solid', color: 'transparent' },
+      textColor: 'rgba(255,255,255,.5)',
+      fontFamily: "'Geist', system-ui",
+      fontSize: 11,
+    },
+    grid: {
+      vertLines: { color: 'rgba(255,255,255,.04)' },
+      horzLines: { color: 'rgba(255,255,255,.04)' },
+    },
+    crosshair: { mode: 1 },
+    rightPriceScale: {
+      borderColor: 'rgba(255,255,255,.08)',
+      scaleMargins: { top: 0.08, bottom: 0.22 },
+    },
+    timeScale: {
+      borderColor: 'rgba(255,255,255,.08)',
+      timeVisible: true,
+      secondsVisible: interval === '1m',
+    },
+  });
+
+  const candle = chart.addCandlestickSeries({
+    upColor: '#22c55e', downColor: '#ef4444',
+    borderUpColor: '#22c55e', borderDownColor: '#ef4444',
+    wickUpColor: '#22c55e', wickDownColor: '#ef4444',
+  });
+
+  const vol = chart.addHistogramSeries({
+    color: 'rgba(0,82,255,.25)',
+    priceFormat: { type: 'volume' },
+    priceScaleId: 'vol',
+    lastValueVisible: false,
+    priceLineVisible: false,
+  });
+  chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.82, bottom: 0 }, borderVisible: false });
+
+  candle.setData(ohlc);
+  vol.setData(volD);
+  chart.timeScale().fitContent();
+
+  new ResizeObserver(() => { if (chart) chart.applyOptions({ width: el.clientWidth }); }).observe(el);
+}
+
+function switchTF(tf) {
+  currentTF = tf;
+  if (selectedCoin) loadChart(selectedCoin.sym, tf);
+}
+
+function closeChart() {
+  document.getElementById('overlay-bg').classList.remove('open');
+  document.getElementById('chart-panel').classList.remove('open');
+  document.body.style.overflow = '';
+  selectedCoin = null;
+  if (chart) { chart.remove(); chart = null; }
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function toggleMenu() {
+  document.getElementById('mob-menu').classList.toggle('open');
+}
+
+// ─── SCROLL TOP ───────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('show', scrollY > 400);
+});
+
+// CSS spin animation for loading
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(styleEl);
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    coins = await fetchTop100();
+    filtered = [...coins];
+    renderTable();
+    updateGlobalStats(coins);
+
+    document.getElementById('tbl-status').textContent = 'Conectando WebSocket...';
+    document.getElementById('last-update').textContent = new Date().toLocaleTimeString('es-CL');
+
+    // Start WebSocket for real-time prices
+    connectWS();
+
+    // Refresh market data every 75 seconds
+    setInterval(async () => {
+      try {
+        sessionStorage.removeItem('mkt_coins_cl_v1');
+        sessionStorage.removeItem('mkt_coins_cl_t');
+        const newCoins = await fetchTop100();
+        // Update market cap, volume from fresh API data
+        newCoins.forEach(nc => {
+          const old = coins.find(c => c.id === nc.id);
+          if (!old) return;
+          old.marketCap = nc.marketCap;
+          old.volume    = nc.volume;
+          old.change1h  = nc.change1h;
+          old.change24h = nc.change24h;
+          old.change7d  = nc.change7d;
+          old.price     = nc.price;
+        });
+        updateGlobalStats(coins);
+        document.getElementById('last-update').textContent = new Date().toLocaleTimeString('es-CL');
+      } catch(e) {}
+    }, 75000);
+
+  } catch(err) {
+    document.getElementById('tbl-status').textContent = 'Error de carga — reintentando...';
+    document.getElementById('coins-tbody').innerHTML = `<tr><td colspan="9" style="padding:48px;text-align:center;color:var(--muted)">
+      Error al cargar datos. Por favor, verifica tu conexión.<br>
+      <button onclick="init()" style="margin-top:16px;padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px">Reintentar</button>
+    </td></tr>`;
+    setTimeout(init, 15000);
+  }
+}
+
+// Run
+init();
+
+// Also update ticker via WebSocket (reuse the same data)
+const origApply = applyPrices;
+window.applyPrices = function(prices) {
+  origApply(prices);
+  updateTicker(prices);
+};
+</script>
+<!-- ═══ COOKIE CONSENT BANNER ═══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 48px);max-width:760px;background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,.5);align-items:center;gap:20px;flex-wrap:wrap;">
+  <p style="flex:1;min-width:200px;font-size:13px;color:rgba(255,255,255,.7);margin:0;line-height:1.6;">Usamos cookies para analizar el tráfico y mejorar tu experiencia. Consulta nuestra <a href="politica-cookies.html" style="color:#4d8eff;text-decoration:none;">Política de Cookies</a> y <a href="politica-privacidad.html" style="color:#4d8eff;text-decoration:none;">Privacidad</a>.</p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 18px;font-size:13px;cursor:pointer;">Rechazar</button>
+    <button onclick="cookieAccept()" style="background:#4d8eff;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('cc_madrid'))return;
+  var b=document.getElementById('cookie-banner');
+  if(b){setTimeout(function(){b.style.display='flex';},800);}
+})();
+function cookieAccept(){localStorage.setItem('cc_madrid','1');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cc_madrid','0');document.getElementById('cookie-banner').style.display='none';}
+
+
+// ─── TICKER EN VIVO (Binance) ───────────────────────────────────────────────
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n&&n!==0)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  window._buildTicker=function(prices){
+    var track=document.getElementById('ticker-track');
+    if(!track)return;
+    if(track.children.length===0){
+      // Primera carga: construir HTML
+      var items=COINS.map(function(c){
+        var v=prices[c.sym]||{};
+        var price=v.price?fmt(v.price):'---';
+        var ch=v.ch||0;
+        var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+        return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+          +'<span class="t-prc">'+price+'</span>'
+          +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+      }).join('');
+      track.innerHTML=items+items;
+    } else {
+      // Actualización: solo cambiar texto, sin tocar la animación
+      var prcs=track.querySelectorAll('.t-prc');
+      var chgs=track.querySelectorAll('.t-chg');
+      COINS.forEach(function(c,i){
+        var v=prices[c.sym];
+        if(!v||!v.price)return;
+        var price=fmt(v.price);
+        var ch=v.ch||0;
+        var chgStr=(ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%';
+        var cls='t-chg '+(ch>=0?'up':'dn');
+        [i, i+COINS.length].forEach(function(idx){
+          if(prcs[idx])prcs[idx].textContent=price;
+          if(chgs[idx]){chgs[idx].textContent=chgStr;chgs[idx].className=cls;}
+        });
+      });
+    }
+  };
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){
+          prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};
+        });
+        window._buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+</body>
+</html>

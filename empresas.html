@@ -1,0 +1,1336 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empresas & Web3 — Madrid Crypto Capital</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0B0D;--navy:#0A0B0D;--green:#0052FF;--green-h:#0044DD;--green-dim:rgba(0,82,255,.12);--green-glow:rgba(0,82,255,.25);--border:rgba(255,255,255,.07);--border-g:rgba(0,82,255,.25);--text:#f0f4f8;--dim:rgba(255,255,255,.6);--muted:rgba(255,255,255,.32);--card:rgba(255,255,255,.04);--mono:'JetBrains Mono',monospace;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Geist','Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:100px;}
+
+/* TICKER */
+.ticker-pill{flex-shrink:0;height:100%;background:var(--green);display:flex;align-items:center;padding:0 14px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);gap:6px;}
+.tdot{width:6px;height:6px;background:var(--navy);border-radius:50%;animation:tdot 1.4s infinite;}
+@keyframes tdot{0%,100%{opacity:1}50%{opacity:.15}}
+.ticker-scroll{flex:1;overflow:hidden;}
+.ticker-track{display:flex;animation:tscroll 40s linear infinite;white-space:nowrap;}
+@keyframes tscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:7px;padding:0 18px;border-right:1px solid rgba(255,255,255,.07);height:34px;}
+.t-sym{font-size:10px;font-weight:600;letter-spacing:.06em;color:#9ca3af;}
+.t-prc{font-size:11px;font-weight:600;color:#fff;}
+.t-chg{font-size:10px;font-weight:500;}
+.t-chg.up{color:#22c55e;}.t-chg.dn{color:#ef4444;}
+/* NAV */
+.page-header{position:fixed;top:0;left:0;right:0;z-index:500;width:100%;}
+.ticker{height:34px;background:var(--navy);display:flex;align-items:center;overflow:hidden;}
+nav{background:#000;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.nav-inner{max-width:1320px;margin:0 auto;height:66px;display:flex;align-items:center;padding:0 32px;}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;margin-right:56px;padding-left:8px;}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;}
+.nav-link{position:relative;height:66px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;border:none;background:none;letter-spacing:-.01em;white-space:nowrap;transition:color .15s;}
+.nav-link:hover{color:#fff;}
+.nav-link::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:2px;background:#0052FF;transform:scaleX(0);transform-origin:left;transition:transform .2s;}
+.nav-link:hover::after,.nav-link.act::after{transform:scaleX(1);}
+.nav-link.act{color:#fff;}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.nav-cta{height:42px;padding:0 24px;background:#0052FF;border:none;border-radius:100px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:8px;transition:background .15s,transform .15s;}
+.nav-cta:hover{background:#0044dd;transform:translateY(-1px);}
+.nav-cta svg{width:15px;height:15px;flex-shrink:0;}
+.ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:8px;margin-left:12px;}
+.ham-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+/* MOBILE MENU */
+.mob-menu{display:none;position:fixed;inset:0;background:#000;z-index:9000;flex-direction:column;overflow-y:auto;}
+.mob-menu.open{display:flex;}
+.mob-close{align-self:flex-end;background:none;border:none;font-size:30px;color:rgba(255,255,255,.5);padding:20px 24px 10px;line-height:1;cursor:pointer;}
+.mob-menu a{font-size:22px;font-weight:500;color:rgba(255,255,255,.7);padding:22px 28px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);display:block;}
+.mob-menu .mob-cta{color:#0052FF;font-weight:700;border-bottom:none;margin-top:12px;}
+
+/* ── HERO ── */
+.hero-ent{position:relative;height:100vh;min-height:640px;display:flex;align-items:center;overflow:hidden;}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,9,15,.85) 0%,rgba(8,9,15,.4) 60%,transparent 100%);}
+.hero-grad-bottom{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,var(--bg),transparent);}
+.hero-ent-inner{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:0 32px;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-g);background:var(--green-dim);border-radius:100px;padding:6px 16px;margin-bottom:28px;}
+.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse-g 2s infinite;}
+@keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 var(--green-glow)}50%{box-shadow:0 0 0 6px transparent}}
+.hero-badge span{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--green);}
+.hero-ent-h1{font-size:clamp(44px,6vw,82px);font-weight:800;line-height:1.0;letter-spacing:-.04em;color:#fff;margin-bottom:24px;}
+.hero-ent-h1 em{font-style:normal;color:var(--green);}
+.hero-ent-p{font-size:18px;line-height:1.75;color:var(--dim);max-width:580px;margin-bottom:40px;font-weight:400;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{height:50px;padding:0 28px;background:var(--green);border:none;border-radius:9px;color:#fff;font-family:inherit;font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:all .15s;cursor:pointer;}
+.btn-primary:hover{background:var(--green-h);transform:translateY(-1px);}
+.btn-ghost{height:50px;padding:0 28px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:9px;color:var(--dim);font-family:inherit;font-size:15px;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:all .15s;}
+.btn-ghost:hover{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;opacity:.5;}
+.hero-scroll span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#fff;}
+.scroll-bar{width:1px;height:48px;background:linear-gradient(to bottom,#fff,transparent);animation:scrollpulse 2s ease-in-out infinite;}
+@keyframes scrollpulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+
+/* ── STATS BAR ── */
+.stats-bar{background:var(--navy);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stats-bar-inner{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:repeat(3,1fr);}
+.stat-item{padding:32px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:6px;}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:42px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1;}
+.stat-prefix{font-size:24px;font-weight:700;color:var(--green);}
+.stat-suffix{font-size:18px;font-weight:600;color:var(--green);}
+.stat-label{font-size:13px;color:var(--muted);font-weight:500;}
+
+/* ── SECTION COMMONS ── */
+.section{padding:100px 32px;}
+.section-dark{background:var(--bg);}
+.section-navy{background:var(--navy);}
+.section-alt{background:#0b0c14;}
+.section-inner{max-width:1280px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:64px;}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:2px;background:var(--green);}
+.section-h2{font-size:clamp(28px,3.5vw,48px);font-weight:800;letter-spacing:-.03em;color:#fff;margin-bottom:16px;line-height:1.1;}
+.section-h2 em{font-style:normal;color:var(--green);}
+.section-sub{font-size:16px;color:var(--dim);max-width:520px;margin:0 auto;line-height:1.75;}
+
+/* ── TERMINAL ── */
+.terminal-section{padding:80px 32px;background:var(--bg);}
+.terminal-wrap{max-width:900px;margin:0 auto;}
+.terminal-box{background:#0d1117;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(0,82,255,.08);}
+.terminal-bar{background:#161b22;border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:8px;}
+.t-dot{width:12px;height:12px;border-radius:50%;}
+.t-dot.red{background:#ff5f57;}.t-dot.yellow{background:#ffbd2e;}.t-dot.green{background:#28ca41;}
+.terminal-title{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:8px;}
+.terminal-body{padding:24px;font-family:var(--mono);font-size:13px;line-height:1.8;min-height:320px;}
+.t-line{display:flex;gap:8px;margin-bottom:4px;}
+.t-prompt{color:#0052FF;flex-shrink:0;}
+.t-cmd{color:#e6edf3;}
+.t-out{color:#8b949e;padding-left:0;}
+.t-out.success{color:#3fb950;}
+.t-out.warn{color:#d29922;}
+.t-out.addr{color:#79c0ff;}
+.t-cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink .9s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── SERVICES ── */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.svc-card{background:var(--bg);padding:36px;cursor:pointer;transition:background .2s;position:relative;}
+.svc-card:hover,.svc-card.active{background:rgba(0,82,255,.05);}
+.svc-card.active{box-shadow:inset 0 0 0 1px var(--border-g);}
+.svc-icon{font-size:28px;margin-bottom:16px;display:block;}
+.svc-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:-.02em;}
+.svc-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.svc-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.svc-tag{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--green);background:var(--green-dim);border:1px solid var(--border-g);border-radius:4px;padding:3px 8px;}
+
+/* Service detail panel */
+.svc-detail{max-width:1280px;margin:32px auto 0;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:none;}
+.svc-detail.open{display:block;}
+.svc-tabs{display:flex;border-bottom:1px solid var(--border);}
+.svc-tab{padding:16px 28px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;font-family:inherit;cursor:pointer;transition:color .15s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.svc-tab:hover{color:var(--dim);}
+.svc-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.svc-panel{display:none;padding:36px;}
+.svc-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.svc-panel-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.svc-panel ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.svc-panel ul li{font-size:14px;color:var(--dim);display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.svc-panel ul li::before{content:'→';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* ── TECH STACK ── */
+.stack-cats{display:flex;flex-direction:column;gap:40px;}
+.stack-cat-title{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.stack-pills{display:flex;flex-wrap:wrap;gap:10px;}
+.stack-pill{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 18px;transition:all .2s;cursor:default;}
+.stack-pill:hover{border-color:var(--border-g);background:var(--green-dim);transform:translateY(-2px);}
+.pill-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.pill-name{font-size:13px;font-weight:600;color:var(--dim);}
+.pill-name small{display:block;font-size:10px;color:var(--muted);font-weight:400;}
+
+/* ── PROCESS ── */
+.process-track{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;}
+.process-track::before{content:'';position:absolute;top:28px;left:calc(100%/12);right:calc(100%/12);height:1px;background:linear-gradient(to right,transparent,var(--border-g),var(--border-g),transparent);}
+.process-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;position:relative;}
+.step-num{width:56px;height:56px;border-radius:50%;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--muted);margin-bottom:20px;position:relative;z-index:1;transition:all .3s;}
+.process-step.done .step-num{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.step-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;}
+.step-time{font-size:11px;font-weight:600;color:var(--green);margin-bottom:8px;font-family:var(--mono);}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── PROJECTS ── */
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.proj-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .25s;position:relative;overflow:hidden;}
+.proj-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--green-dim),transparent);opacity:0;transition:opacity .25s;}
+.proj-card:hover{border-color:var(--border-g);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.proj-card:hover::before{opacity:1;}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.proj-chain{font-family:var(--mono);font-size:10px;font-weight:600;padding:4px 10px;border-radius:100px;border:1px solid;}
+.proj-name{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:4px;}
+.proj-type{font-size:12px;color:var(--muted);margin-bottom:18px;}
+.proj-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;}
+.proj-stat-val{font-size:16px;font-weight:700;color:#fff;}
+.proj-stat-label{font-size:11px;color:var(--muted);}
+.proj-standard{font-family:var(--mono);font-size:11px;color:var(--green);}
+
+/* ── CODE PREVIEW ── */
+.code-section{padding:100px 32px;background:var(--navy);}
+.code-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center;}
+.code-left h2{font-size:clamp(26px,3vw,42px);font-weight:800;letter-spacing:-.03em;color:#fff;margin-bottom:20px;line-height:1.1;}
+.code-left h2 em{font-style:normal;color:var(--green);}
+.code-left p{font-size:15px;color:var(--dim);line-height:1.75;margin-bottom:28px;}
+.code-features{display:flex;flex-direction:column;gap:12px;margin-bottom:32px;}
+.code-feature{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--dim);}
+.code-feature::before{content:'✓';color:var(--green);font-weight:700;width:20px;}
+.code-box{background:#0d1117;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.code-bar{background:#161b22;padding:14px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.code-file{font-family:var(--mono);font-size:12px;color:var(--muted);}
+.code-lang{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--green);background:var(--green-dim);border:1px solid var(--border-g);border-radius:4px;padding:2px 8px;margin-left:auto;}
+pre.code-pre{padding:24px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.85;counter-reset:lines;}
+.code-pre .ln{display:flex;gap:20px;}
+.code-pre .ln::before{content:counter(lines);counter-increment:lines;color:#3d444d;min-width:20px;text-align:right;flex-shrink:0;user-select:none;}
+.kw{color:#ff7b72;}.ty{color:#79c0ff;}.fn{color:#d2a8ff;}.str{color:#a5d6ff;}.cm{color:#8b949e;font-style:italic;}.nu{color:#79c0ff;}.at{color:#ffa657;}.nm{color:#e6edf3;}.op{color:#ff7b72;}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.pr-card{border:1px solid var(--border);border-radius:18px;padding:36px;position:relative;transition:all .22s;background:rgba(255,255,255,.03);display:flex;flex-direction:column;}
+.pr-card:hover{border-color:var(--border-g);transform:translateY(-4px);box-shadow:0 24px 60px rgba(0,0,0,.3);}
+.pr-card-feat{background:var(--navy);border-color:var(--green);box-shadow:0 0 40px var(--green-glow);}
+.pr-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--green);color:#0a0b11;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 16px;border-radius:100px;white-space:nowrap;}
+.pr-name{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;}
+.pr-price{font-size:46px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1;}
+.pr-price-pre{font-size:20px;color:var(--green);font-weight:700;vertical-align:middle;}
+.pr-note{font-size:12px;color:var(--muted);margin-top:4px;margin-bottom:16px;height:16px;}
+.pr-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.pr-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;flex:1;}
+.pr-features li{font-size:13px;color:var(--dim);display:flex;align-items:flex-start;gap:8px;line-height:1.45;}
+.pr-features li::before{content:'';width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:1px;background:var(--green-dim) url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 13l4 4L19 7' stroke='%230052FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat;border:1px solid var(--border-g);}
+.pr-btn{display:block;text-align:center;padding:13px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;transition:all .15s;border:1.5px solid var(--border);color:var(--dim);}
+.pr-btn:hover{border-color:var(--green);color:var(--green);}
+.pr-btn-g{background:var(--green);border-color:var(--green);color:#fff;}
+.pr-btn-g:hover{background:var(--green-h);color:#fff;}
+
+/* ── FAQ ── */
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:2px;}
+.faq-item{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card);}
+.faq-q{width:100%;background:none;border:none;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:inherit;font-size:15px;font-weight:600;color:#fff;cursor:pointer;text-align:left;transition:background .15s;}
+.faq-q:hover{background:rgba(255,255,255,.03);}
+.faq-arrow{width:20px;height:20px;flex-shrink:0;color:var(--muted);transition:transform .25s;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);color:var(--green);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.faq-item.open .faq-a{max-height:200px;}
+.faq-a-inner{padding:0 24px 22px;font-size:14px;color:var(--dim);line-height:1.75;}
+
+/* ── CTA / CONTACT ── */
+.cta-section{padding:100px 32px;background:var(--bg);border-top:1px solid var(--border);}
+.cta-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:start;}
+.cta-form{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:18px;padding:40px;}
+.cta-form-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;}
+.cta-form-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.f-group{margin-bottom:16px;}
+.f-label{display:block;font-size:12px;font-weight:600;color:var(--dim);margin-bottom:8px;letter-spacing:.02em;}
+.f-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:14px;color:#fff;outline:none;transition:border-color .15s;}
+.f-input:focus{border-color:var(--green);}
+.f-input::placeholder{color:var(--muted);}
+.f-select{appearance:none;background:rgba(255,255,255,.05) url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 12px center/16px no-repeat;cursor:pointer;}
+.f-select option{background:#0A0B0D;}
+.f-textarea{resize:vertical;min-height:100px;}
+.f-submit{width:100%;height:50px;background:var(--green);border:none;border-radius:8px;font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;margin-top:4px;}
+.f-submit:hover{background:var(--green-h);}
+.f-note{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;}
+
+/* ── FOOTER ── */
+.site-footer{background:#000;color:rgba(255,255,255,.65);padding:72px 32px 0;}
+.footer-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 2.6fr;gap:48px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.07);}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;text-decoration:none;padding-left:0;}
+.footer-tagline{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:28px;max-width:240px;}
+.footer-social{display:flex;gap:10px;}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .15s;}
+.social-btn:hover{background:#0052FF;border-color:#0052FF;}
+.social-btn svg{width:16px;height:16px;fill:rgba(255,255,255,.5);}
+.social-btn:hover svg{fill:#fff;}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);text-decoration:none;margin-bottom:11px;transition:color .15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{max-width:1180px;margin:0 auto;padding:22px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,.25);}
+.footer-bottom-links{display:flex;gap:20px;}
+.footer-bottom-links a{font-size:12px;color:rgba(255,255,255,.25);text-decoration:none;transition:color .15s;}
+.footer-bottom-links a:hover{color:rgba(255,255,255,.6);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .services-grid{grid-template-columns:repeat(2,1fr);}
+  .process-track{grid-template-columns:repeat(3,1fr);gap:24px;}
+  .process-track::before{display:none;}
+  .code-inner{grid-template-columns:1fr;gap:40px;}
+  .projects-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:860px){
+  body{padding-top:90px;}
+  .nav-inner{padding:0 16px;height:56px;}
+  .nav-logo{margin-right:auto;}
+  .nav-cta{display:none;}
+  .nav-links{display:none;}
+  .ham-btn{display:flex;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .ham-btn{display:flex;}
+  .hero-ent-h1{font-size:42px;}
+  .stats-bar-inner{grid-template-columns:repeat(2,1fr);}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border);}
+  .services-grid{grid-template-columns:1fr;}
+  .svc-panel.active{grid-template-columns:1fr;}
+  .projects-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto;}
+  .cta-inner{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-cols{grid-template-columns:repeat(2,1fr);}
+  .f-row{grid-template-columns:1fr;}
+  .section{padding:64px 20px;}
+  .process-track{grid-template-columns:1fr;max-width:360px;margin:0 auto;}
+}
+@media(max-width:500px){
+  .footer-cols{grid-template-columns:1fr;}
+  .hero-ctas{flex-direction:column;}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center;}
+}
+/* ── BRAND LOGO ── */
+.brand-logo-img{width:200px;height:52px;object-fit:cover;object-position:center 50%;display:block;}
+</style>
+</head>
+<body>
+
+<!-- HEADER: ticker + nav -->
+<div class="page-header">
+<div class="ticker">
+  <div class="ticker-pill"><div class="tdot"></div>En vivo</div>
+  <div class="ticker-scroll"><div class="ticker-track" id="ticker-track"></div></div>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img"></a>
+    <div class="nav-links">
+      <a href="personas.html" class="nav-link">Individuo</a>
+      <a href="empresas.html" class="nav-link">Empresa</a>
+    </div>
+    <div class="nav-right">
+      <a href="agenda.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="15" r="1.5" fill="currentColor"></circle></svg>
+        Agenda asesoría
+      </a>
+      <button class="ham-btn" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="toggleMenu()">✕</button>
+  <a href="personas.html" onclick="toggleMenu()">Individuo</a>
+  <a href="empresas.html" onclick="toggleMenu()">Empresa</a>
+  <a href="agenda.html" class="mob-cta" onclick="toggleMenu()">Agenda asesoría →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero-ent">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grad"></div>
+  <div class="hero-grad-bottom"></div>
+  <div class="hero-ent-inner">
+    <div class="hero-badge reveal"><span class="badge-dot"></span><span>Desarrollo Web3 & Blockchain</span></div>
+    <h1 class="hero-ent-h1 reveal">De la idea<br>al <em>protocolo</em><br>en producción.</h1>
+    <p class="hero-ent-p reveal">Construimos infraestructura blockchain de clase mundial. Smart contracts auditados, tokenización real, dApps listas para producción en las principales redes.</p>
+    <div class="hero-ctas reveal">
+      <a href="#servicios" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Ver servicios
+      </a>
+      <a href="#contacto" class="btn-ghost">Hablar con un arquitecto Web3 →</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-bar"></div></div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat-item reveal"><div class="stat-num" data-target="12" data-prefix="USD$" data-suffix="M+">0</div><div class="stat-label">Capital tokenizado</div></div>
+    <div class="stat-item reveal"><div class="stat-num" data-target="8">0</div><div class="stat-label">Chains soportadas</div></div>
+    <div class="stat-item reveal"><div class="stat-num" data-target="9">0</div><div class="stat-label">Años de experiencia</div></div>
+  </div>
+</div>
+
+<!-- TERMINAL -->
+<div class="terminal-section">
+  <div class="terminal-wrap reveal">
+    <div class="terminal-box">
+      <div class="terminal-bar">
+        <div class="t-dot red"></div><div class="t-dot yellow"></div><div class="t-dot green"></div>
+        <span class="terminal-title">bash — arquitecto@madridcrypto: ~/proyecto-cliente</span>
+      </div>
+      <div class="terminal-body" id="terminal-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="servicios" class="section section-alt">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Servicios</div>
+      <h2 class="section-h2">Todo lo que tu empresa necesita<br>para entrar al <em>ecosistema Web3</em></h2>
+      <p class="section-sub">Haz clic en cada servicio para ver en detalle qué hacemos, con qué tecnología y qué recibes.</p>
+    </div>
+    <div class="services-grid reveal" id="svc-grid">
+      <div class="svc-card" onclick="openSvc(0)">
+        <span class="svc-icon">🏢</span>
+        <div class="svc-name">Tokenización de Empresa</div>
+        <p class="svc-desc">Convierte las acciones y equity de tu empresa en tokens digitales para captar inversión global.</p>
+        <div class="svc-tags"><span class="svc-tag">ERC-1400</span><span class="svc-tag">ERC-20</span><span class="svc-tag">Gnosis Safe</span></div>
+      </div>
+      <div class="svc-card" onclick="openSvc(1)">
+        <span class="svc-icon">🏗️</span>
+        <div class="svc-name">Activos Reales (RWA)</div>
+        <p class="svc-desc">Fracciona inmuebles, commodities, arte y cualquier activo físico en la blockchain.</p>
+        <div class="svc-tags"><span class="svc-tag">ERC-3643</span><span class="svc-tag">Chainlink</span><span class="svc-tag">Oráculos</span></div>
+      </div>
+      <div class="svc-card" onclick="openSvc(2)">
+        <span class="svc-icon">🎨</span>
+        <div class="svc-name">NFTs & Colecciones</div>
+        <p class="svc-desc">Lanzamos colecciones NFT de nivel Bored Ape / CryptoPunks con smart contracts optimizados.</p>
+        <div class="svc-tags"><span class="svc-tag">ERC-721A</span><span class="svc-tag">IPFS</span><span class="svc-tag">Merkle Tree</span></div>
+      </div>
+      <div class="svc-card" onclick="openSvc(3)">
+        <span class="svc-icon">⚡</span>
+        <div class="svc-name">Criptomoneda & Tokenomics</div>
+        <p class="svc-desc">Diseñamos y lanzamos tu token con tokenomics, vesting, gobernanza y listado en exchanges.</p>
+        <div class="svc-tags"><span class="svc-tag">ERC-20</span><span class="svc-tag">Vesting</span><span class="svc-tag">DEX/CEX</span></div>
+      </div>
+      <div class="svc-card" onclick="openSvc(4)">
+        <span class="svc-icon">🔄</span>
+        <div class="svc-name">DeFi & Protocolos</div>
+        <p class="svc-desc">Construimos protocolos DeFi: lending, staking, liquidity pools y yield farming.</p>
+        <div class="svc-tags"><span class="svc-tag">Uniswap V3</span><span class="svc-tag">Aave</span><span class="svc-tag">veToken</span></div>
+      </div>
+      <div class="svc-card" onclick="openSvc(5)">
+        <span class="svc-icon">💻</span>
+        <div class="svc-name">dApps & Desarrollo Web3</div>
+        <p class="svc-desc">Interfaces decentralizadas con wallet connect, firma de transacciones y UX de primer nivel.</p>
+        <div class="svc-tags"><span class="svc-tag">wagmi</span><span class="svc-tag">viem</span><span class="svc-tag">WalletConnect</span></div>
+      </div>
+    </div>
+
+    <!-- Detail panel -->
+    <div class="svc-detail" id="svc-detail">
+      <div class="svc-tabs" id="svc-tabs">
+        <button class="svc-tab active" onclick="switchTab(0)">¿Qué es?</button>
+        <button class="svc-tab" onclick="switchTab(1)">Tecnología</button>
+        <button class="svc-tab" onclick="switchTab(2)">Entregables</button>
+      </div>
+      <div class="svc-panel active" id="svc-panel-0">
+        <div><div class="svc-panel-title">Descripción</div><ul id="svc-desc-list"></ul></div>
+        <div><div class="svc-panel-title">Casos de uso</div><ul id="svc-cases-list"></ul></div>
+      </div>
+      <div class="svc-panel" id="svc-panel-1">
+        <div><div class="svc-panel-title">Stack técnico</div><ul id="svc-tech-list"></ul></div>
+        <div><div class="svc-panel-title">Redes soportadas</div><ul id="svc-chains-list"></ul></div>
+      </div>
+      <div class="svc-panel" id="svc-panel-2">
+        <div><div class="svc-panel-title">Qué recibes</div><ul id="svc-deliverables-list"></ul></div>
+        <div><div class="svc-panel-title">Plazos estimados</div><ul id="svc-timeline-list"></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack" class="section section-navy">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Stack Tecnológico</div>
+      <h2 class="section-h2">Las mismas herramientas que usan<br><em>los mejores protocolos del mundo</em></h2>
+    </div>
+    <div class="stack-cats reveal">
+      <div>
+        <div class="stack-cat-title">Blockchains</div>
+        <div class="stack-pills">
+          <div class="stack-pill"><div class="pill-logo" style="background:#627eea20;color:#627eea;">Ξ</div><div><div class="pill-name">Ethereum<small>Mainnet · Sepolia</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#9945ff20;color:#9945ff;">◎</div><div><div class="pill-name">Solana<small>Mainnet · Devnet</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#f3ba2f20;color:#f3ba2f;">⬡</div><div><div class="pill-name">BNB Chain<small>BSC · opBNB</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#8247e520;color:#8247e5;">⬡</div><div><div class="pill-name">Polygon<small>PoS · zkEVM</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#e8411920;color:#e84119;">▲</div><div><div class="pill-name">Avalanche<small>C-Chain</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#28a0f020;color:#28a0f0;">○</div><div><div class="pill-name">Arbitrum<small>One · Nova</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#0052ff20;color:#0052ff;">⬡</div><div><div class="pill-name">Base<small>L2 Coinbase</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#ff041220;color:#ff0412;">○</div><div><div class="pill-name">Optimism<small>Superchain</small></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="stack-cat-title">Smart Contracts & Herramientas</div>
+        <div class="stack-pills">
+          <div class="stack-pill"><div class="pill-logo" style="background:#ffd70020;color:#ffd700;font-family:var(--mono);font-size:10px;">HH</div><div><div class="pill-name">Hardhat<small>Testing & Deploy</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#0052FF20;color:#0052FF;font-family:var(--mono);font-size:10px;">⚒</div><div><div class="pill-name">Foundry<small>Fuzzing & Testing</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#4e74e920;color:#4e74e9;font-family:var(--mono);font-size:10px;">OZ</div><div><div class="pill-name">OpenZeppelin<small>Contratos auditados</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#375bd220;color:#375bd2;font-family:var(--mono);font-size:9px;">🔗</div><div><div class="pill-name">Chainlink<small>Oráculos & VRF</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#65c2cb20;color:#65c2cb;font-family:var(--mono);font-size:9px;">⊕</div><div><div class="pill-name">IPFS<small>Almacenamiento</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#6f4cff20;color:#6f4cff;font-family:var(--mono);font-size:9px;">GRT</div><div><div class="pill-name">The Graph<small>Indexado on-chain</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#36bffa20;color:#36bffa;font-family:var(--mono);font-size:9px;">ALC</div><div><div class="pill-name">Alchemy<small>Node provider</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#ff574220;color:#ff5742;font-family:var(--mono);font-size:9px;">🛡</div><div><div class="pill-name">Slither<small>Auditoría estática</small></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="stack-cat-title">Frontend Web3</div>
+        <div class="stack-pills">
+          <div class="stack-pill"><div class="pill-logo" style="background:#61dafb20;color:#61dafb;font-family:var(--mono);font-size:11px;">⚛</div><div><div class="pill-name">React / Next.js<small>dApp frontend</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#0052FF20;color:#0052FF;font-family:var(--mono);font-size:9px;">wgm</div><div><div class="pill-name">wagmi + viem<small>React hooks Web3</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#3396ff20;color:#3396ff;font-family:var(--mono);font-size:8px;">WC</div><div><div class="pill-name">WalletConnect<small>Multi-wallet</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#e2761b20;color:#e2761b;font-family:var(--mono);font-size:9px;">🦊</div><div><div class="pill-name">MetaMask SDK<small>Integración directa</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#4f46e520;color:#4f46e5;font-family:var(--mono);font-size:9px;">TS</div><div><div class="pill-name">TypeScript<small>Tipado fuerte</small></div></div></div>
+          <div class="stack-pill"><div class="pill-logo" style="background:#06b6d420;color:#06b6d4;font-family:var(--mono);font-size:8px;">TW</div><div><div class="pill-name">Tailwind CSS<small>UI rápida</small></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="proceso" class="section section-alt">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Proceso</div>
+      <h2 class="section-h2">De la reunión inicial al<br><em>deploy en mainnet</em></h2>
+      <p class="section-sub">Un proceso probado en 50+ proyectos. Transparente, iterativo y orientado a resultados reales.</p>
+    </div>
+    <div class="process-track reveal">
+      <div class="process-step done"><div class="step-num">01</div><div class="step-name">Discovery</div><div class="step-time">1–2 sem.</div><p class="step-desc">Análisis de necesidades, casos de uso blockchain y hoja de ruta técnica.</p></div>
+      <div class="process-step done"><div class="step-num">02</div><div class="step-name">Arquitectura</div><div class="step-time">1 sem.</div><p class="step-desc">Diseño de contratos, selección de chain y modelo de datos on-chain.</p></div>
+      <div class="process-step done"><div class="step-num">03</div><div class="step-name">Desarrollo</div><div class="step-time">4–12 sem.</div><p class="step-desc">Programación de smart contracts, tests unitarios e integración frontend.</p></div>
+      <div class="process-step done"><div class="step-num">04</div><div class="step-name">Auditoría</div><div class="step-time">2 sem.</div><p class="step-desc">Revisión de seguridad con Slither, pen testing y corrección de hallazgos.</p></div>
+      <div class="process-step done"><div class="step-num">05</div><div class="step-name">Deploy</div><div class="step-time">1 sem.</div><p class="step-desc">Despliegue en mainnet, verificación en Etherscan y pruebas finales.</p></div>
+      <div class="process-step done"><div class="step-num">06</div><div class="step-name">Soporte</div><div class="step-time">Continuo</div><p class="step-desc">Monitorización, actualizaciones de contratos y soporte técnico post-launch.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="proyectos" class="section section-navy">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Caso de éxito</div>
+      <h2 class="section-h2">Andes Solar Hash:<br>energía competitiva <em>tokenizada en NFT</em></h2>
+      <p class="section-sub" style="max-width:620px;margin:0 auto;">Empresa chilena que convierte infraestructura minera real de Bitcoin en activos digitales. 100 NFTs de edición limitada en Polygon — cada uno respaldado por un Antminer S21+ operativo y con recompensas diarias en BTC.</p>
+    </div>
+
+    <!-- HERO CASE STUDY -->
+    <div class="reveal" style="background:linear-gradient(135deg,rgba(255,165,0,.06),rgba(0,82,255,.08)),rgba(255,255,255,.02);border:1px solid rgba(255,165,0,.2);border-radius:24px;overflow:hidden;margin-top:48px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;">
+
+        <!-- LEFT: imagen del miner -->
+        <div style="background:radial-gradient(ellipse at center,rgba(255,165,0,.12) 0%,rgba(0,0,0,0) 70%),#0a0c1a;display:flex;align-items:center;justify-content:center;padding:48px;min-height:400px;">
+          <img src="andes-miner.png" alt="Andes Solar Hash NFT Minero S21+"
+               style="max-width:320px;width:100%;drop-shadow:0 0 40px rgba(255,165,0,.4);"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <!-- Fallback si la imagen no está cargada -->
+          <div style="display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+            <div style="font-size:80px;">⛏️</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.3);">S21+ · 234 TH/s · SHA-256</div>
+          </div>
+        </div>
+
+        <!-- RIGHT: info -->
+        <div style="padding:48px;display:flex;flex-direction:column;justify-content:center;gap:24px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#f59e0b;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:6px;padding:4px 10px;">Bitcoin Mining</span>
+              <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);background:var(--green-dim);border:1px solid var(--border-g);border-radius:6px;padding:4px 10px;">En operación</span>
+            </div>
+            <h3 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:#fff;margin:0 0 8px;letter-spacing:-.02em;">Andes Solar Hash</h3>
+            <p style="font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;margin:0;">Colección de 100 NFTs de edición limitada en Polygon, cada uno respaldado por un Antminer S21+ real operativo en Chile. Al adquirir un NFT, el inversor recibe recompensas diarias en BTC o POL proporcionales a la producción minera — sin intermediarios, verificado en blockchain.</p>
+          </div>
+
+          <!-- Stats -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;">
+              <div style="font-size:22px;font-weight:800;color:#f59e0b;">234 TH/s</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">Hashrate por minero</div>
+            </div>
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;">
+              <div style="font-size:22px;font-weight:800;color:#f59e0b;">S21+</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">Antminer SHA-256</div>
+            </div>
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;">
+              <div style="font-size:22px;font-weight:800;color:var(--green);">100</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">NFTs edición limitada</div>
+            </div>
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;">
+              <div style="font-size:22px;font-weight:800;color:var(--green);">Polygon</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">Blockchain · OpenSea</div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="svc-tag">NFTs Mineros</span>
+            <span class="svc-tag">Bitcoin SHA-256</span>
+            <span class="svc-tag">Polygon</span>
+            <span class="svc-tag">Energía Competitiva</span>
+            <span class="svc-tag">Recompensas diarias BTC</span>
+            <span class="svc-tag">Edición limitada</span>
+          </div>
+
+          <!-- CTA -->
+          <div>
+            <a href="https://andessolarhash.com/nft/" target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;font-weight:700;font-size:15px;border-radius:10px;text-decoration:none;transition:opacity .2s;"
+               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Ver proyecto completo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NFT Mineros highlight -->
+      <div style="border-top:1px solid rgba(255,165,0,.15);padding:32px 48px;background:rgba(245,158,11,.04);">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+          <div style="flex:0 0 auto;width:44px;height:44px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;">⚡</div>
+          <div style="flex:1;min-width:200px;">
+            <div style="font-size:16px;font-weight:700;color:#f59e0b;margin-bottom:6px;">NFTs Mineros — energía competitiva convertida en activo digital</div>
+            <p style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.6;margin:0;">Cada NFT otorga una participación digital limitada en infraestructura minera operativa. Los holders reciben un porcentaje de la producción real directamente en su wallet (BTC o POL), sin custodia centralizada. Transferible en OpenSea. Madrid Crypto Capital estructuró los smart contracts, la tokenomics y la estrategia de emisión. Próximas ediciones: Panda Edition y Rosa Edition.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+@media(max-width:768px){
+  #proyectos [style*="grid-template-columns:1fr 1fr"]:first-of-type{grid-template-columns:1fr!important;}
+  #proyectos [style*="padding:48px"]{padding:28px!important;}
+  #proyectos [style*="padding:32px 48px"]{padding:24px 28px!important;}
+}
+</style>
+
+<!-- CODE PREVIEW -->
+<section class="code-section">
+  <div class="code-inner">
+    <div class="code-left reveal">
+      <div class="eyebrow" style="justify-content:flex-start;"><div style="width:24px;height:2px;background:var(--green)"></div>Smart Contracts</div>
+      <h2>Código <em>auditado</em><br>y listo para producción</h2>
+      <p>Cada contrato que entregamos pasa por revisión de seguridad con herramientas profesionales y cumple los estándares de la industria. Solidity 0.8+, OpenZeppelin, gas optimizado.</p>
+      <div class="code-features">
+        <div class="code-feature">Contratos verificados en Etherscan / Explorer</div>
+        <div class="code-feature">Tests con cobertura superior al 95%</div>
+        <div class="code-feature">Análisis estático con Slither</div>
+        <div class="code-feature">Gas optimizado con Foundry fuzzing</div>
+        <div class="code-feature">Documentación NatSpec completa</div>
+      </div>
+      <a href="#contacto" class="btn-primary" style="width:fit-content;">Solicitar demo técnica</a>
+    </div>
+    <div class="code-box reveal">
+      <div class="code-bar">
+        <div class="t-dot red"></div><div class="t-dot yellow"></div><div class="t-dot green"></div>
+        <span class="code-file" style="margin-left:12px;">MadridToken.sol</span>
+        <span class="code-lang">Solidity 0.8.20</span>
+      </div>
+      <pre class="code-pre"><div class="ln"><span class="cm">// SPDX-License-Identifier: MIT</span></div>
+<div class="ln"><span class="kw">pragma</span> <span class="nm">solidity</span> <span class="nu">^0.8.20</span><span class="nm">;</span></div>
+<div class="ln"></div>
+<div class="ln"><span class="kw">import</span> <span class="str">"@openzeppelin/contracts/token/ERC20/ERC20.sol"</span><span class="nm">;</span></div>
+<div class="ln"><span class="kw">import</span> <span class="str">"@openzeppelin/contracts/access/Ownable.sol"</span><span class="nm">;</span></div>
+<div class="ln"><span class="kw">import</span> <span class="str">"@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol"</span><span class="nm">;</span></div>
+<div class="ln"></div>
+<div class="ln"><span class="cm">/// @title MadridToken — Token con gobernanza y vesting</span></div>
+<div class="ln"><span class="cm">/// @author Madrid Crypto Capital</span></div>
+<div class="ln"><span class="kw">contract</span> <span class="fn">MadridToken</span> <span class="kw">is</span> <span class="ty">ERC20</span><span class="nm">,</span> <span class="ty">ERC20Votes</span><span class="nm">,</span> <span class="ty">Ownable</span> <span class="nm">{</span></div>
+<div class="ln">  <span class="ty">uint256</span> <span class="kw">public constant</span> <span class="nm">MAX_SUPPLY</span> <span class="op">=</span> <span class="nu">100_000_000</span> <span class="op">*</span> <span class="nu">10</span><span class="op">**</span><span class="nu">18</span><span class="nm">;</span></div>
+<div class="ln">  <span class="ty">mapping</span><span class="nm">(</span><span class="ty">address</span> <span class="op">=></span> <span class="ty">uint256</span><span class="nm">)</span> <span class="kw">public</span> <span class="nm">vestingRelease</span><span class="nm">;</span></div>
+<div class="ln"></div>
+<div class="ln">  <span class="at">event</span> <span class="fn">TokensVested</span><span class="nm">(</span><span class="ty">address indexed</span> <span class="nm">beneficiary</span><span class="nm">,</span> <span class="ty">uint256</span> <span class="nm">amount</span><span class="nm">);</span></div>
+<div class="ln"></div>
+<div class="ln">  <span class="kw">constructor</span><span class="nm">(</span><span class="ty">address</span> <span class="nm">initialOwner</span><span class="nm">)</span></div>
+<div class="ln">    <span class="fn">ERC20</span><span class="nm">(</span><span class="str">"Madrid Token"</span><span class="nm">,</span> <span class="str">"MDC"</span><span class="nm">)</span></div>
+<div class="ln">    <span class="fn">Ownable</span><span class="nm">(</span><span class="nm">initialOwner</span><span class="nm">)</span></div>
+<div class="ln">  <span class="nm">{</span></div>
+<div class="ln">    <span class="fn">_mint</span><span class="nm">(</span><span class="nm">msg.sender</span><span class="nm">,</span> <span class="nu">10_000_000</span> <span class="op">*</span> <span class="nu">10</span><span class="op">**</span><span class="nu">18</span><span class="nm">);</span></div>
+<div class="ln">  <span class="nm">}</span></div>
+<div class="ln"></div>
+<div class="ln">  <span class="kw">function</span> <span class="fn">mint</span><span class="nm">(</span><span class="ty">address</span> <span class="nm">to</span><span class="nm">,</span> <span class="ty">uint256</span> <span class="nm">amount</span><span class="nm">)</span> <span class="kw">external</span> <span class="fn">onlyOwner</span> <span class="nm">{</span></div>
+<div class="ln">    <span class="kw">require</span><span class="nm">(</span><span class="fn">totalSupply</span><span class="nm">()</span> <span class="op">+</span> <span class="nm">amount</span> <span class="op"><=</span> <span class="nm">MAX_SUPPLY</span><span class="nm">,</span> <span class="str">"Exceeds max supply"</span><span class="nm">);</span></div>
+<div class="ln">    <span class="fn">_mint</span><span class="nm">(</span><span class="nm">to</span><span class="nm">,</span> <span class="nm">amount</span><span class="nm">);</span></div>
+<div class="ln">  <span class="nm">}</span></div>
+<div class="ln"><span class="nm">}</span></div></pre>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precios" class="section section-alt">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Planes</div>
+      <h2 class="section-h2">Precios <em>transparentes</em><br>sin letra pequeña</h2>
+      <p class="section-sub">Primera consulta siempre gratuita. Sin permanencia. Precio en USD.</p>
+    </div>
+    <div class="pricing-grid reveal">
+      <div class="pr-card">
+        <div class="pr-name">Consultoría estratégica</div>
+        <div><span class="pr-price-pre">USD</span> <span class="pr-price">2.500</span></div>
+        <div class="pr-note">Proyecto único · 2-3 semanas</div>
+        <p class="pr-desc">Para empresas y fundadores que necesitan validar su idea blockchain, definir arquitectura y presentar su proyecto a inversionistas antes de comprometer capital en desarrollo.</p>
+        <ul class="pr-features">
+          <li>Definición estratégica del proyecto y narrativa de negocio</li>
+          <li>Análisis de viabilidad blockchain y selección de chain óptima</li>
+          <li>Diseño de tokenomics y modelo económico del protocolo</li>
+          <li>Hoja de ruta técnica detallada con milestones</li>
+          <li>Documento PDF para inversionistas (7-10 páginas)</li>
+          <li>Presentación ejecutiva lista para pitch</li>
+          <li>3 sesiones de consultoría 1:1 con arquitecto Web3</li>
+          <li>Análisis regulatorio por jurisdicción objetivo</li>
+        </ul>
+        <a href="#contacto" class="pr-btn">Solicitar consultoría</a>
+      </div>
+      <div class="pr-card pr-card-feat">
+        <div class="pr-badge">Más solicitado</div>
+        <div class="pr-name">Desarrollo Web3 completo</div>
+        <div><span class="pr-price-pre">USD</span> <span class="pr-price">12.500</span></div>
+        <div class="pr-note">Desde · proyecto único · 6-12 semanas</div>
+        <p class="pr-desc">Tokenización, smart contracts auditados, dApp lista para producción y presencia digital Web3 profesional. Todo lo que una empresa necesita para operar en blockchain con estándares institucionales.</p>
+        <ul class="pr-features">
+          <li>Smart contracts auditados (Slither + Foundry, cobertura 95%+)</li>
+          <li>Tokenización de empresa, equity o activos reales (RWA)</li>
+          <li>dApp con WalletConnect, wagmi + viem</li>
+          <li>Panel de administración Web3</li>
+          <li>Deploy verificado en mainnet + documentación NatSpec</li>
+          <li>Estructura legal completa del proyecto Web3</li>
+          <li>Arquitectura y desarrollo del sitio web del proyecto</li>
+          <li>15 posts gráficos para RRSS + estrategia de contenido</li>
+          <li>Soporte técnico 6 meses post-launch</li>
+        </ul>
+        <a href="#contacto" class="pr-btn pr-btn-g">Solicitar desarrollo</a>
+      </div>
+      <div class="pr-card">
+        <div class="pr-name">Full Launch — De la idea al mercado</div>
+        <div><span class="pr-price-pre">USD</span> <span class="pr-price">27.500</span></div>
+        <div class="pr-note">Desde · proyecto completo · 3-6 meses</div>
+        <p class="pr-desc">El paquete completo para lanzar un protocolo, criptomoneda o proyecto Web3 al mercado de forma profesional: tecnología de primer nivel, comunidad, contenido audiovisual, legal, go-to-market y red de inversores Latam.</p>
+        <ul class="pr-features">
+          <li>Todo lo del plan Desarrollo Web3 completo</li>
+          <li>Criptomoneda propia con tokenomics, vesting y gobernanza</li>
+          <li>Colección NFT completa (ERC-721A, IPFS, Merkle whitelist)</li>
+          <li>Protocolo DeFi: staking, liquidity pool o lending</li>
+          <li>Video institucional (3 min) + 10 videos cortos Reels/TikTok</li>
+          <li>Campaña de presale e ICO con alertas tempranas</li>
+          <li>Listado en exchanges DEX y contactos CEX</li>
+          <li>Introducción a red de inversores Latam y EE.UU.</li>
+          <li>Soporte técnico dedicado 12 meses + protocolo 24h</li>
+        </ul>
+        <a href="#contacto" class="pr-btn">Hablar con experto</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-navy">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2 class="section-h2">Preguntas <em>frecuentes</em></h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿En qué blockchains pueden desplegar contratos?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Trabajamos con Ethereum, Solana, BNB Chain, Polygon, Avalanche, Arbitrum, Base y Optimism. La selección depende del caso de uso, costos de gas y ecosistema de usuarios de tu proyecto. Lo analizamos juntos en la consultoría inicial.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Realizáis auditorías de seguridad?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Sí. Todo contrato pasa por análisis estático con Slither, revisión manual y fuzzing con Foundry antes del deploy. Para proyectos de mayor envergadura coordinamos auditorías externas con firmas como Trail of Bits o Certik.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Cuánto tiempo tarda un proyecto de tokenización?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Una tokenización de empresa básica tarda entre 6 y 10 semanas. Un proyecto completo (token + dApp + marketplace) puede llegar a 4-6 meses. Entregamos milestones semanales para que siempre estés al tanto del progreso.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Pueden listar nuestra criptomoneda en exchanges?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Sí. Tenemos relaciones directas con exchanges DEX (Uniswap, PancakeSwap, Raydium) y contactos en CEX de mediano y gran tamaño. El proceso de listing incluye auditoría del token, liquidez inicial y documentación técnica.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Trabajan con startups o solo con empresas grandes?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Trabajamos con todo tipo de organizaciones: desde startups en etapa temprana hasta empresas consolidadas. El plan de Consultoría está diseñado especialmente para proyectos en etapas iniciales que quieren validar su modelo antes de invertir en desarrollo.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Qué pasa si se encuentran vulnerabilidades post-lanzamiento?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Todos nuestros contratos incluyen mecanismos de pausa de emergencia (Pausable) y sistemas de upgrade proxy cuando aplica. Ante cualquier incidente respondemos en menos de 2 horas y tenemos protocolo de crisis establecido para mitigar daños.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA CONTACT -->
+<section id="contacto" class="cta-section">
+  <div class="cta-inner">
+    <div class="reveal">
+      <div class="eyebrow" style="justify-content:flex-start;"><div style="width:24px;height:2px;background:var(--green)"></div>Primer contacto</div>
+      <h2 style="font-size:clamp(28px,3.5vw,46px);font-weight:800;letter-spacing:-.03em;color:#fff;margin-bottom:20px;line-height:1.1;">Cuéntanos tu proyecto.<br>Respondemos en <em style="color:var(--green);font-style:normal;">menos de 24h.</em></h2>
+      <p style="font-size:15px;color:var(--dim);line-height:1.75;margin-bottom:36px;max-width:400px;">Primera consulta gratuita. Sin compromiso. Te asignamos el arquitecto Web3 ideal para tu caso.</p>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:flex-start;gap:14px;"><div style="width:40px;height:40px;border-radius:9px;background:var(--green-dim);border:1px solid var(--border-g);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📅</div><div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Reunión técnica inicial</div><div style="font-size:13px;color:var(--muted);">Analizamos tu proyecto en profundidad</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;"><div style="width:40px;height:40px;border-radius:9px;background:var(--green-dim);border:1px solid var(--border-g);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📋</div><div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Propuesta técnica y económica</div><div style="font-size:13px;color:var(--muted);">Stack, plazos y presupuesto detallado</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;"><div style="width:40px;height:40px;border-radius:9px;background:var(--green-dim);border:1px solid var(--border-g);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🚀</div><div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Arrancamos en 48h</div><div style="font-size:13px;color:var(--muted);">Si hay acuerdo, empezamos de inmediato</div></div></div>
+      </div>
+    </div>
+    <div class="cta-form reveal">
+      <div class="cta-form-title">Agenda tu asesoría de empresa</div>
+      <div class="cta-form-sub">Selecciona horario · Confirmación inmediata</div>
+
+      <!-- Pasos del proceso -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#0052FF;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Tu proyecto Web3</div>
+            <div style="font-size:12px;color:var(--muted);">Tipo de desarrollo, experiencia y presupuesto</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:16px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,82,255,.2);border:1px solid rgba(0,82,255,.4);color:#6699ff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Tus datos de contacto</div>
+            <div style="font-size:12px;color:var(--muted);">Nombre, email corporativo y empresa</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:16px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,82,255,.2);border:1px solid rgba(0,82,255,.4);color:#6699ff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Selecciona fecha y hora</div>
+            <div style="font-size:12px;color:var(--muted);">Disponibilidad real en tiempo real · Lunes a viernes</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:16px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,255,163,.1);border:1px solid rgba(0,255,163,.3);color:var(--green);font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--green);">Invitación Google Meet al instante</div>
+            <div style="font-size:12px;color:var(--muted);">Link de videollamada directo a tu correo</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="agenda.html?tipo=empresa" class="f-submit" style="text-decoration:none;display:flex;justify-content:center;align-items:center;gap:10px;">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="2" fill="currentColor"/></svg>
+        Ver horarios disponibles
+      </a>
+      <p class="f-note" style="text-align:center;margin-top:12px;">⏱️ 30 min · Google Meet · Sin costo · Sin compromiso</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">
+        <img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img">
+      </a>
+      <p class="footer-tagline">Tu puerta al mundo de las criptomonedas. Asesoría profesional desde Chile para toda Latinoamérica y el mundo.</p>
+      <div class="footer-social">
+        <a href="https://x.com/MadridCrypto" target="_blank" class="social-btn" aria-label="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/company/madrid-crypto-capital" target="_blank" class="social-btn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://facebook.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://instagram.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@MadridCryptoCapital" target="_blank" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios Gratuitos</div>
+        <a href="dca.html">Calculadora Bitcoin DCA</a>
+        <a href="mercado.html">Mercado en Vivo</a>
+        <a href="glosario.html">Glosario Cripto</a>
+        <a href="fear-greed.html">Índice de Codicia y Miedo</a>
+        <a href="https://chatgpt.com/g/g-69c6acf9bf3c8191b7ee6dfaf076032c-asesor-digital-madrid-crypto-capital" target="_blank" rel="noopener">Asesor IA gratuito</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Empresa</div>
+        <a href="personas.html">Individuo</a>
+        <a href="empresas.html">Empresa</a>
+        <a href="agenda.html">Agendar asesoría</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Política de cookies</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:Contacto@madridcryptocapital.com">Contacto@madridcryptocapital.com</a>
+        <a href="tel:+56944717233">+56 9 4471 7233</a>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;line-height:1.6;">Manquehue Sur 350, of. 201<br>Santiago, Chile 🇨🇱</p>
+        <a href="https://wa.me/56944717233" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2021 Madrid Crypto Capital · Todos los derechos reservados</p>
+    <div class="footer-bottom-links">
+      <a href="politica-privacidad.html">Política de privacidad</a>
+      <a href="politica-cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+function toggleMenu(){document.getElementById('mob-menu').classList.toggle('open');}
+
+/* ── Hero Canvas ── */
+(function(){
+  var canvas = document.getElementById('hero-canvas');
+  var ctx = canvas.getContext('2d');
+  var nodes = [], RAF;
+  var mouse = {x:-1000,y:-1000};
+  var W,H;
+
+  function resize(){
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  var COLORS = ['rgba(0,82,255,','rgba(99,168,40,','rgba(150,220,80,','rgba(80,140,30,'];
+  var CHAINS = ['ETH','SOL','BNB','MATIC','AVAX','ARB','BASE','OP','LINK','UNI'];
+
+  function initNodes(){
+    nodes = [];
+    var count = Math.floor(W * H / 14000);
+    for(var i=0;i<count;i++){
+      nodes.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+        r: 2+Math.random()*3,
+        color: COLORS[Math.floor(Math.random()*COLORS.length)],
+        label: Math.random()>.75 ? CHAINS[Math.floor(Math.random()*CHAINS.length)] : null,
+        phase: Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    var time = t * .0005;
+
+    nodes.forEach(function(n){
+      n.x += n.vx; n.y += n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    });
+
+    // Edges
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<160){
+          var alpha=(1-dist/160)*.25;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x,nodes[i].y);
+          ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle='rgba(0,82,255,'+alpha+')';
+          ctx.lineWidth=.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Mouse attraction edges
+    nodes.forEach(function(n){
+      var dx=n.x-mouse.x, dy=n.y-mouse.y;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<200){
+        var alpha=(1-dist/200)*.6;
+        ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(mouse.x,mouse.y);
+        ctx.strokeStyle='rgba(0,82,255,'+alpha+')';ctx.lineWidth=.8;ctx.stroke();
+      }
+    });
+
+    // Nodes
+    nodes.forEach(function(n){
+      var pulse=Math.sin(time*2+n.phase);
+      var r=n.r+pulse*.5;
+      // Glow
+      var g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*4);
+      g.addColorStop(0,n.color+'.3)');g.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(n.x,n.y,r*4,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      // Core
+      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.fillStyle=n.color+(.6+pulse*.2)+')';ctx.fill();
+      // Label
+      if(n.label){
+        ctx.font='bold 9px JetBrains Mono,monospace';
+        ctx.fillStyle='rgba(0,82,255,.7)';
+        ctx.fillText(n.label,n.x+r+4,n.y+3);
+      }
+    });
+
+    RAF=requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener('mouseleave',function(){mouse.x=-1000;mouse.y=-1000;});
+  window.addEventListener('resize',function(){resize();initNodes();});
+  resize();initNodes();requestAnimationFrame(draw);
+})();
+
+/* ── Terminal Typewriter ── */
+(function(){
+  var lines = [
+    {type:'prompt', cmd:'npx hardhat compile'},
+    {type:'out', text:'  Compiling 12 Solidity files with 0.8.20', cls:''},
+    {type:'out', text:'  Compiled successfully ✓', cls:'success'},
+    {type:'blank'},
+    {type:'prompt', cmd:'npx hardhat test'},
+    {type:'out', text:'  MadridToken', cls:''},
+    {type:'out', text:'    ✓ Should deploy with correct total supply (38ms)', cls:'success'},
+    {type:'out', text:'    ✓ Should allow owner to mint tokens (21ms)', cls:'success'},
+    {type:'out', text:'    ✓ Should revert when exceeding MAX_SUPPLY (14ms)', cls:'success'},
+    {type:'out', text:'    ✓ Should emit TokensVested event correctly (19ms)', cls:'success'},
+    {type:'out', text:'  47 passing (1.3s)', cls:'success'},
+    {type:'blank'},
+    {type:'prompt', cmd:'npx hardhat run scripts/deploy.js --network ethereum'},
+    {type:'out', text:'  Deploying MadridToken to Ethereum Mainnet...', cls:'warn'},
+    {type:'out', text:'  Contract deployed to: 0x7a3Bf92aC4e1D9dF18c0F37...f92C', cls:'addr'},
+    {type:'out', text:'  Gas used: 847,291 · Cost: 0.0234 ETH', cls:''},
+    {type:'out', text:'  Transaction: 0x8f2e4a...3a1b ✓', cls:'success'},
+    {type:'blank'},
+    {type:'prompt', cmd:'npx hardhat verify --network ethereum 0x7a3Bf92aC4'},
+    {type:'out', text:'  Verifying contract on Etherscan...', cls:'warn'},
+    {type:'out', text:'  Successfully submitted source code for verification ✓', cls:'success'},
+    {type:'cursor'},
+  ];
+
+  var body = document.getElementById('terminal-body');
+  var lineIdx = 0;
+  var charIdx = 0;
+  var started = false;
+
+  function renderLine(line){
+    var el = document.createElement('div');
+    if(line.type==='blank'){el.style.height='8px';body.appendChild(el);return;}
+    el.className='t-line';
+    if(line.type==='prompt'){
+      el.innerHTML='<span class="t-prompt">➜ ~</span><span class="t-cmd"></span>';
+    } else if(line.type==='out'){
+      el.innerHTML='<span class="t-out '+line.cls+'"></span>';
+    } else if(line.type==='cursor'){
+      el.innerHTML='<span class="t-prompt">➜ ~</span><span class="t-cursor"></span>';
+    }
+    body.appendChild(el);
+    return el;
+  }
+
+  function typeLines(){
+    if(lineIdx>=lines.length) return;
+    var line = lines[lineIdx];
+    if(line.type==='blank'||line.type==='cursor'){
+      renderLine(line);
+      lineIdx++;
+      setTimeout(typeLines, line.type==='blank'?100:0);
+      return;
+    }
+    var el = renderLine(line);
+    var target = line.type==='prompt' ? el.querySelector('.t-cmd') : el.querySelector('.t-out');
+    var text = line.type==='prompt' ? line.cmd : line.text;
+    charIdx=0;
+    var speed = line.type==='prompt' ? 40 : 8;
+    function typeChar(){
+      if(charIdx<=text.length){
+        target.textContent=text.slice(0,charIdx);
+        charIdx++;
+        body.scrollTop=body.scrollHeight;
+        setTimeout(typeChar, charIdx===1&&line.type==='prompt'?400:speed);
+      } else {
+        lineIdx++;
+        var delay = line.type==='prompt' ? 300 : 60;
+        setTimeout(typeLines, delay);
+      }
+    }
+    typeChar();
+  }
+
+  // Start when terminal enters viewport
+  var obs = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting && !started){
+      started=true;
+      setTimeout(typeLines,500);
+      obs.disconnect();
+    }
+  },{threshold:.3});
+  obs.observe(body);
+})();
+
+/* ── Service data ── */
+var SVC_DATA = [
+  {
+    desc:['Convierte las acciones y equity de tu empresa en tokens digitales','Permite captación de inversión global sin intermediarios','Cumple estándares regulatorios con tokens de seguridad','Automatiza dividendos y derechos de voto con smart contracts'],
+    cases:['Startup buscando inversores internacionales','Empresa consolidada abriendo capital','Fondo de inversión tokenizando participaciones','PYME que quiere acceder a capital Web3'],
+    tech:['Solidity 0.8+ con OpenZeppelin ERC-1400','Gnosis Safe para multisig corporativo','Chainlink para oráculos de precios','KYC/AML integrado on-chain'],
+    chains:['Ethereum (recomendado para compliance)','Polygon (menor coste de gas)','Arbitrum (velocidad y escalabilidad)','BNB Chain (mercado asiático)'],
+    del:['Contratos ERC-1400 auditados','Panel de administración de cap table','Documentación legal y técnica','Integración con plataformas de inversión'],
+    time:['Discovery y arquitectura: 2 semanas','Desarrollo de contratos: 4 semanas','Auditoría y testing: 2 semanas','Deploy y configuración: 1 semana']
+  },
+  {
+    desc:['Fracciona cualquier activo físico en tokens digitales negociables','Inmuebles, commodities, arte, maquinaria, carteras de deuda','Liquidez instantánea para activos históricamente ilíquidos','Precios actualizados en tiempo real via oráculos Chainlink'],
+    cases:['Fondo inmobiliario que quiere fraccionar propiedades','Minera que tokeniza su producción de cobre','Galería de arte digital para obras físicas','Empresa agrícola tokenizando cosechas futuras'],
+    tech:['ERC-3643 (T-REX) para security tokens','Chainlink Data Feeds para precios','IPFS para documentación legal vinculada','Merkle proofs para verificación de activos'],
+    chains:['Ethereum (mayor confianza institucional)','Polygon zkEVM (velocidad + seguridad)','Avalanche (sub-redes privadas)','Arbitrum One (costos reducidos)'],
+    del:['Contratos RWA auditados y verificados','Sistema de oráculos configurado','Portal de inversores con KYC','Integración con registros legales'],
+    time:['Due diligence y structuring: 3 semanas','Desarrollo: 6-8 semanas','Legal + auditoría: 3 semanas','Lanzamiento y liquidez: 1 semana']
+  },
+  {
+    desc:['Colecciones NFT de nivel profesional con contratos optimizados','Whitelist con Merkle Tree para pre-sale eficiente en gas','Metadata dinámica y revelación aleatoria con Chainlink VRF','Royalties en marketplaces con EIP-2981'],
+    cases:['Marca que quiere lanzar colección de comunidad','Artista digital tokenizando su obra','Proyecto de gaming con assets NFT','Club deportivo con membership NFTs'],
+    tech:['ERC-721A (hasta 5x más eficiente en gas)','Chainlink VRF para aleatoriedad verificable','IPFS + Arweave para metadata permanente','Merkle Tree para whitelist escalable'],
+    chains:['Ethereum (mayor valor percibido)','Polygon (accesible, bajo gas)','Solana (Metaplex, velocidad)','Base (ecosistema Coinbase)'],
+    del:['Contratos ERC-721A auditados','Script de mint con whitelist','Metadata y generador de imágenes','Panel de administración de colección'],
+    time:['Diseño y arquitectura: 1 semana','Desarrollo de contratos: 3 semanas','Auditoría: 1 semana','Mint site y lanzamiento: 1 semana']
+  },
+  {
+    desc:['Token ERC-20 con tokenomics diseñados para sostenibilidad','Vesting configurable para equipo, advisors e inversores','Mecanismos de gobernanza con votación on-chain','Estrategia de listing en DEX y CEX incluida'],
+    cases:['Proyecto DeFi que necesita token de gobernanza','Plataforma que quiere incentivar a sus usuarios','DAO que emite token de membresía','Protocolo que quiere descentralizar su ownership'],
+    tech:['ERC-20 con extensiones de OpenZeppelin','TokenVesting con cliff y schedule lineal','Governor Bravo para gobernanza on-chain','Uniswap V3 para liquidez inicial'],
+    chains:['Ethereum (mayor liquidez DeFi)','BNB Chain (mayor base de usuarios retail)','Polygon (ecosistema activo)','Arbitrum (fees bajos, DeFi maduro)'],
+    del:['Contrato token auditado','Sistema de vesting multifuente','Panel de tokenomics en tiempo real','Guía de listing y materiales para exchanges'],
+    time:['Diseño tokenomics: 1 semana','Desarrollo: 3 semanas','Auditoría: 2 semanas','Listing y liquidez: 2 semanas']
+  },
+  {
+    desc:['Protocolos DeFi de lending, staking y liquidity provision','Forks auditados de Uniswap, Aave, Compound','Mecanismos veToken para alineación de incentivos a largo plazo','Yield farming y emisión de recompensas controlada'],
+    cases:['Exchange descentralizado para un nicho específico','Protocolo de lending para activos RWA','Plataforma de staking para tu token existente','DAO treasury management con DeFi'],
+    tech:['Uniswap V3 concentrated liquidity','Aave V3 lending pool architecture','Curve veToken mechanics','Chainlink price feeds para liquidaciones'],
+    chains:['Ethereum (máxima composabilidad)','Arbitrum (DeFi nativo, fees bajos)','Optimism (Superchain ecosystem)','Base (acceso a usuarios Coinbase)'],
+    del:['Protocolo DeFi auditado','Frontend de la dApp','Documentación de integración','Scripts de liquidez inicial y bootstrap'],
+    time:['Arquitectura y fork selection: 2 semanas','Desarrollo y personalización: 8-12 semanas','Auditoría intensiva: 3 semanas','Deploy y bootstrap: 2 semanas']
+  },
+  {
+    desc:['Interfaces Web3 completas con conexión a cualquier wallet','UX de nivel Web2 con funcionalidad Web3 completa','Firma de transacciones, lectura de contratos y eventos en tiempo real','Responsive, rápida y con soporte para múltiples redes'],
+    cases:['Dashboard para holders de tu token','Marketplace NFT propio','Panel de governance para tu DAO','Explorer personalizado para tu chain'],
+    tech:['React 18 + Next.js 14 (App Router)','wagmi v2 + viem para interacción con contratos','WalletConnect 2.0 + RainbowKit','The Graph para indexado de eventos'],
+    chains:['Compatible con cualquier EVM chain','Soporte multi-chain en la misma dApp','Testnet/mainnet switching automático','Infura + Alchemy como providers'],
+    del:['dApp completa deployada en producción','Código fuente con documentación','Tests E2E con Playwright','CI/CD configurado en Vercel/Netlify'],
+    time:['Diseño UI/UX: 1-2 semanas','Desarrollo frontend: 4-6 semanas','Integración contratos: 2 semanas','Testing y deploy: 1 semana']
+  }
+];
+
+var currentSvc = -1;
+
+function openSvc(idx){
+  var cards = document.querySelectorAll('.svc-card');
+  cards.forEach(function(c){c.classList.remove('active');});
+  cards[idx].classList.add('active');
+
+  var detail = document.getElementById('svc-detail');
+  detail.classList.add('open');
+
+  var data = SVC_DATA[idx];
+  fill('svc-desc-list', data.desc);
+  fill('svc-cases-list', data.cases);
+  fill('svc-tech-list', data.tech);
+  fill('svc-chains-list', data.chains);
+  fill('svc-deliverables-list', data.del);
+  fill('svc-timeline-list', data.time);
+
+  switchTab(0);
+  currentSvc = idx;
+
+  if(currentSvc !== idx || !detail.classList.contains('open')){
+    detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+
+function fill(id, items){
+  var ul = document.getElementById(id);
+  ul.innerHTML = items.map(function(i){return '<li>'+i+'</li>';}).join('');
+}
+
+function switchTab(tabIdx){
+  document.querySelectorAll('.svc-tab').forEach(function(t,i){t.classList.toggle('active',i===tabIdx);});
+  document.querySelectorAll('.svc-panel').forEach(function(p,i){p.classList.toggle('active',i===tabIdx);});
+}
+
+/* ── FAQ Accordion ── */
+function toggleFaq(btn){
+  var item = btn.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');});
+  if(!wasOpen) item.classList.add('open');
+}
+
+/* ── Scroll Reveal ── */
+var revealObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}
+  });
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el);});
+
+/* ── Counter Animation ── */
+var counterObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(!e.isIntersecting) return;
+    var el = e.target;
+    var target = parseInt(el.dataset.target);
+    var prefix = el.dataset.prefix||'';
+    var suffix = el.dataset.suffix||'';
+    var start = Date.now();
+    var duration = 1800;
+    function update(){
+      var p = Math.min(1,(Date.now()-start)/duration);
+      var eased = 1-Math.pow(1-p,3);
+      var val = Math.round(eased*target);
+      el.innerHTML = '<span class="stat-prefix">'+prefix+'</span>'+val+'<span class="stat-suffix">'+suffix+'</span>';
+      if(p<1) requestAnimationFrame(update);
+    }
+    update();
+    counterObs.unobserve(el);
+  });
+},{threshold:.5});
+document.querySelectorAll('.stat-num').forEach(function(el){counterObs.observe(el);});
+
+/* ── Nav active link on scroll ── */
+var sections = ['servicios','stack','proceso','proyectos','precios'];
+window.addEventListener('scroll',function(){
+  var scrollY = window.scrollY + 120;
+  sections.forEach(function(id){
+    var sec = document.getElementById(id);
+    if(!sec) return;
+    var link = document.querySelector('.nav-lnk[href="#'+id+'"]');
+    if(!link) return;
+    if(scrollY >= sec.offsetTop && scrollY < sec.offsetTop + sec.offsetHeight){
+      link.style.color='#fff';
+    } else {
+      link.style.color='';
+    }
+  });
+},{passive:true});
+</script>
+<!-- ═══ COOKIE CONSENT BANNER ═══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 48px);max-width:760px;background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,.5);align-items:center;gap:20px;flex-wrap:wrap;">
+  <p style="flex:1;min-width:200px;font-size:13px;color:rgba(255,255,255,.7);margin:0;line-height:1.6;">Usamos cookies para analizar el tráfico y mejorar tu experiencia. Consulta nuestra <a href="politica-cookies.html" style="color:#4d8eff;text-decoration:none;">Política de Cookies</a> y <a href="politica-privacidad.html" style="color:#4d8eff;text-decoration:none;">Privacidad</a>.</p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 18px;font-size:13px;cursor:pointer;">Rechazar</button>
+    <button onclick="cookieAccept()" style="background:#4d8eff;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('cc_madrid'))return;
+  var b=document.getElementById('cookie-banner');
+  if(b){setTimeout(function(){b.style.display='flex';},800);}
+})();
+function cookieAccept(){localStorage.setItem('cc_madrid','1');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cc_madrid','0');document.getElementById('cookie-banner').style.display='none';}
+
+
+
+// ─── TICKER EN VIVO (Binance) ───────────────────────────────────────────────
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n&&n!==0)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  window._buildTicker=function(prices){
+    var track=document.getElementById('ticker-track');
+    if(!track)return;
+    if(track.children.length===0){
+      // Primera carga: construir HTML
+      var items=COINS.map(function(c){
+        var v=prices[c.sym]||{};
+        var price=v.price?fmt(v.price):'---';
+        var ch=v.ch||0;
+        var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+        return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+          +'<span class="t-prc">'+price+'</span>'
+          +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+      }).join('');
+      track.innerHTML=items+items;
+    } else {
+      // Actualización: solo cambiar texto, sin tocar la animación
+      var prcs=track.querySelectorAll('.t-prc');
+      var chgs=track.querySelectorAll('.t-chg');
+      COINS.forEach(function(c,i){
+        var v=prices[c.sym];
+        if(!v||!v.price)return;
+        var price=fmt(v.price);
+        var ch=v.ch||0;
+        var chgStr=(ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%';
+        var cls='t-chg '+(ch>=0?'up':'dn');
+        [i, i+COINS.length].forEach(function(idx){
+          if(prcs[idx])prcs[idx].textContent=price;
+          if(chgs[idx]){chgs[idx].textContent=chgStr;chgs[idx].className=cls;}
+        });
+      });
+    }
+  };
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){
+          prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};
+        });
+        window._buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+</body></html>

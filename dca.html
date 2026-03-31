@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora DCA Bitcoin — Madrid Crypto Capital</title>
+  <meta name="description" content="Calcula cuánto habrías ganado invirtiendo en Bitcoin con la estrategia DCA (Dollar-Cost Averaging). Herramienta gratuita de Madrid Crypto Capital.">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────────── */
+    :root{
+      --white:#fff;
+      --off:#f7f8fa;
+      --navy:#0A0B0D;
+      --green:#0052FF;
+      --green-h:#0044DD;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --text:#111827;
+      --sub:#374151;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────────── */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;overflow-x:hidden;}
+    body{
+      background:#fff;
+      color:var(--text);
+      font-family:'Inter',system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+      padding-top:100px;
+    }
+
+    /* ─── TICKER ─────────────────────────────────────────────────── */
+    .ticker-pill{
+      flex-shrink:0;height:100%;background:var(--green);
+      display:flex;align-items:center;padding:0 14px;
+      font-size:9px;font-weight:700;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--navy);gap:6px;
+    }
+    .tdot{width:6px;height:6px;background:var(--navy);border-radius:50%;animation:tdot 1.4s infinite;}
+    @keyframes tdot{0%,100%{opacity:1}50%{opacity:.15}}
+    .ticker-scroll{flex:1;overflow:hidden;}
+    .ticker-track{display:flex;animation:tscroll 40s linear infinite;white-space:nowrap;}
+    @keyframes tscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .t-item{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:0 18px;border-right:1px solid rgba(255,255,255,.07);height:34px;
+    }
+    .t-sym{font-size:10px;font-weight:600;letter-spacing:.06em;color:#9ca3af;}
+    .t-prc{font-size:11px;font-weight:600;color:#fff;}
+    .t-chg{font-size:10px;font-weight:500;}
+    .t-chg.up{color:#22c55e;}
+    .t-chg.dn{color:#ef4444;}
+
+    /* ─── HEADER / NAV ───────────────────────────────────────────── */
+    .page-header{position:fixed;top:0;left:0;right:0;z-index:500;width:100%;}
+    .ticker{height:34px;background:var(--navy);display:flex;align-items:center;overflow:hidden;}
+    nav{background:#000;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+    .nav-inner{max-width:1320px;margin:0 auto;height:66px;display:flex;align-items:center;padding:0 32px;}
+    .nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;margin-right:56px;padding-left:8px;}
+    .brand-logo-img{width:200px;height:52px;object-fit:cover;object-position:center 50%;display:block;}
+    .nav-links{display:flex;align-items:center;gap:2px;flex:1;}
+    .nav-link{
+      position:relative;height:66px;padding:0 18px;display:flex;align-items:center;
+      font-size:15px;font-weight:500;color:rgba(255,255,255,.65);
+      text-decoration:none;border:none;background:none;letter-spacing:-.01em;
+      white-space:nowrap;transition:color .15s;
+    }
+    .nav-link:hover{color:#fff;}
+    .nav-link::after{
+      content:'';position:absolute;bottom:0;left:18px;right:18px;height:2px;
+      background:#0052FF;transform:scaleX(0);transform-origin:left;transition:transform .2s;
+    }
+    .nav-link:hover::after,.nav-link.act::after{transform:scaleX(1);}
+    .nav-link.act{color:#fff;}
+    .nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-cta{
+      height:42px;padding:0 24px;background:#0052FF;border:none;border-radius:100px;
+      color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap;
+      text-decoration:none;display:flex;align-items:center;gap:8px;
+      transition:background .15s,transform .15s;
+    }
+    .nav-cta:hover{background:#0044dd;transform:translateY(-1px);}
+    .nav-cta svg{width:15px;height:15px;flex-shrink:0;}
+    .ham-btn{
+      display:none;flex-direction:column;justify-content:center;gap:5px;
+      background:none;border:none;padding:8px;margin-left:12px;cursor:pointer;
+    }
+    .ham-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+    .mob-menu{display:none;position:fixed;inset:0;background:#000;z-index:9000;flex-direction:column;overflow-y:auto;}
+    .mob-menu.open{display:flex;}
+    .mob-close{
+      align-self:flex-end;background:none;border:none;font-size:30px;
+      color:rgba(255,255,255,.5);padding:20px 24px 10px;line-height:1;cursor:pointer;
+    }
+    .mob-menu a{
+      font-size:22px;font-weight:500;color:rgba(255,255,255,.7);
+      padding:22px 28px;text-decoration:none;
+      border-bottom:1px solid rgba(255,255,255,.08);display:block;
+    }
+    .mob-menu .mob-cta{color:#0052FF;font-weight:700;border-bottom:none;margin-top:12px;}
+
+    /* ─── HERO ───────────────────────────────────────────────────── */
+    .dca-hero{
+      background:linear-gradient(135deg,#080d1e 0%,#0d1530 50%,#080d1e 100%);
+      padding:88px 32px 80px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .dca-hero::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,82,255,.18) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .dca-hero::after{
+      content:'';position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(0,82,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,82,255,.04) 1px, transparent 1px);
+      background-size:60px 60px;
+      pointer-events:none;
+    }
+    .hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(0,82,255,.15);border:1px solid rgba(0,82,255,.3);
+      border-radius:100px;padding:6px 18px;
+      font-size:12px;font-weight:600;letter-spacing:.1em;
+      text-transform:uppercase;color:#6b9fff;margin-bottom:28px;
+    }
+    .hero-btc-icon{width:28px;height:28px;flex-shrink:0;display:block;}
+    .hero-title{
+      font-size:clamp(36px,6vw,64px);font-weight:900;
+      color:#fff;letter-spacing:-.03em;line-height:1.08;margin-bottom:20px;
+    }
+    .hero-title span{
+      background:linear-gradient(90deg,#4d8eff,#0052FF);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-sub{
+      font-size:18px;line-height:1.65;color:rgba(255,255,255,.55);
+      max-width:580px;margin:0 auto 36px;
+    }
+    .hero-stats{
+      display:flex;justify-content:center;gap:40px;flex-wrap:wrap;
+    }
+    .hero-stat{text-align:center;}
+    .hero-stat-val{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.02em;}
+    .hero-stat-lbl{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px;}
+
+    /* ─── CALCULATOR WRAPPER ─────────────────────────────────────── */
+    .calc-section{
+      background:#f0f2f7;
+      padding:56px 32px 72px;
+    }
+    .calc-inner{max-width:1200px;margin:0 auto;}
+    .calc-grid{
+      display:grid;
+      grid-template-columns:380px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    /* ─── INPUT PANEL ────────────────────────────────────────────── */
+    .input-panel{
+      background:#fff;border:1px solid #e2e6ef;
+      border-radius:20px;padding:32px;
+      box-shadow:0 2px 16px rgba(0,0,0,.06);
+    }
+    .panel-title{
+      font-size:11px;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:#9ca3af;margin-bottom:24px;
+    }
+    .field{margin-bottom:20px;}
+    .field label{
+      display:block;font-size:13px;font-weight:600;
+      color:#374151;margin-bottom:8px;letter-spacing:-.01em;
+    }
+    .field-wrap{position:relative;}
+    .field-prefix{
+      position:absolute;left:14px;top:50%;transform:translateY(-50%);
+      font-size:16px;font-weight:600;color:#6b7280;pointer-events:none;
+    }
+    .field input,.field select{
+      width:100%;height:50px;border:1.5px solid #e2e6ef;border-radius:12px;
+      background:#f9fafb;font-family:inherit;font-size:16px;font-weight:500;
+      color:#111827;outline:none;transition:border-color .15s,background .15s;
+      padding:0 14px;
+      -webkit-appearance:none;appearance:none;
+    }
+    .field input.with-prefix{padding-left:26px;}
+    .field input:focus,.field select:focus{
+      border-color:#0052FF;background:#fff;
+      box-shadow:0 0 0 3px rgba(0,82,255,.1);
+    }
+    .field select{
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 14px center;
+      padding-right:36px;
+      cursor:pointer;
+    }
+    /* Date row: always stacked vertically — matches mobile (which user confirmed looks perfect) */
+    .field-row{display:grid;grid-template-columns:1fr;gap:0;}
+    .field-row .field{min-width:0;}
+    .calc-btn{
+      width:100%;height:52px;background:#0052FF;border:none;border-radius:12px;
+      color:#fff;font-family:inherit;font-size:16px;font-weight:700;
+      cursor:pointer;letter-spacing:-.01em;
+      transition:background .15s,transform .15s,box-shadow .15s;
+      margin-top:4px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .calc-btn:hover{background:#0044dd;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,82,255,.35);}
+    .calc-btn:active{transform:translateY(0);}
+    .calc-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+    .presets-label{
+      font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:#9ca3af;margin:20px 0 10px;
+    }
+    .preset-btns{display:flex;flex-direction:column;gap:8px;}
+    .preset-btn{
+      background:none;border:1.5px solid #e2e6ef;border-radius:10px;
+      padding:10px 14px;font-family:inherit;font-size:13px;font-weight:500;
+      color:#374151;cursor:pointer;text-align:left;
+      transition:border-color .15s,background .15s,color .15s;
+      line-height:1.4;
+    }
+    .preset-btn:hover{border-color:#0052FF;background:rgba(0,82,255,.04);color:#0052FF;}
+    .preset-btn strong{font-weight:700;color:#111827;display:block;font-size:14px;}
+
+    /* ─── RESULTS PANEL ──────────────────────────────────────────── */
+    .results-panel{
+      background:#0a0f1e;border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;overflow:hidden;
+      box-shadow:0 4px 32px rgba(0,0,0,.24);
+      position:relative;
+    }
+    .results-top{padding:28px 28px 0;}
+    .metrics-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+      margin-bottom:28px;
+    }
+    .metric-card{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      border-radius:12px;padding:16px 14px;
+    }
+    .metric-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;}
+    .metric-val{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1;}
+    .metric-val.positive{color:#22c55e;}
+    .metric-val.negative{color:#ef4444;}
+    .metric-val.btc-val{font-size:16px;color:#f7931a;}
+    .metric-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;}
+
+    /* chart */
+    .chart-wrap{
+      position:relative;width:100%;height:320px;
+      background:#0a0f1e;
+    }
+    #dca-chart{display:block;width:100%;height:100%;}
+
+    .results-bottom{padding:20px 28px 24px;}
+    .result-summary{
+      font-size:14px;line-height:1.7;color:rgba(255,255,255,.5);
+    }
+    .result-summary strong{color:#fff;font-weight:600;}
+    .result-summary .highlight{color:#22c55e;font-weight:700;}
+    .result-summary .highlight.neg{color:#ef4444;}
+
+    /* chart legend */
+    .chart-legend{
+      display:flex;align-items:center;gap:20px;
+      padding:0 28px 16px;
+    }
+    .legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.45);}
+    .legend-dot{width:10px;height:10px;border-radius:50%;}
+    .legend-dot.blue{background:#0052FF;}
+    .legend-dot.green{background:#22c55e;}
+
+    /* loading overlay */
+    .loading-overlay{
+      position:absolute;inset:0;background:rgba(10,15,30,.85);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:10;backdrop-filter:blur(4px);border-radius:20px;
+      opacity:0;pointer-events:none;transition:opacity .25s;
+    }
+    .loading-overlay.visible{opacity:1;pointer-events:all;}
+    .spinner{
+      width:40px;height:40px;border:3px solid rgba(255,255,255,.1);
+      border-top-color:#0052FF;border-radius:50%;
+      animation:spin .7s linear infinite;margin-bottom:16px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{font-size:14px;color:rgba(255,255,255,.5);}
+
+    /* error state */
+    .error-msg{
+      display:none;
+      background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
+      border-radius:10px;padding:14px 18px;margin:0 28px 20px;
+      font-size:13px;color:#fca5a5;line-height:1.5;
+    }
+    .error-msg.visible{display:block;}
+
+    /* empty state */
+    .empty-state{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      height:100%;padding:60px 32px;text-align:center;
+    }
+    .empty-icon{font-size:48px;margin-bottom:16px;opacity:.3;}
+    .empty-title{font-size:16px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:8px;}
+    .empty-sub{font-size:13px;color:rgba(255,255,255,.2);line-height:1.6;}
+
+    /* ─── INFO SECTION ───────────────────────────────────────────── */
+    .info-section{
+      background:#fff;
+      padding:80px 32px;
+    }
+    .info-inner{max-width:1100px;margin:0 auto;}
+    .section-eyebrow{
+      font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      color:#0052FF;margin-bottom:12px;
+    }
+    .section-title{
+      font-size:clamp(28px,4vw,42px);font-weight:800;
+      color:#0a0b0d;letter-spacing:-.03em;line-height:1.15;margin-bottom:16px;
+    }
+    .section-sub{font-size:17px;color:#6b7280;line-height:1.65;max-width:560px;margin-bottom:56px;}
+    .info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .info-card{
+      background:#f9fafb;border:1px solid #e5e7eb;border-radius:20px;
+      padding:32px;transition:border-color .2s,box-shadow .2s;
+    }
+    .info-card:hover{border-color:#0052FF;box-shadow:0 4px 24px rgba(0,82,255,.1);}
+    .info-card-icon{
+      width:52px;height:52px;background:rgba(0,82,255,.08);border-radius:14px;
+      display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+      font-size:24px;
+    }
+    .info-card-title{font-size:18px;font-weight:700;color:#111827;margin-bottom:10px;letter-spacing:-.02em;}
+    .info-card-text{font-size:15px;color:#6b7280;line-height:1.65;}
+
+    /* DCA steps */
+    .dca-steps{
+      background:#080d1e;
+      padding:80px 32px;
+    }
+    .dca-steps-inner{max-width:1100px;margin:0 auto;}
+    .steps-header{text-align:center;margin-bottom:56px;}
+    .steps-header .section-eyebrow{color:#6b9fff;}
+    .steps-header .section-title{color:#fff;}
+    .steps-header .section-sub{color:rgba(255,255,255,.45);margin:0 auto 0;}
+    .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;}
+    .steps-grid::before{
+      content:'';position:absolute;top:30px;left:calc(12.5% + 16px);right:calc(12.5% + 16px);
+      height:1px;background:linear-gradient(90deg,transparent,rgba(0,82,255,.4),transparent);
+      z-index:0;
+    }
+    .step-card{
+      text-align:center;position:relative;z-index:1;
+    }
+    .step-num{
+      width:60px;height:60px;background:#0052FF;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;font-weight:800;color:#fff;margin:0 auto 20px;
+      box-shadow:0 0 0 8px rgba(0,82,255,.1);
+    }
+    .step-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:10px;}
+    .step-text{font-size:14px;color:rgba(255,255,255,.4);line-height:1.65;}
+
+    /* ─── CTA STRIP ──────────────────────────────────────────────── */
+    .cta-strip{
+      background:linear-gradient(135deg,#0a0b0d,#0d1a3a);
+      padding:72px 32px;text-align:center;
+    }
+    .cta-strip-inner{max-width:640px;margin:0 auto;}
+    .cta-strip h2{font-size:clamp(26px,4vw,40px);font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:16px;}
+    .cta-strip p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:36px;}
+    .cta-strip-btn{
+      display:inline-flex;align-items:center;gap:10px;
+      background:#0052FF;color:#fff;text-decoration:none;
+      height:54px;padding:0 36px;border-radius:100px;
+      font-size:16px;font-weight:700;
+      transition:background .15s,transform .15s,box-shadow .15s;
+    }
+    .cta-strip-btn:hover{background:#0044dd;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,82,255,.4);}
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    .site-footer{background:#000;color:rgba(255,255,255,.65);padding:72px 32px 0;}
+    .footer-inner{
+      max-width:1180px;margin:0 auto;
+      display:grid;grid-template-columns:1.4fr 2fr;gap:80px;
+      padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;text-decoration:none;padding-left:0;}
+    .footer-tagline{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:28px;max-width:240px;}
+    .footer-social{display:flex;gap:10px;}
+    .social-btn{
+      width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);
+      display:flex;align-items:center;justify-content:center;
+      color:rgba(255,255,255,.5);text-decoration:none;
+      transition:background .15s,color .15s;flex-shrink:0;
+    }
+    .social-btn svg{width:16px;height:16px;fill:currentColor;}
+    .social-btn:hover{background:rgba(255,255,255,.12);color:#fff;}
+    .footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;}
+    .footer-col-title{
+      font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(255,255,255,.35);margin-bottom:20px;
+    }
+    .footer-col a{
+      display:block;font-size:14px;color:rgba(255,255,255,.55);
+      text-decoration:none;margin-bottom:11px;transition:color .15s;
+    }
+    .footer-col a:hover{color:#fff;}
+    .footer-bottom{
+      max-width:1180px;margin:0 auto;padding:22px 0;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    }
+    .footer-bottom p{font-size:13px;color:rgba(255,255,255,.25);}
+    .footer-bottom-links{display:flex;gap:20px;}
+    .footer-bottom-links a{
+      font-size:13px;color:rgba(255,255,255,.25);text-decoration:none;transition:color .15s;
+    }
+    .footer-bottom-links a:hover{color:rgba(255,255,255,.6);}
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media(max-width:1080px){
+      .calc-grid{grid-template-columns:1fr;}
+      .metrics-grid{grid-template-columns:repeat(2,1fr);}
+      .steps-grid{grid-template-columns:repeat(2,1fr);}
+      .steps-grid::before{display:none;}
+    }
+    @media(max-width:860px){
+      body{padding-top:90px;}
+      .nav-inner{padding:0 16px;height:56px;}
+      .nav-logo{margin-right:auto;}
+      .nav-links{display:none;}
+      .nav-cta{display:none;}
+      .ham-btn{display:flex;}
+      .footer-inner{grid-template-columns:1fr;gap:40px;}
+      .footer-cols{grid-template-columns:1fr 1fr;gap:24px;}
+      .info-cards{grid-template-columns:1fr;}
+      .dca-hero{padding:60px 20px 56px;}
+      .calc-section{padding:36px 16px 56px;}
+      .input-panel{padding:24px 20px;}
+      .results-top{padding:20px 20px 0;}
+      .results-bottom{padding:16px 20px 20px;}
+      .chart-legend{padding:0 20px 12px;}
+      .chart-wrap{height:260px;}
+    }
+    @media(max-width:660px){
+      .metrics-grid{grid-template-columns:1fr 1fr;}
+      .info-section{padding:56px 20px;}
+      .dca-steps{padding:56px 20px;}
+      .cta-strip{padding:56px 20px;}
+      .steps-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:480px){
+      .metrics-grid{grid-template-columns:1fr 1fr;}
+      .hero-stats{gap:24px;}
+      .field-row{grid-template-columns:1fr;}
+    }
+    @media(max-width:560px){
+      .footer-cols{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     HEADER  (exact copy from home)
+══════════════════════════════════════════════════════ -->
+<div class="page-header">
+  <div class="ticker">
+    <div class="ticker-pill"><div class="tdot"></div>En vivo</div>
+    <div class="ticker-scroll">
+      <div class="ticker-track" id="ticker-track"></div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img"></a>
+      <div class="nav-links">
+        <a href="personas.html" class="nav-link">Individuo</a>
+        <a href="empresas.html" class="nav-link">Empresa</a>
+      </div>
+      <div class="nav-right">
+        <a href="agenda.html" class="nav-cta">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="15" r="1.5" fill="currentColor"></circle></svg>
+          Agenda asesoría
+        </a>
+        <button class="ham-btn" onclick="toggleMenu()" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+</div>
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="toggleMenu()">✕</button>
+  <a href="personas.html" onclick="toggleMenu()">Individuo</a>
+  <a href="empresas.html" onclick="toggleMenu()">Empresa</a>
+  <a href="agenda.html" class="mob-cta" onclick="toggleMenu()">Agenda asesoría →</a>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════ -->
+<section class="dca-hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg class="hero-btc-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="16" fill="#F7931A"/>
+        <path fill="#fff" d="M22.189 14.245c.29-1.938-1.186-2.979-3.206-3.674l.655-2.626-1.6-.399-.638 2.558c-.42-.105-.852-.204-1.281-.302l.642-2.573-1.599-.4-.655 2.626c-.348-.079-.69-.158-1.022-.24l.002-.009-2.207-.551-.426 1.709s1.186.272 1.161.289c.648.162.765.59.745 1.03l-.748 2.998c.045.011.103.028.167.053l-.17-.043-1.048 4.202c-.08.197-.281.494-.736.381.016.023-1.163-.291-1.163-.291l-.794 1.832 2.083.52c.387.097.767.199 1.141.294l-.661 2.653 1.598.399.655-2.629c.436.118.859.227 1.274.33l-.653 2.615 1.6.399.661-2.648c2.725.516 4.776.308 5.638-2.158.696-1.985-.035-3.13-1.469-3.877 1.044-.241 1.831-.927 2.04-2.347zm-3.648 5.114c-.495 1.985-3.843.912-4.927.643l.879-3.524c1.085.271 4.566.808 4.048 2.881zm.495-5.142c-.451 1.809-3.235.89-4.138.664l.797-3.196c.903.225 3.808.644 3.341 2.532z"/>
+      </svg>
+      Herramienta gratuita
+    </div>
+    <h1 class="hero-title">
+      Calculadora DCA<br><span>Bitcoin</span>
+    </h1>
+    <p class="hero-sub">
+      Descubre cuánto habrías acumulado invirtiendo una cantidad fija de forma periódica en Bitcoin. La estrategia preferida por los inversores más inteligentes del mundo.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">+14,000%</div>
+        <div class="hero-stat-lbl">Retorno DCA 2015→2025</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">$100/mes</div>
+        <div class="hero-stat-lbl">Para empezar a invertir</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">0 timing</div>
+        <div class="hero-stat-lbl">Necesario para empezar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CALCULATOR
+══════════════════════════════════════════════════════ -->
+<section class="calc-section">
+  <div class="calc-inner">
+    <div class="calc-grid">
+
+      <!-- LEFT: Inputs -->
+      <div class="input-panel">
+        <div class="panel-title">Parámetros de simulación</div>
+
+        <div class="field">
+          <label for="amount">Inversión por período</label>
+          <div class="field-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="amount" class="with-prefix" value="100" min="1" max="1000000" step="1" placeholder="100">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="frequency">Frecuencia de compra</label>
+          <select id="frequency">
+            <option value="monthly" selected>Mensual — 1 vez al mes</option>
+            <option value="weekly">Semanal — 1 vez por semana</option>
+            <option value="daily">Diaria — todos los días</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="start-date">Desde</label>
+            <input type="month" id="start-date" value="2020-01" min="2017-08" max="2026-02">
+          </div>
+          <div class="field">
+            <label for="end-date">Hasta</label>
+            <input type="month" id="end-date" min="2017-09" max="2026-03">
+          </div>
+        </div>
+
+        <button class="calc-btn" id="calc-btn" onclick="runCalculation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          Calcular simulación
+        </button>
+
+        <div class="presets-label">Ejemplos rápidos</div>
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="applyPreset(50,'weekly','2019-01','today')">
+            <strong>$50/semana · 2019 → hoy</strong>
+            Compra semanal moderada, inicio del bull run
+          </button>
+          <button class="preset-btn" onclick="applyPreset(100,'monthly','2020-01','today')">
+            <strong>$100/mes · 2020 → hoy</strong>
+            El escenario más popular entre principiantes
+          </button>
+          <button class="preset-btn" onclick="applyPreset(200,'monthly','2022-01','today')">
+            <strong>$200/mes · 2022 → hoy</strong>
+            Comenzando en el mercado bajista
+          </button>
+          <button class="preset-btn" onclick="applyPreset(100,'monthly','2018-01','today')">
+            <strong>$100/mes · 2018 → hoy</strong>
+            Simulación histórica completa
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Results -->
+      <div class="results-panel" id="results-panel">
+
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loading-overlay">
+          <div class="spinner"></div>
+          <div class="loading-text" id="loading-text">Obteniendo datos históricos…</div>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-msg" id="error-msg"></div>
+
+        <!-- Empty state (shown before first calculation) -->
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">₿</div>
+          <div class="empty-title">Configura tu simulación</div>
+          <div class="empty-sub">Selecciona el monto, la frecuencia y el rango de fechas, luego pulsa <strong style="color:rgba(255,255,255,.4)">"Calcular simulación"</strong> para ver los resultados.</div>
+        </div>
+
+        <!-- Results (hidden until calculation) -->
+        <div id="results-content" style="display:none;">
+          <div class="results-top">
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-lbl">Total invertido</div>
+                <div class="metric-val" id="m-invested">—</div>
+                <div class="metric-sub" id="m-purchases">— compras</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-lbl">Valor actual</div>
+                <div class="metric-val positive" id="m-value">—</div>
+                <div class="metric-sub" id="m-price-now">Precio actual BTC</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-lbl">BTC acumulado</div>
+                <div class="metric-val btc-val" id="m-btc">—</div>
+                <div class="metric-sub">₿ Bitcoin</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-lbl">Retorno (ROI)</div>
+                <div class="metric-val positive" id="m-roi">—</div>
+                <div class="metric-sub" id="m-profit">Ganancia neta</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="dca-chart"></canvas>
+          </div>
+
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot blue"></div>Total invertido</div>
+            <div class="legend-item"><div class="legend-dot green"></div>Valor del portfolio</div>
+          </div>
+
+          <div class="results-bottom">
+            <div class="result-summary" id="result-summary"></div>
+          </div>
+        </div>
+
+      </div><!-- /results-panel -->
+    </div><!-- /calc-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ¿QUÉ ES DCA?
+══════════════════════════════════════════════════════ -->
+<section class="info-section">
+  <div class="info-inner">
+    <div class="section-eyebrow">Estrategia probada</div>
+    <h2 class="section-title">¿Qué es el DCA?</h2>
+    <p class="section-sub">Dollar-Cost Averaging (DCA) es la práctica de invertir una cantidad fija de dinero a intervalos regulares, independientemente del precio del activo.</p>
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-icon">📅</div>
+        <div class="info-card-title">Consistencia automática</div>
+        <div class="info-card-text">Al invertir de forma periódica eliminás la necesidad de tomar decisiones emocionales. Comprás más Bitcoin cuando está barato y menos cuando está caro, promediando tu precio de entrada de forma natural.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">🛡️</div>
+        <div class="info-card-title">Reduce el riesgo de timing</div>
+        <div class="info-card-text">Intentar "comprar en el mínimo" es casi imposible incluso para expertos. Con DCA distribuís el riesgo en el tiempo, protegiendo tu capital de la volatilidad de corto plazo del mercado.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">📈</div>
+        <div class="info-card-title">Resultados históricos sólidos</div>
+        <div class="info-card-text">Cualquier período de DCA en Bitcoin de 3+ años ha sido rentable históricamente. Incluso quienes comenzaron en picos de mercado (2017, 2021) lograron retornos positivos al mantener la estrategia.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CÓMO FUNCIONA
+══════════════════════════════════════════════════════ -->
+<section class="dca-steps">
+  <div class="dca-steps-inner">
+    <div class="steps-header">
+      <div class="section-eyebrow">Proceso simple</div>
+      <h2 class="section-title">Cómo empezar con DCA</h2>
+      <p class="section-sub">Cuatro pasos para implementar la estrategia más inteligente en Bitcoin.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Define tu presupuesto</div>
+        <div class="step-text">Decide cuánto puedes invertir cómodamente de forma periódica. Puede ser desde $20 al mes. Lo importante es la consistencia, no el monto.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Elige la frecuencia</div>
+        <div class="step-text">Mensual, semanal o diaria. Cada frecuencia tiene sus ventajas. Más frecuente = promedio más suavizado. Menos frecuente = menos comisiones.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Automatiza la compra</div>
+        <div class="step-text">Configura compras automáticas en tu exchange. La automatización elimina las decisiones emocionales y garantiza la ejecución de la estrategia.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title">Mantén y monitorea</div>
+        <div class="step-text">La clave del DCA es la paciencia. Ignora la volatilidad de corto plazo y enfócate en el horizonte temporal de 3–5+ años para maximizar resultados.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CTA STRIP
+══════════════════════════════════════════════════════ -->
+<section class="cta-strip">
+  <div class="cta-strip-inner">
+    <h2>¿Listo para empezar tu estrategia DCA?</h2>
+    <p>Nuestros asesores te ayudan a configurar tu portafolio, elegir el exchange adecuado y automatizar tus inversiones en Bitcoin.</p>
+    <a href="agenda.html" class="cta-strip-btn">
+      <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="15" r="1.5" fill="currentColor"></circle></svg>
+      Agenda una asesoría gratuita
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER  (exact copy from home)
+══════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">
+        <img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img">
+      </a>
+      <p class="footer-tagline">Tu puerta al mundo de las criptomonedas. Asesoría profesional desde Chile para toda Latinoamérica y el mundo.</p>
+      <div class="footer-social">
+        <a href="https://x.com/MadridCrypto" target="_blank" class="social-btn" aria-label="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/company/madrid-crypto-capital" target="_blank" class="social-btn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://facebook.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://instagram.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@MadridCryptoCapital" target="_blank" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios Gratuitos</div>
+        <a href="dca.html">Calculadora Bitcoin DCA</a>
+        <a href="mercado.html">Mercado en Vivo</a>
+        <a href="glosario.html">Glosario Cripto</a>
+        <a href="fear-greed.html">Índice de Codicia y Miedo</a>
+        <a href="https://chatgpt.com/g/g-69c6acf9bf3c8191b7ee6dfaf076032c-asesor-digital-madrid-crypto-capital" target="_blank" rel="noopener">Asesor IA gratuito</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Empresa</div>
+        <a href="personas.html">Individuo</a>
+        <a href="empresas.html">Empresa</a>
+        <a href="agenda.html">Agendar asesoría</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Política de cookies</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:Contacto@madridcryptocapital.com">Contacto@madridcryptocapital.com</a>
+        <a href="tel:+56944717233">+56 9 4471 7233</a>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;line-height:1.6;">Manquehue Sur 350, of. 201<br>Santiago, Chile 🇨🇱</p>
+        <a href="https://wa.me/56944717233" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2021 Madrid Crypto Capital · Todos los derechos reservados</p>
+    <div class="footer-bottom-links">
+      <a href="politica-privacidad.html">Política de privacidad</a>
+      <a href="politica-cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ──────────────────────────────────────────────────
+   MOBILE MENU
+────────────────────────────────────────────────── */
+function toggleMenu() {
+  const m = document.getElementById('mob-menu');
+  m.classList.toggle('open');
+}
+
+/* ──────────────────────────────────────────────────
+   TICKER — Binance live prices
+────────────────────────────────────────────────── */
+(function updateTicker() {
+  const symbols = ['BTCUSDT','ETHUSDT','SOLUSDT','XRPUSDT','BNBUSDT','ADAUSDT'];
+  const ids = ['btc','eth','sol','xrp','bnb','ada'];
+  const url = 'https://api.binance.com/api/v3/ticker/24hr?symbols=' + encodeURIComponent(JSON.stringify(symbols));
+
+  function fmt(p) {
+    const n = parseFloat(p);
+    if (n >= 10000) return '$' + (n/1000).toFixed(1) + 'K';
+    if (n >= 1000)  return '$' + n.toLocaleString('en-US',{maximumFractionDigits:0});
+    if (n >= 10)    return '$' + n.toFixed(2);
+    return '$' + n.toFixed(4);
+  }
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      data.forEach((item, i) => {
+        const id = ids[i];
+        const pEl = document.getElementById('tk-' + id);
+        const cEl = document.getElementById('tk-' + id + '-c');
+        if (!pEl || !cEl) return;
+        const pct = parseFloat(item.priceChangePercent);
+        pEl.textContent = fmt(item.lastPrice);
+        cEl.textContent = (pct >= 0 ? '▲' : '▼') + Math.abs(pct).toFixed(2) + '%';
+        cEl.className = 't-chg ' + (pct >= 0 ? 'up' : 'dn');
+      });
+    })
+    .catch(() => { /* keep static fallback */ });
+})();
+
+/* ──────────────────────────────────────────────────
+   CACHE HELPERS
+────────────────────────────────────────────────── */
+const CACHE_KEY = 'mcc_dca_v3'; // v3 = Binance source
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+function saveCache(prices) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      ts: Date.now(),
+      prices: prices
+    }));
+  } catch(e) { /* quota exceeded – silently ignore */ }
+}
+
+function loadCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (Date.now() - obj.ts > CACHE_TTL) return null;
+    return obj.prices; // [[ts_ms, price], ...]
+  } catch(e) { return null; }
+}
+
+/* ──────────────────────────────────────────────────
+   FETCH BTC HISTORY  (CoinGecko)
+────────────────────────────────────────────────── */
+async function fetchBTCHistory() {
+  const cached = loadCache();
+  if (cached) return cached;
+
+  // Binance klines: BTCUSDT daily candles from Aug 2017 (oldest available) to now
+  // Limit = 1000 candles per request → need multiple batches fetched in parallel
+  const DAY_MS  = 86400000;
+  const LIMIT   = 1000;
+  const startMs = new Date('2017-08-17').getTime(); // oldest BTCUSDT date on Binance
+  const endMs   = Date.now() + DAY_MS;
+
+  // Build batch ranges
+  const batches = [];
+  let cur = startMs;
+  while (cur < endMs) {
+    const batchEnd = Math.min(cur + LIMIT * DAY_MS, endMs);
+    batches.push({ from: cur, to: batchEnd });
+    cur = batchEnd + DAY_MS;
+  }
+
+  // Fetch all batches in parallel
+  const requests = batches.map(b => {
+    const url = `https://api.binance.com/api/v3/klines` +
+                `?symbol=BTCUSDT&interval=1d` +
+                `&startTime=${b.from}&endTime=${b.to}&limit=${LIMIT}`;
+    return fetch(url).then(r => {
+      if (!r.ok) throw new Error('Binance HTTP ' + r.status);
+      return r.json();
+    });
+  });
+
+  const results = await Promise.all(requests);
+
+  // Convert klines [[openTime, o, h, l, CLOSE, ...], ...] → [[ts_ms, price], ...]
+  let prices = [];
+  results.forEach(batch => {
+    batch.forEach(k => prices.push([k[0], parseFloat(k[4])]));
+  });
+
+  // Sort & deduplicate
+  prices.sort((a, b) => a[0] - b[0]);
+  prices = prices.filter((p, i) => i === 0 || p[0] !== prices[i - 1][0]);
+
+  if (!prices.length) throw new Error('NO_DATA');
+
+  saveCache(prices);
+  return prices; // [[ts_ms, usd_close], ...]
+}
+
+/* ──────────────────────────────────────────────────
+   FIND NEAREST PRICE
+────────────────────────────────────────────────── */
+function findPrice(priceData, targetMs) {
+  // Binary search for closest timestamp
+  let lo = 0, hi = priceData.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (priceData[mid][0] < targetMs) lo = mid + 1;
+    else hi = mid;
+  }
+  // Compare lo and lo-1
+  if (lo > 0) {
+    const diffA = Math.abs(priceData[lo][0] - targetMs);
+    const diffB = Math.abs(priceData[lo-1][0] - targetMs);
+    if (diffB < diffA) return priceData[lo-1][1];
+  }
+  return priceData[lo][1];
+}
+
+/* ──────────────────────────────────────────────────
+   BUILD PURCHASE SCHEDULE
+────────────────────────────────────────────────── */
+function buildSchedule(startDate, endDate, frequency) {
+  const dates = [];
+  let current = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (frequency === 'monthly') {
+    // 1st of each month
+    current = new Date(current.getFullYear(), current.getMonth(), 1);
+    while (current <= end) {
+      dates.push(new Date(current));
+      current.setMonth(current.getMonth() + 1);
+    }
+  } else if (frequency === 'weekly') {
+    while (current <= end) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 7);
+    }
+  } else { // daily
+    while (current <= end) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+  }
+
+  return dates;
+}
+
+/* ──────────────────────────────────────────────────
+   DCA CALCULATION ENGINE
+────────────────────────────────────────────────── */
+function calculateDCA(priceData, amount, frequency, startDate, endDate) {
+  const schedule = buildSchedule(startDate, endDate, frequency);
+  if (!schedule.length) throw new Error('NO_SCHEDULE');
+
+  let totalInvested = 0;
+  let totalBTC = 0;
+  const chartPoints = []; // { date, invested, value }
+
+  schedule.forEach(date => {
+    const ms = date.getTime();
+    const price = findPrice(priceData, ms);
+    if (!price || price <= 0) return;
+
+    const btcBought = amount / price;
+    totalInvested += amount;
+    totalBTC += btcBought;
+
+    chartPoints.push({
+      date: date,
+      ms: ms,
+      invested: totalInvested,
+      btcPrice: price,
+      btcTotal: totalBTC,
+      value: totalBTC * price
+    });
+  });
+
+  if (!chartPoints.length) throw new Error('NO_POINTS');
+
+  // Get current BTC price (last available in dataset)
+  const lastDataPoint = priceData[priceData.length - 1];
+  const currentPrice = lastDataPoint[1];
+  const currentValue = totalBTC * currentPrice;
+  const roi = ((currentValue - totalInvested) / totalInvested) * 100;
+
+  return {
+    totalInvested,
+    totalBTC,
+    currentPrice,
+    currentValue,
+    roi,
+    profit: currentValue - totalInvested,
+    purchases: chartPoints.length,
+    chartPoints
+  };
+}
+
+/* ──────────────────────────────────────────────────
+   NUMBER FORMATTERS
+────────────────────────────────────────────────── */
+function fmtUSD(n, compact) {
+  if (compact) {
+    if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    if (n >= 1e3) return '$' + (n/1e3).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+  }
+  return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+function fmtBTC(n) {
+  if (n >= 1) return n.toFixed(4) + ' BTC';
+  return n.toFixed(6) + ' BTC';
+}
+
+function fmtPct(n) {
+  const sign = n >= 0 ? '+' : '';
+  return sign + n.toFixed(2) + '%';
+}
+
+/* ──────────────────────────────────────────────────
+   CANVAS CHART
+────────────────────────────────────────────────── */
+function drawChart(chartPoints) {
+  const canvas = document.getElementById('dca-chart');
+  const wrap   = canvas.parentElement;
+  const DPR    = window.devicePixelRatio || 1;
+  const W      = wrap.clientWidth;
+  const H      = wrap.clientHeight;
+
+  canvas.width  = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  const PAD = { top: 20, right: 72, bottom: 44, left: 16 };
+  const CW = W - PAD.left - PAD.right;
+  const CH = H - PAD.top  - PAD.bottom;
+
+  // Background
+  ctx.fillStyle = '#0a0f1e';
+  ctx.fillRect(0, 0, W, H);
+
+  if (!chartPoints.length) return;
+
+  // Data ranges
+  const maxVal = Math.max(
+    ...chartPoints.map(p => Math.max(p.invested, p.value))
+  );
+  const niceMax = niceNumber(maxVal * 1.08);
+
+  const startMs = chartPoints[0].ms;
+  const endMs   = chartPoints[chartPoints.length - 1].ms;
+  const msRange = endMs - startMs || 1;
+
+  // Helpers
+  function xOf(ms)  { return PAD.left + ((ms - startMs) / msRange) * CW; }
+  function yOf(val) { return PAD.top  + CH - (val / niceMax) * CH; }
+
+  // ── Grid lines (5 horizontal) ──
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth   = 1;
+  for (let i = 1; i <= 5; i++) {
+    const y = PAD.top + (CH / 5) * (5 - i + 1) - CH/5;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, y);
+    ctx.lineTo(W - PAD.right + 8, y);
+    ctx.stroke();
+  }
+
+  // ── Y-axis labels ──
+  ctx.fillStyle   = 'rgba(255,255,255,0.3)';
+  ctx.font        = `${10 * (DPR > 1 ? 1 : 1)}px Inter, system-ui, sans-serif`;
+  ctx.textAlign   = 'left';
+  ctx.textBaseline= 'middle';
+  for (let i = 0; i <= 5; i++) {
+    const val = (niceMax / 5) * i;
+    const y   = PAD.top + CH - (val / niceMax) * CH;
+    ctx.fillText(fmtUSD(val, true), W - PAD.right + 10, y);
+  }
+
+  // ── X-axis year labels ──
+  const totalYears = (endMs - startMs) / (365.25 * 24 * 3600 * 1000);
+  let yearStep = 1;
+  if (totalYears > 8) yearStep = 2;
+  if (totalYears > 12) yearStep = 3;
+
+  const startYear = new Date(startMs).getFullYear();
+  const endYear   = new Date(endMs).getFullYear();
+
+  ctx.fillStyle    = 'rgba(255,255,255,0.3)';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'top';
+  ctx.font         = '10px Inter, system-ui, sans-serif';
+
+  let prevLabelX = -999;
+  for (let y = startYear; y <= endYear + 1; y += yearStep) {
+    const ms = new Date(y, 0, 1).getTime();
+    const x  = xOf(ms);
+    if (x < PAD.left || x > W - PAD.right) continue;
+    if (x - prevLabelX < 32) continue;
+    prevLabelX = x;
+
+    // tick
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth   = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, PAD.top + CH);
+    ctx.lineTo(x, PAD.top + CH + 5);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillText(String(y), x, PAD.top + CH + 8);
+  }
+
+  // Downsample if too many points (performance)
+  const MAX_PTS = 500;
+  let pts = chartPoints;
+  if (pts.length > MAX_PTS) {
+    const step = Math.ceil(pts.length / MAX_PTS);
+    pts = pts.filter((_, i) => i % step === 0 || i === pts.length - 1);
+  }
+
+  // ── Area fill: Total Invested (blue) ──
+  const gradBlue = ctx.createLinearGradient(0, PAD.top, 0, PAD.top + CH);
+  gradBlue.addColorStop(0, 'rgba(0,82,255,0.35)');
+  gradBlue.addColorStop(1, 'rgba(0,82,255,0.0)');
+
+  ctx.beginPath();
+  ctx.moveTo(xOf(pts[0].ms), PAD.top + CH);
+  pts.forEach(p => ctx.lineTo(xOf(p.ms), yOf(p.invested)));
+  ctx.lineTo(xOf(pts[pts.length-1].ms), PAD.top + CH);
+  ctx.closePath();
+  ctx.fillStyle = gradBlue;
+  ctx.fill();
+
+  // Blue line
+  ctx.beginPath();
+  pts.forEach((p, i) => {
+    const x = xOf(p.ms), y = yOf(p.invested);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#0052FF';
+  ctx.lineWidth   = 2;
+  ctx.lineJoin    = 'round';
+  ctx.stroke();
+
+  // ── Area fill: Portfolio Value (green) ──
+  const gradGreen = ctx.createLinearGradient(0, PAD.top, 0, PAD.top + CH);
+  gradGreen.addColorStop(0, 'rgba(34,197,94,0.25)');
+  gradGreen.addColorStop(1, 'rgba(34,197,94,0.0)');
+
+  ctx.beginPath();
+  ctx.moveTo(xOf(pts[0].ms), PAD.top + CH);
+  pts.forEach(p => ctx.lineTo(xOf(p.ms), yOf(p.value)));
+  ctx.lineTo(xOf(pts[pts.length-1].ms), PAD.top + CH);
+  ctx.closePath();
+  ctx.fillStyle = gradGreen;
+  ctx.fill();
+
+  // Green line
+  ctx.beginPath();
+  pts.forEach((p, i) => {
+    const x = xOf(p.ms), y = yOf(p.value);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth   = 2.5;
+  ctx.lineJoin    = 'round';
+  ctx.stroke();
+
+  // ── Final value dot (green) ──
+  const lastPt = pts[pts.length - 1];
+  const lx = xOf(lastPt.ms);
+  const ly = yOf(lastPt.value);
+  ctx.beginPath();
+  ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+  ctx.fillStyle   = '#22c55e';
+  ctx.fill();
+  ctx.strokeStyle = '#0a0f1e';
+  ctx.lineWidth   = 2;
+  ctx.stroke();
+}
+
+function niceNumber(n) {
+  if (n <= 0) return 1000;
+  const exp  = Math.floor(Math.log10(n));
+  const frac = n / Math.pow(10, exp);
+  let nice;
+  if      (frac <= 1)   nice = 1;
+  else if (frac <= 2)   nice = 2;
+  else if (frac <= 2.5) nice = 2.5;
+  else if (frac <= 5)   nice = 5;
+  else                  nice = 10;
+  return nice * Math.pow(10, exp);
+}
+
+/* ──────────────────────────────────────────────────
+   UI HELPERS
+────────────────────────────────────────────────── */
+function showLoading(msg) {
+  document.getElementById('loading-text').textContent = msg || 'Cargando datos…';
+  document.getElementById('loading-overlay').classList.add('visible');
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('visible');
+}
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function clearError() {
+  document.getElementById('error-msg').classList.remove('visible');
+}
+function showResults() {
+  document.getElementById('empty-state').style.display   = 'none';
+  document.getElementById('results-content').style.display = 'block';
+}
+
+/* ──────────────────────────────────────────────────
+   PRESET HANDLER
+────────────────────────────────────────────────── */
+function applyPreset(amount, freq, start, end) {
+  document.getElementById('amount').value    = amount;
+  document.getElementById('frequency').value = freq;
+  document.getElementById('start-date').value = start;
+
+  if (end === 'today') {
+    const now = new Date();
+    const mm  = String(now.getMonth() + 1).padStart(2, '0');
+    document.getElementById('end-date').value = `${now.getFullYear()}-${mm}`;
+  } else {
+    document.getElementById('end-date').value = end;
+  }
+
+  runCalculation();
+}
+
+/* ──────────────────────────────────────────────────
+   MAIN CALCULATION RUNNER
+────────────────────────────────────────────────── */
+async function runCalculation() {
+  clearError();
+
+  // Read inputs
+  const amount    = parseFloat(document.getElementById('amount').value);
+  const frequency = document.getElementById('frequency').value;
+  const startStr  = document.getElementById('start-date').value; // "YYYY-MM"
+  const endStr    = document.getElementById('end-date').value;
+
+  // Validate
+  if (!amount || amount <= 0) {
+    showError('Por favor ingresa un monto válido mayor a $0.');
+    return;
+  }
+  if (!startStr || !endStr) {
+    showError('Por favor selecciona las fechas de inicio y fin.');
+    return;
+  }
+
+  const startDate = new Date(startStr + '-01');
+  const endDate   = new Date(endStr   + '-01');
+
+  if (startDate >= endDate) {
+    showError('La fecha de inicio debe ser anterior a la fecha de fin.');
+    return;
+  }
+
+  // Check daily range limit to avoid huge datasets
+  const daysDiff = (endDate - startDate) / (1000 * 86400);
+  if (frequency === 'daily' && daysDiff > 3650) {
+    showError('Para frecuencia diaria, el rango máximo es 10 años.');
+    return;
+  }
+
+  // Show loading
+  showLoading('Obteniendo datos históricos de Bitcoin…');
+
+  try {
+    const priceData = await fetchBTCHistory();
+    showLoading('Calculando simulación DCA…');
+
+    const result = calculateDCA(priceData, amount, frequency, startDate, endDate);
+
+    // Update metrics
+    const mInvested = document.getElementById('m-invested');
+    const mValue    = document.getElementById('m-value');
+    const mBTC      = document.getElementById('m-btc');
+    const mROI      = document.getElementById('m-roi');
+    const mPurchases= document.getElementById('m-purchases');
+    const mPriceNow = document.getElementById('m-price-now');
+    const mProfit   = document.getElementById('m-profit');
+
+    mInvested.textContent  = fmtUSD(result.totalInvested);
+    mValue.textContent     = fmtUSD(result.currentValue);
+    mBTC.textContent       = fmtBTC(result.totalBTC);
+    mROI.textContent       = fmtPct(result.roi);
+    mPurchases.textContent = result.purchases + ' compras';
+    mPriceNow.textContent  = 'BTC = ' + fmtUSD(result.currentPrice);
+    mProfit.textContent    = (result.profit >= 0 ? '+' : '') + fmtUSD(result.profit) + ' ganancia';
+
+    // ROI color
+    mROI.className    = 'metric-val ' + (result.roi >= 0 ? 'positive' : 'negative');
+    mValue.className  = 'metric-val ' + (result.roi >= 0 ? 'positive' : 'negative');
+
+    // Frequency label
+    const freqLabels = { monthly: 'mensualmente', weekly: 'semanalmente', daily: 'diariamente' };
+    const freqLabel  = freqLabels[frequency] || frequency;
+
+    // Date range labels
+    const fmtMonth = d => d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    const startLabel = fmtMonth(startDate);
+    const endLabel   = fmtMonth(endDate);
+
+    // Summary text
+    const isPositive = result.roi >= 0;
+    document.getElementById('result-summary').innerHTML =
+      `Comprando <strong>${fmtUSD(amount)}</strong> ${freqLabel} desde <strong>${startLabel}</strong> ` +
+      `hasta <strong>${endLabel}</strong>, tu inversión total de <strong>${fmtUSD(result.totalInvested)}</strong> ` +
+      `vale hoy <strong>${fmtUSD(result.currentValue)}</strong> ` +
+      `<span class="highlight${isPositive ? '' : ' neg'}">${isPositive ? '▲' : '▼'}${Math.abs(result.roi).toFixed(2)}%</span>. ` +
+      `Acumulaste <strong style="color:#f7931a">${fmtBTC(result.totalBTC)}</strong>.`;
+
+    // Show results pane
+    showResults();
+
+    // Draw chart after DOM is visible
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        drawChart(result.chartPoints);
+        hideLoading();
+      }, 50);
+    });
+
+  } catch (err) {
+    hideLoading();
+    if (err.message === 'RATE_LIMITED') {
+      showError('Demasiadas solicitudes a la API. Espera un momento y vuelve a intentarlo, o usa datos en caché si están disponibles.');
+    } else if (err.message === 'NO_SCHEDULE' || err.message === 'NO_POINTS') {
+      showError('No se encontraron puntos de precio. Usa fechas desde agosto 2017 en adelante.');
+    } else {
+      showError('No se pudo cargar datos históricos. Verifica tu conexión e intenta de nuevo.');
+    }
+    console.error('[DCA]', err);
+  }
+}
+
+/* ──────────────────────────────────────────────────
+   INIT
+────────────────────────────────────────────────── */
+(function init() {
+  // Set default end date to current month
+  const now = new Date();
+  const mm  = String(now.getMonth() + 1).padStart(2, '0');
+  document.getElementById('end-date').value = `${now.getFullYear()}-${mm}`;
+
+  // Redraw chart on resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const content = document.getElementById('results-content');
+      if (content.style.display !== 'none') {
+        // Re-run silently with cached data
+        runCalculation();
+      }
+    }, 250);
+  });
+})();
+</script>
+
+<!-- ═══ COOKIE CONSENT BANNER ═══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 48px);max-width:760px;background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,.5);align-items:center;gap:20px;flex-wrap:wrap;">
+  <p style="flex:1;min-width:200px;font-size:13px;color:rgba(255,255,255,.7);margin:0;line-height:1.6;">Usamos cookies para analizar el tráfico y mejorar tu experiencia. Consulta nuestra <a href="politica-cookies.html" style="color:#4d8eff;text-decoration:none;">Política de Cookies</a> y <a href="politica-privacidad.html" style="color:#4d8eff;text-decoration:none;">Privacidad</a>.</p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 18px;font-size:13px;cursor:pointer;">Rechazar</button>
+    <button onclick="cookieAccept()" style="background:#4d8eff;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('cc_madrid'))return;
+  var b=document.getElementById('cookie-banner');
+  if(b){setTimeout(function(){b.style.display='flex';},800);}
+})();
+function cookieAccept(){localStorage.setItem('cc_madrid','1');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cc_madrid','0');document.getElementById('cookie-banner').style.display='none';}
+
+
+// ─── TICKER EN VIVO (Binance) ───────────────────────────────────────────────
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n&&n!==0)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  window._buildTicker=function(prices){
+    var track=document.getElementById('ticker-track');
+    if(!track)return;
+    if(track.children.length===0){
+      // Primera carga: construir HTML
+      var items=COINS.map(function(c){
+        var v=prices[c.sym]||{};
+        var price=v.price?fmt(v.price):'---';
+        var ch=v.ch||0;
+        var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+        return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+          +'<span class="t-prc">'+price+'</span>'
+          +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+      }).join('');
+      track.innerHTML=items+items;
+    } else {
+      // Actualización: solo cambiar texto, sin tocar la animación
+      var prcs=track.querySelectorAll('.t-prc');
+      var chgs=track.querySelectorAll('.t-chg');
+      COINS.forEach(function(c,i){
+        var v=prices[c.sym];
+        if(!v||!v.price)return;
+        var price=fmt(v.price);
+        var ch=v.ch||0;
+        var chgStr=(ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%';
+        var cls='t-chg '+(ch>=0?'up':'dn');
+        [i, i+COINS.length].forEach(function(idx){
+          if(prcs[idx])prcs[idx].textContent=price;
+          if(chgs[idx]){chgs[idx].textContent=chgStr;chgs[idx].className=cls;}
+        });
+      });
+    }
+  };
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){
+          prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};
+        });
+        window._buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+
+</body>
+</html>

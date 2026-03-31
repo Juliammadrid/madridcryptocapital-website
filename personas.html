@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Inversión en Cripto | Madrid Crypto Capital</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#0052FF;
+  --green-dim:rgba(0,82,255,.12);
+  --green-glow:rgba(0,82,255,.35);
+  --navy:#0A0B0D;
+  --bg:#0A0B0D;
+  --off:#111320;
+  --border:rgba(255,255,255,.07);
+  --txt:#c8cdd8;
+  --white:#f0f2f8;
+  --red:#e05252;
+  --red-dim:rgba(224,82,82,.15);
+}
+html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;padding-top:100px;max-width:100%}
+
+/* TICKER */
+.ticker-pill{flex-shrink:0;height:100%;background:var(--green);display:flex;align-items:center;padding:0 14px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);gap:6px;}
+.tdot{width:6px;height:6px;background:var(--navy);border-radius:50%;animation:tdot 1.4s infinite;}
+@keyframes tdot{0%,100%{opacity:1}50%{opacity:.15}}
+.ticker-scroll{flex:1;overflow:hidden;}
+.ticker-track{display:flex;animation:tscroll 40s linear infinite;white-space:nowrap;}
+@keyframes tscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:7px;padding:0 18px;border-right:1px solid rgba(255,255,255,.07);height:34px;}
+.t-sym{font-size:10px;font-weight:600;letter-spacing:.06em;color:#9ca3af;}
+.t-prc{font-size:11px;font-weight:600;color:#fff;}
+.t-chg{font-size:10px;font-weight:500;}
+.t-chg.up{color:#22c55e;}.t-chg.dn{color:#ef4444;}
+/* NAV */
+.page-header{position:fixed;top:0;left:0;right:0;z-index:500;width:100%;}
+.ticker{height:34px;background:var(--navy);display:flex;align-items:center;overflow:hidden;}
+nav{background:#000;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.nav-inner{max-width:1320px;margin:0 auto;height:66px;display:flex;align-items:center;padding:0 32px;}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;margin-right:56px;padding-left:8px;}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;}
+.nav-link{position:relative;height:66px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;border:none;background:none;letter-spacing:-.01em;white-space:nowrap;transition:color .15s;}
+.nav-link:hover{color:#fff;}
+.nav-link::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:2px;background:#0052FF;transform:scaleX(0);transform-origin:left;transition:transform .2s;}
+.nav-link:hover::after,.nav-link.act::after{transform:scaleX(1);}
+.nav-link.act{color:#fff;}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.nav-cta{height:42px;padding:0 24px;background:#0052FF;border:none;border-radius:100px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:8px;transition:background .15s,transform .15s;}
+.nav-cta:hover{background:#0044dd;transform:translateY(-1px);}
+.nav-cta svg{width:15px;height:15px;flex-shrink:0;}
+.ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:8px;margin-left:12px;}
+.ham-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+/* MOBILE MENU */
+.mob-menu{display:none;position:fixed;inset:0;background:#000;z-index:9000;flex-direction:column;overflow-y:auto;}
+.mob-menu.open{display:flex;}
+.mob-close{align-self:flex-end;background:none;border:none;font-size:30px;color:rgba(255,255,255,.5);padding:20px 24px 10px;line-height:1;cursor:pointer;}
+.mob-menu a{font-size:22px;font-weight:500;color:rgba(255,255,255,.7);padding:22px 28px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);display:block;}
+.mob-menu .mob-cta{color:#0052FF;font-weight:700;border-bottom:none;margin-top:12px;}
+
+
+/* ─── HERO ─── */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:80px 80px 60px;gap:60px;position:relative;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;z-index:0;opacity:.35}
+.hero-content{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid var(--green-glow);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:24px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,82px);line-height:1.0;color:var(--white);margin-bottom:16px}
+.hero-title span{color:var(--green)}
+.hero-subtitle{font-size:17px;line-height:1.65;color:var(--txt);max-width:480px;margin-bottom:32px}
+.hero-stats{display:flex;gap:32px;margin-bottom:36px}
+.h-stat{display:flex;flex-direction:column}
+.h-stat-n{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);line-height:1}
+.h-stat-l{font-size:11px;color:var(--txt);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{background:var(--green);color:#000;font-weight:700;font-size:15px;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s}
+.btn-primary:hover{opacity:.85}
+.btn-outline{background:transparent;color:var(--white);font-weight:600;font-size:15px;padding:13px 28px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block;transition:border-color .2s,color .2s}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+/* ─── PHONE MOCKUP ─── */
+.hero-right{position:relative;z-index:1;display:flex;align-items:center;justify-content:center}
+.phone-wrap{position:relative;display:inline-block}
+.phone-shell{width:260px;height:530px;background:linear-gradient(145deg,#1a1d2e,#0A0B0D);border:2px solid rgba(255,255,255,.12);border-radius:38px;padding:12px;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 60px rgba(0,82,255,.08),inset 0 1px 0 rgba(255,255,255,.08)}
+.phone-shell::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:rgba(255,255,255,.15);border-radius:2px}
+.phone-screen{width:100%;height:100%;background:var(--bg);border-radius:28px;overflow:hidden;display:flex;flex-direction:column}
+.phone-header{background:var(--off);padding:12px 14px 10px;border-bottom:1px solid var(--border)}
+.phone-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.phone-logo{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--green);letter-spacing:1px}
+.phone-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt)}
+.phone-total-label{font-size:9px;color:var(--txt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.phone-total-value{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--white);line-height:1}
+.phone-total-chg{font-size:10px;color:var(--green);margin-top:1px}
+.phone-mini-chart{height:70px;padding:6px 10px 4px;position:relative}
+.phone-mini-chart canvas{width:100%;height:100%}
+.phone-holdings{flex:1;padding:8px 10px;overflow:hidden}
+.phone-holdings-title{font-size:9px;color:var(--txt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.ph-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
+.ph-row:last-child{border-bottom:none}
+.ph-left{display:flex;align-items:center;gap:6px}
+.ph-dot{width:8px;height:8px;border-radius:50%}
+.ph-sym{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--white);font-weight:600}
+.ph-name{font-size:8px;color:var(--txt)}
+.ph-right{text-align:right}
+.ph-val{font-size:10px;color:var(--white);font-weight:600}
+.ph-pct{font-size:8px}
+.ph-pct.up{color:var(--green)}
+.ph-pct.dn{color:var(--red)}
+.phone-footer{background:var(--off);padding:8px 14px;border-top:1px solid var(--border);display:flex;justify-content:space-around}
+.pf-btn{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:7px;color:var(--txt);cursor:pointer}
+.pf-btn.active{color:var(--green)}
+.pf-icon{font-size:14px}
+
+/* Glow ring around phone */
+.phone-glow{position:absolute;inset:-20px;border-radius:55px;background:radial-gradient(ellipse at center,rgba(0,82,255,.12) 0%,transparent 70%);z-index:-1;animation:glow-pulse 3s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* Floating badges */
+.float-badge{position:absolute;background:rgba(13,15,26,.95);border:1px solid var(--border);border-radius:12px;padding:10px 14px;backdrop-filter:blur(10px);white-space:nowrap;font-size:12px}
+.float-badge.tl{top:-10px;left:-70px}
+.float-badge.br{bottom:40px;right:-60px}
+.float-badge.bl{bottom:130px;left:-60px}
+.fb-label{font-size:9px;color:var(--txt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.fb-value{font-weight:700;color:var(--white);font-size:14px}
+.fb-value.up{color:var(--green)}
+.fb-value.dn{color:var(--red)}
+
+/* ─── CHART SECTION ─── */
+#chart-section{padding:100px 80px;background:var(--navy)}
+.section-label{font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,56px);color:var(--white);line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--txt);max-width:560px;line-height:1.65;margin-bottom:48px}
+.chart-container{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative}
+.chart-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.chart-asset-tabs{display:flex;gap:8px}
+.chart-asset-btn{background:transparent;border:1px solid var(--border);color:var(--txt);padding:7px 14px;border-radius:8px;font-size:13px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:.2s}
+.chart-asset-btn.active{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.chart-period-tabs{display:flex;gap:4px}
+.chart-period-btn{background:transparent;border:none;color:var(--txt);padding:6px 12px;border-radius:6px;font-size:12px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:.2s}
+.chart-period-btn.active{background:var(--off);color:var(--white)}
+.chart-info{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.chart-price{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--white)}
+.chart-change{font-size:14px;font-weight:600;padding:3px 10px;border-radius:6px}
+.chart-change.up{background:var(--green-dim);color:var(--green)}
+.chart-change.dn{background:var(--red-dim);color:var(--red)}
+.chart-ohlc{display:flex;gap:20px;margin-bottom:20px}
+.ohlc-item{font-size:11px;color:var(--txt)}
+.ohlc-item span{color:var(--white);font-family:'JetBrains Mono',monospace}
+#main-chart{width:100%;height:340px;display:block}
+.chart-volume-label{font-size:10px;color:var(--txt);margin-top:6px;font-family:'JetBrains Mono',monospace}
+
+/* ─── DIFERENCIAL ─── */
+#diferencial{padding:100px 80px}
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.diff-card{background:var(--off);border:1px solid var(--border);border-radius:20px;padding:32px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.diff-card:hover{border-color:var(--green);transform:translateY(-4px)}
+.diff-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);opacity:0;transition:opacity .3s}
+.diff-card:hover::before{opacity:1}
+.diff-icon{width:52px;height:52px;border-radius:14px;background:var(--green-dim);border:1px solid var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.diff-card h3{font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px}
+.diff-card p{font-size:14px;color:var(--txt);line-height:1.65}
+.diff-metric{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.diff-metric-n{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)}
+.diff-metric-l{font-size:12px;color:var(--txt);line-height:1.3}
+
+/* ─── PROCESO ─── */
+#proceso{padding:100px 80px;background:var(--navy)}
+.proceso-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px;position:relative}
+.proceso-steps::before{content:'';position:absolute;top:36px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);z-index:0}
+.paso{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;z-index:1;transition:border-color .3s}
+.paso:hover{border-color:var(--green)}
+.paso-num{width:40px;height:40px;border-radius:50%;background:var(--green);color:#000;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.paso h3{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}
+.paso p{font-size:13px;color:var(--txt);line-height:1.6}
+.paso-tag{display:inline-block;margin-top:12px;font-size:10px;color:var(--green);background:var(--green-dim);border:1px solid var(--green-glow);padding:3px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+
+/* ─── PLANES ─── */
+#planes{padding:100px 80px}
+.planes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.plan-card{background:var(--off);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;transition:transform .3s;display:flex;flex-direction:column}
+.plan-card.featured{border-color:var(--green);background:linear-gradient(135deg,rgba(0,82,255,.06),var(--off))}
+.plan-card.featured::before{content:'MÁS POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#000;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 16px;border-radius:20px}
+.plan-card:hover{transform:translateY(-4px)}
+.plan-name{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--green);font-weight:600;margin-bottom:8px}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:6px}
+.plan-price-n{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--white);line-height:1}
+.plan-price-s{font-size:14px;color:var(--txt)}
+.plan-desc{font-size:13px;color:var(--txt);margin-bottom:24px;line-height:1.5}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;flex:1}
+.plan-features li{font-size:14px;color:var(--txt);display:flex;align-items:flex-start;gap:10px;line-height:1.4}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-cta{display:block;text-align:center;padding:13px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;transition:.2s}
+.plan-cta.primary{background:var(--green);color:#000}
+.plan-cta.primary:hover{opacity:.85}
+.plan-cta.outline{border:1.5px solid var(--border);color:var(--white)}
+.plan-cta.outline:hover{border-color:var(--green);color:var(--green)}
+.plan-guarantee{text-align:center;margin-top:32px;font-size:13px;color:var(--txt)}
+.plan-guarantee strong{color:var(--white)}
+
+/* ─── TESTIMONIOS ─── */
+#testimonios{padding:100px 80px;background:var(--navy)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.test-card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:28px;transition:border-color .3s}
+.test-card:hover{border-color:rgba(0,82,255,.3)}
+.test-stars{color:var(--green);font-size:14px;letter-spacing:2px;margin-bottom:14px}
+.test-quote{font-size:14px;color:var(--txt);line-height:1.7;margin-bottom:20px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--green-dim);border:1.5px solid var(--green-glow);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--green)}
+.test-name{font-weight:600;color:var(--white);font-size:14px}
+.test-role{font-size:12px;color:var(--txt)}
+.test-return{margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.test-return-l{font-size:11px;color:var(--txt)}
+.test-return-n{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--green)}
+
+/* ─── CTA / CONTACT ─── */
+#contacto{padding:100px 80px}
+.cta-inner{max-width:800px;margin:0 auto;text-align:center}
+.cta-form{background:var(--off);border:1px solid var(--border);border-radius:24px;padding:48px;margin-top:48px;text-align:left}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full{grid-column:1/-1}
+label{font-size:13px;font-weight:600;color:var(--white)}
+input,select,textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-size:14px;font-family:'Geist',sans-serif;transition:border-color .2s;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+select option{background:var(--bg)}
+textarea{resize:vertical;min-height:120px}
+.form-submit{width:100%;background:var(--green);color:#000;font-weight:700;font-size:16px;padding:16px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s;margin-top:8px}
+.form-submit:hover{opacity:.85}
+.form-note{text-align:center;font-size:12px;color:var(--txt);margin-top:12px}
+
+/* ─── FOOTER ─── */
+.site-footer{background:#000;color:rgba(255,255,255,.65);padding:72px 32px 0;}
+.footer-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 2.6fr;gap:48px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.07);}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;text-decoration:none;padding-left:0;}
+.footer-tagline{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:28px;max-width:240px;}
+.footer-social{display:flex;gap:10px;}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .15s;}
+.social-btn:hover{background:#0052FF;border-color:#0052FF;}
+.social-btn svg{width:16px;height:16px;fill:rgba(255,255,255,.5);}
+.social-btn:hover svg{fill:#fff;}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);text-decoration:none;margin-bottom:11px;transition:color .15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{max-width:1180px;margin:0 auto;padding:22px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,.25);}
+.footer-bottom-links{display:flex;gap:20px;}
+.footer-bottom-links a{font-size:12px;color:rgba(255,255,255,.25);text-decoration:none;transition:color .15s;}
+.footer-bottom-links a:hover{color:rgba(255,255,255,.6);}
+
+/* ─── PARA TI SI ─── */
+#para-ti{padding:100px 80px}
+.pati-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px}
+.pati-card{background:var(--off);border:1.5px solid rgba(0,82,255,.25);border-radius:24px;padding:44px;position:relative;overflow:hidden}
+.pati-card-right{border-color:rgba(0,180,80,.25)}
+.pati-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),transparent)}
+.pati-card-right::before{background:linear-gradient(90deg,#00c864,transparent)}
+.pati-icon{font-size:40px;margin-bottom:20px;display:block}
+.pati-card h3{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--white);line-height:1.15;margin-bottom:24px}
+.pati-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.pati-tags span{font-size:12px;padding:5px 12px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);color:var(--txt)}
+.pati-divider{height:1px;background:var(--border);margin-bottom:24px}
+.pati-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.pati-list li{font-size:14px;color:var(--txt);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.pati-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.pati-card-right .pati-list li::before{color:#00c864}
+
+/* ─── PLANES NUEVO ─── */
+.plan-sessions{display:flex;gap:6px;margin-bottom:8px}
+.sess-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.12);transition:.3s}
+.sess-dot.active{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(0,82,255,.5)}
+.plan-card.featured .sess-dot.active{box-shadow:0 0 10px rgba(0,82,255,.7)}
+.plan-sessions-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt);margin-bottom:20px}
+.plan-price-cur{font-size:16px;color:var(--txt);align-self:flex-start;padding-top:10px}
+
+/* ─── REVEAL ─── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1100px){
+  #hero{grid-template-columns:1fr;padding:80px 40px 60px;text-align:center}
+  .hero-content{max-width:580px;margin:0 auto}
+  .hero-stats{justify-content:center}
+  .hero-btns{justify-content:center}
+  .hero-subtitle{margin:0 auto 32px}
+  .float-badge.tl{display:none}
+  .float-badge.br,.float-badge.bl{display:none}
+  .diff-grid,.planes-grid,.test-grid,.pati-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  body{padding-top:90px;}
+  .nav-inner{padding:0 16px;height:56px;}
+  .nav-logo{margin-right:auto;}
+  .nav-cta{display:none;}
+  .nav-links{display:none;}
+  .ham-btn{display:flex;}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .ham-btn{display:flex}
+  nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:#000;}
+  #hero{padding:60px 20px 40px;grid-template-columns:1fr!important;gap:32px;overflow:hidden}
+  #hero-canvas{display:none!important;}
+  .hero-right{display:none!important;}
+  .float-badge{display:none!important;}
+  #chart-section,#diferencial,#proceso,#planes,#testimonios,#contacto{padding:60px 20px}
+  .diff-grid,.planes-grid,.test-grid,.proceso-steps,.pati-grid{grid-template-columns:1fr}
+  #para-ti{padding:60px 20px}
+  .proceso-steps::before{display:none}
+  .form-row{grid-template-columns:1fr}
+  .phone-shell{width:220px;height:450px}
+  .ticker-track{will-change:transform;transform:translateZ(0);}
+  .plan-card,.pati-card{box-shadow:0 2px 8px rgba(0,0,0,.12)!important;}
+  section,div{max-width:100%;box-sizing:border-box;}
+  /* Footer móvil */
+  .site-footer{padding:48px 20px 0;}
+  .footer-inner{grid-template-columns:1fr;gap:40px;}
+  .footer-cols{grid-template-columns:1fr;gap:24px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:12px;}
+  .footer-tagline{max-width:100%;}
+}
+/* ── BRAND LOGO ── */
+.brand-logo-img{width:200px;height:52px;object-fit:cover;object-position:center 50%;display:block;}
+</style>
+</head>
+<body>
+
+<!-- HEADER: ticker + nav -->
+<div class="page-header">
+<div class="ticker">
+  <div class="ticker-pill"><div class="tdot"></div>En vivo</div>
+  <div class="ticker-scroll"><div class="ticker-track" id="ticker-track"></div></div>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img"></a>
+    <div class="nav-links">
+      <a href="personas.html" class="nav-link">Individuo</a>
+      <a href="empresas.html" class="nav-link">Empresa</a>
+    </div>
+    <div class="nav-right">
+      <a href="agenda.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="15" r="1.5" fill="currentColor"></circle></svg>
+        Agenda asesoría
+      </a>
+      <button class="ham-btn" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="toggleMenu()">✕</button>
+  <a href="personas.html" onclick="toggleMenu()">Individuo</a>
+  <a href="empresas.html" onclick="toggleMenu()">Empresa</a>
+  <a href="agenda.html" class="mob-cta" onclick="toggleMenu()">Agenda asesoría →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content reveal">
+    <div class="hero-badge">Asesoría Cripto Personal</div>
+    <h1 class="hero-title">Aprende a operar<br/>en cripto o<br/><span>deja tu capital</span><br/>trabajando</h1>
+    <p class="hero-subtitle">Ya sea que quieras aprender a invertir por tu cuenta o simplemente hacer crecer tu capital sin complicaciones, tenemos un plan diseñado para ti. Con respaldo de expertos desde Chile para toda LATAM.</p>
+    <div class="hero-stats">
+      <div class="h-stat">
+        <span class="h-stat-n" id="c-rendimiento">0</span>
+        <span class="h-stat-l">Clientes<br/>asesorados</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-stat-n" id="c-clientes">0</span>
+        <span class="h-stat-l">USD bajo<br/>asesoría</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-stat-n" id="c-aum">0</span>
+        <span class="h-stat-l">Años en el<br/>ecosistema cripto</span>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="dca.html" class="btn-primary">Estrategia DCA →</a>
+      <a href="mercado.html" class="btn-outline">Mercado en Vivo</a>
+    </div>
+  </div>
+
+  <div class="hero-right reveal">
+    <div class="phone-wrap">
+      <div class="phone-glow"></div>
+      <!-- Floating badges -->
+      <div class="float-badge tl">
+        <div class="fb-label">BTC/USD hoy</div>
+        <div class="fb-value up">+4.72%</div>
+      </div>
+      <div class="float-badge br">
+        <div class="fb-label">Sharpe ratio</div>
+        <div class="fb-value">2.34</div>
+      </div>
+      <div class="float-badge bl">
+        <div class="fb-label">Drawdown máx.</div>
+        <div class="fb-value dn">-12.4%</div>
+      </div>
+
+      <div class="phone-shell">
+        <div class="phone-screen">
+          <!-- Phone header -->
+          <div class="phone-header">
+            <div class="phone-header-top">
+              <span class="phone-logo">MCC</span>
+              <span class="phone-time" id="phone-time">09:41</span>
+            </div>
+            <div class="phone-total-label">Portafolio total</div>
+            <div class="phone-total-value" id="phone-total">$24,318.40</div>
+            <div class="phone-total-chg" id="phone-chg">▲ +18.7% este mes</div>
+          </div>
+          <!-- Mini chart inside phone -->
+          <div class="phone-mini-chart">
+            <canvas id="mini-chart"></canvas>
+          </div>
+          <!-- Holdings -->
+          <div class="phone-holdings">
+            <div class="phone-holdings-title">Posiciones</div>
+            <div class="ph-row">
+              <div class="ph-left"><div class="ph-dot" style="background:#f7931a"></div><div><div class="ph-sym">BTC</div><div class="ph-name">Bitcoin</div></div></div>
+              <div class="ph-right"><div class="ph-val">$14,291</div><div class="ph-pct up">+22.4%</div></div>
+            </div>
+            <div class="ph-row">
+              <div class="ph-left"><div class="ph-dot" style="background:#627eea"></div><div><div class="ph-sym">ETH</div><div class="ph-name">Ethereum</div></div></div>
+              <div class="ph-right"><div class="ph-val">$6,430</div><div class="ph-pct up">+18.1%</div></div>
+            </div>
+            <div class="ph-row">
+              <div class="ph-left"><div class="ph-dot" style="background:#9945ff"></div><div><div class="ph-sym">SOL</div><div class="ph-name">Solana</div></div></div>
+              <div class="ph-right"><div class="ph-val">$2,814</div><div class="ph-pct up">+31.6%</div></div>
+            </div>
+            <div class="ph-row">
+              <div class="ph-left"><div class="ph-dot" style="background:#0052FF"></div><div><div class="ph-sym">USDC</div><div class="ph-name">Reserva</div></div></div>
+              <div class="ph-right"><div class="ph-val">$783</div><div class="ph-pct" style="color:var(--txt)">Estable</div></div>
+            </div>
+          </div>
+          <!-- Footer nav -->
+          <div class="phone-footer">
+            <div class="pf-btn active"><span class="pf-icon">◎</span>Portfolio</div>
+            <div class="pf-btn"><span class="pf-icon">📈</span>Mercado</div>
+            <div class="pf-btn"><span class="pf-icon">⚙</span>Config</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHART SECTION -->
+<section id="chart-section">
+  <div class="reveal">
+    <div class="section-label">Análisis de mercado</div>
+    <h2 class="section-title">Monitoreo en<br/>tiempo real</h2>
+    <p class="section-sub">Accede a la misma visión de mercado que usamos para gestionar tu portafolio. Gráficos de velas, volumen, y análisis técnico avanzado.</p>
+  </div>
+  <div class="chart-container reveal">
+    <div class="chart-toolbar">
+      <div class="chart-asset-tabs">
+        <button class="chart-asset-btn active" onclick="switchAsset('BTC',this)">BTC</button>
+        <button class="chart-asset-btn" onclick="switchAsset('ETH',this)">ETH</button>
+        <button class="chart-asset-btn" onclick="switchAsset('SOL',this)">SOL</button>
+        <button class="chart-asset-btn" onclick="switchAsset('PORT',this)">Portfolio</button>
+      </div>
+      <div class="chart-period-tabs">
+        <button class="chart-period-btn" onclick="switchPeriod('1W',this)">1S</button>
+        <button class="chart-period-btn active" onclick="switchPeriod('1M',this)">1M</button>
+        <button class="chart-period-btn" onclick="switchPeriod('3M',this)">3M</button>
+        <button class="chart-period-btn" onclick="switchPeriod('6M',this)">6M</button>
+        <button class="chart-period-btn" onclick="switchPeriod('1Y',this)">1A</button>
+      </div>
+    </div>
+    <div class="chart-info">
+      <div class="chart-price" id="chart-price">$67,420</div>
+      <div class="chart-change up" id="chart-change">+4.72%</div>
+    </div>
+    <div class="chart-ohlc">
+      <div class="ohlc-item">A: <span id="ohlc-o">$65,200</span></div>
+      <div class="ohlc-item">M: <span id="ohlc-h">$68,900</span></div>
+      <div class="ohlc-item">m: <span id="ohlc-l">$64,100</span></div>
+      <div class="ohlc-item">C: <span id="ohlc-c">$67,420</span></div>
+      <div class="ohlc-item">Vol: <span id="ohlc-v">24.3B</span></div>
+    </div>
+    <canvas id="main-chart"></canvas>
+    <div class="chart-volume-label">Volumen — indicativo</div>
+  </div>
+</section>
+
+<!-- PARA TI SI -->
+<section id="para-ti">
+  <div class="reveal" style="text-align:center;margin-bottom:0">
+    <div class="section-label">¿Esta asesoría es para ti?</div>
+    <h2 class="section-title">Encuentra tu<br/>punto de partida</h2>
+    <p class="section-sub" style="margin:0 auto">No importa si eres nuevo en cripto o ya tienes capital. Tenemos un camino para los dos.</p>
+  </div>
+  <div class="pati-grid">
+
+    <div class="pati-card reveal">
+      <span class="pati-icon">🎓</span>
+      <h3>Quiero aprender<br/>a operar</h3>
+      <div class="pati-tags">
+        <span>Soy nuevo en cripto</span>
+        <span>Quiero operar yo mismo</span>
+        <span>No sé qué criptomonedas comprar</span>
+        <span>Tengo miedo de cometer errores</span>
+      </div>
+      <div class="pati-divider"></div>
+      <ul class="pati-list">
+        <li>Asesorías 1:1 adaptadas a tu nivel — principiante o avanzado</li>
+        <li>Aprende a usar exchanges y wallets con seguridad real</li>
+        <li>Estrategia DCA paso a paso para comprar sin estrés</li>
+        <li>Acceso a nuestro GPT cripto las 24h para resolver dudas</li>
+        <li>Análisis semanal para tomar decisiones con información</li>
+      </ul>
+    </div>
+
+    <div class="pati-card pati-card-right reveal">
+      <span class="pati-icon">📈</span>
+      <h3>Quiero que mi<br/>capital trabaje solo</h3>
+      <div class="pati-tags">
+        <span>Tengo capital pero poco tiempo</span>
+        <span>Prefiero delegar la gestión</span>
+        <span>Quiero diversificar sin complicaciones</span>
+        <span>Busco rentabilidad sin pantallas</span>
+      </div>
+      <div class="pati-divider"></div>
+      <ul class="pati-list">
+        <li>Portafolio diseñado según tu perfil de riesgo e inversión</li>
+        <li>DCA automático configurado y monitoreado por expertos</li>
+        <li>Rebalanceo trimestral activo para mantener tu estrategia</li>
+        <li>Análisis semanal directo a tu correo con recomendaciones</li>
+        <li>Reuniones de revisión para que siempre estés al tanto</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="reveal">
+    <div class="section-label">Cómo funciona</div>
+    <h2 class="section-title">Empieza en<br/>4 pasos simples</h2>
+  </div>
+  <div class="proceso-steps">
+    <div class="paso reveal">
+      <div class="paso-num">1</div>
+      <h3>Primera consulta</h3>
+      <p>Conversamos sobre tu situación actual, capital disponible, objetivos y nivel de conocimiento cripto.</p>
+      <span class="paso-tag">15 min · gratis</span>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">2</div>
+      <h3>Plan a tu medida</h3>
+      <p>Diseñamos tu portafolio y estrategia DCA según tu perfil. Elegimos las criptomonedas correctas para ti.</p>
+      <span class="paso-tag">48 horas</span>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">3</div>
+      <h3>Onboarding guiado</h3>
+      <p>Te acompañamos en tus primeras operaciones: apertura de cuentas, wallets, primera compra.</p>
+      <span class="paso-tag">Día 1</span>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">4</div>
+      <h3>Asesorías y seguimiento</h3>
+      <p>Sesiones regulares, análisis semanal por correo y alertas de mercado. Nunca estás solo en el proceso.</p>
+      <span class="paso-tag">Continuo</span>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section id="planes" style="background:var(--navy);">
+  <div class="reveal" style="text-align:center">
+    <div class="section-label">Planes personales</div>
+    <h2 class="section-title">Elige tu frecuencia<br/>de asesoría</h2>
+    <p class="section-sub" style="margin:0 auto 56px">Sin contratos a largo plazo. Sin comisiones ocultas. Cancela cuando quieras.</p>
+  </div>
+  <div class="planes-grid">
+
+    <!-- STARTER -->
+    <div class="plan-card reveal">
+      <div class="plan-sessions">
+        <span class="sess-dot active"></span>
+        <span class="sess-dot"></span>
+        <span class="sess-dot"></span>
+        <span class="sess-dot"></span>
+      </div>
+      <div class="plan-sessions-label">1 sesión / mes</div>
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">
+        <span class="plan-price-cur">USD</span>
+        <span class="plan-price-n">97</span>
+        <span class="plan-price-s">/mes</span>
+      </div>
+      <p class="plan-desc">Para quienes buscan entrar al mundo cripto con criterio, eligiendo los activos correctos desde el inicio.</p>
+      <ul class="plan-features">
+        <li>1 asesoría mensual de 1h30 · nivel principiante o avanzado</li>
+        <li>Acceso al GPT de Madrid Crypto Capital</li>
+        <li>Análisis semanal por correo con recomendaciones</li>
+        <li>Estrategia DCA básica personalizada</li>
+        <li>Portafolio según tu perfil de riesgo</li>
+      </ul>
+      <a href="agenda.html?tipo=persona" class="plan-cta outline">Agendar asesoría</a>
+    </div>
+
+    <!-- PRO -->
+    <div class="plan-card featured reveal">
+      <div class="plan-sessions">
+        <span class="sess-dot active"></span>
+        <span class="sess-dot"></span>
+        <span class="sess-dot active"></span>
+        <span class="sess-dot"></span>
+      </div>
+      <div class="plan-sessions-label">2 sesiones / mes · quincenal</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">
+        <span class="plan-price-cur">USD</span>
+        <span class="plan-price-n">247</span>
+        <span class="plan-price-s">/mes</span>
+      </div>
+      <p class="plan-desc">Para quienes quieren pasar al siguiente nivel con estrategia activa y seguimiento real. Capital recomendado: +USD 2.500.</p>
+      <ul class="plan-features">
+        <li>2 asesorías quincenales de 1h30 · principiante o avanzado</li>
+        <li>Acceso al GPT de Madrid Crypto Capital</li>
+        <li>Análisis semanal por correo con recomendaciones</li>
+        <li>Estrategia DCA avanzada en automático</li>
+        <li>Portafolio según perfil de riesgo + rebalanceo trimestral</li>
+        <li>Acceso a información sobre ICOs y presales</li>
+      </ul>
+      <a href="agenda.html?tipo=persona" class="plan-cta primary">Agendar asesoría</a>
+    </div>
+
+    <!-- VIP -->
+    <div class="plan-card reveal">
+      <div class="plan-sessions">
+        <span class="sess-dot active"></span>
+        <span class="sess-dot active"></span>
+        <span class="sess-dot active"></span>
+        <span class="sess-dot active"></span>
+      </div>
+      <div class="plan-sessions-label">4 sesiones / mes · 1 por semana</div>
+      <div class="plan-name">VIP</div>
+      <div class="plan-price">
+        <span class="plan-price-cur">USD</span>
+        <span class="plan-price-n">497</span>
+        <span class="plan-price-s">/mes</span>
+      </div>
+      <p class="plan-desc">Seguimiento semanal con wallet fría institucional y optimización fiscal. Capital recomendado: +USD 10.000.</p>
+      <ul class="plan-features">
+        <li>4 asesorías de 1h30 · una por semana</li>
+        <li>Acceso al GPT de Madrid Crypto Capital</li>
+        <li>Análisis semanal Premium por correo</li>
+        <li>Estrategia DCA avanzada en automático</li>
+        <li>Portafolio según perfil de riesgo + rebalanceo trimestral</li>
+        <li>Acceso a información sobre ICOs y presales</li>
+        <li>Configuración de wallet fría con seguridad institucional</li>
+        <li>Optimización fiscal para ganancias en criptomonedas</li>
+      </ul>
+      <a href="agenda.html?tipo=persona" class="plan-cta outline">Agendar asesoría</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="reveal" style="text-align:center">
+    <div class="section-label">Clientes</div>
+    <h2 class="section-title">Resultados reales</h2>
+  </div>
+  <div class="test-grid">
+    <div class="test-card reveal">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"Llevaba dos años perdiendo dinero siguiendo influencers de Twitter. Con MCC construimos un portafolio serio y en 6 meses mi capital creció más de lo que perdí en esos dos años."</p>
+      <div class="test-author">
+        <div class="test-avatar">CM</div>
+        <div>
+          <div class="test-name">Cristóbal M.</div>
+          <div class="test-role">Ingeniero comercial, Santiago</div>
+        </div>
+      </div>
+      <div class="test-return">
+        <span class="test-return-l">Rendimiento 6M</span>
+        <span class="test-return-n">+84.3%</span>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"Lo que más valoro es la gestión del riesgo. Cuando el mercado cayó 30%, mi portafolio solo bajó 8%. Esa tranquilidad no tiene precio."</p>
+      <div class="test-author">
+        <div class="test-avatar">AV</div>
+        <div>
+          <div class="test-name">Alejandra V.</div>
+          <div class="test-role">Médico, Providencia</div>
+        </div>
+      </div>
+      <div class="test-return">
+        <span class="test-return-l">Drawdown protegido</span>
+        <span class="test-return-n">-8% vs -30% mkt</span>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"Empecé con el plan Starter y en 3 meses migré al Pro. Los reportes son muy claros, sé exactamente qué tengo y por qué. Nunca había tenido tanta claridad sobre mis inversiones."</p>
+      <div class="test-author">
+        <div class="test-avatar">FR</div>
+        <div>
+          <div class="test-name">Felipe R.</div>
+          <div class="test-role">Emprendedor, Vitacura</div>
+        </div>
+      </div>
+      <div class="test-return">
+        <span class="test-return-l">Rendimiento anual</span>
+        <span class="test-return-n">+127%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="cta-inner">
+    <div class="reveal">
+      <div class="section-label">Empieza hoy</div>
+      <h2 class="section-title">Agenda tu llamada<br/>de diagnóstico</h2>
+      <p class="section-sub" style="margin:0 auto">15 minutos. Sin costo. Sin compromiso. Con un asesor senior que analizará tu situación y diseñará una estrategia inicial.</p>
+    </div>
+    <div class="cta-form reveal" style="max-width:560px;margin:0 auto;background:var(--off);border:1px solid var(--border);border-radius:20px;padding:36px;">
+      <!-- Pasos del proceso -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#0052FF;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#fff;">Tu situación con cripto</div>
+            <div style="font-size:12px;color:var(--txt);opacity:.6;">Portafolio actual, objetivos y nivel de experiencia</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:18px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,82,255,.15);border:1px solid rgba(0,82,255,.35);color:#6699ff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#fff;">Tus datos de contacto</div>
+            <div style="font-size:12px;color:var(--txt);opacity:.6;">Nombre, email y teléfono</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:18px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,82,255,.15);border:1px solid rgba(0,82,255,.35);color:#6699ff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#fff;">Elige fecha y hora</div>
+            <div style="font-size:12px;color:var(--txt);opacity:.6;">Disponibilidad real · Lunes a viernes · Hora Chile</div>
+          </div>
+        </div>
+        <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-left:18px;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);color:#22c55e;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#22c55e;">Link de Google Meet al instante</div>
+            <div style="font-size:12px;color:var(--txt);opacity:.6;">Invitación a tu correo · 15 minutos · Sin costo</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="agenda.html?tipo=persona" class="form-submit" style="text-decoration:none;display:flex;justify-content:center;align-items:center;gap:10px;background:#0052FF;color:#fff;border-radius:12px;padding:16px 28px;font-size:15px;font-weight:700;">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="2" fill="currentColor"/></svg>
+        Ver horarios disponibles
+      </a>
+      <p class="form-note" style="text-align:center;margin-top:14px;">🔒 Confirmación inmediata · Recordatorio automático por email</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">
+        <img src="logo.png" alt="Madrid Crypto Capital" class="brand-logo-img">
+      </a>
+      <p class="footer-tagline">Tu puerta al mundo de las criptomonedas. Asesoría profesional desde Chile para toda Latinoamérica y el mundo.</p>
+      <div class="footer-social">
+        <a href="https://x.com/MadridCrypto" target="_blank" class="social-btn" aria-label="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/company/madrid-crypto-capital" target="_blank" class="social-btn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://facebook.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://instagram.com/madridcryptocapital" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@MadridCryptoCapital" target="_blank" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios Gratuitos</div>
+        <a href="dca.html">Calculadora Bitcoin DCA</a>
+        <a href="mercado.html">Mercado en Vivo</a>
+        <a href="glosario.html">Glosario Cripto</a>
+        <a href="fear-greed.html">Índice de Codicia y Miedo</a>
+        <a href="https://chatgpt.com/g/g-69c6acf9bf3c8191b7ee6dfaf076032c-asesor-digital-madrid-crypto-capital" target="_blank" rel="noopener">Asesor IA gratuito</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Empresa</div>
+        <a href="personas.html">Individuo</a>
+        <a href="empresas.html">Empresa</a>
+        <a href="agenda.html">Agendar asesoría</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Política de cookies</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:Contacto@madridcryptocapital.com">Contacto@madridcryptocapital.com</a>
+        <a href="tel:+56944717233">+56 9 4471 7233</a>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;line-height:1.6;">Manquehue Sur 350, of. 201<br>Santiago, Chile 🇨🇱</p>
+        <a href="https://wa.me/56944717233" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2021 Madrid Crypto Capital · Todos los derechos reservados</p>
+    <div class="footer-bottom-links">
+      <a href="politica-privacidad.html">Política de privacidad</a>
+      <a href="politica-cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── MOBILE MENU ───
+function toggleMenu(){document.getElementById('mob-menu').classList.toggle('open');}
+
+// ─── PHONE CLOCK ───
+function updateClock(){
+  var d=new Date();
+  var h=d.getHours().toString().padStart(2,'0');
+  var m=d.getMinutes().toString().padStart(2,'0');
+  var el=document.getElementById('phone-time');
+  if(el) el.textContent=h+':'+m;
+}
+updateClock();
+setInterval(updateClock,60000);
+
+// ─── TICKER ───
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  function buildTicker(prices){
+    var items=COINS.map(function(c){
+      var v=prices[c.sym]||{};
+      var price=fmt(v.price||0);
+      var ch=v.ch||0;
+      var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+      return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+        +'<span class="t-prc">'+price+'</span>'
+        +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+    }).join('');
+    document.getElementById('ticker-track').innerHTML=items+items;
+  }
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};});
+        buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+
+// ─── HERO CANVAS ───
+(function(){
+  if(window.innerWidth<=768)return;
+  var canvas=document.getElementById('hero-canvas');
+  var ctx=canvas.getContext('2d');
+  var W,H,nodes=[];
+  var mouse={x:-999,y:-999};
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  window.addEventListener('resize',function(){resize();init();});
+  document.addEventListener('mousemove',function(e){
+    var r=canvas.getBoundingClientRect();
+    mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+  });
+  function init(){
+    nodes=[];
+    var n=Math.floor(W*H/14000);
+    for(var i=0;i<n;i++){
+      nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+1});
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<nodes.length;i++){
+      var a=nodes[i];
+      a.x+=a.vx;a.y+=a.vy;
+      if(a.x<0||a.x>W)a.vx*=-1;
+      if(a.y<0||a.y>H)a.vy*=-1;
+      // mouse attract
+      var dx=mouse.x-a.x,dy=mouse.y-a.y,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<150){a.x+=dx*.006;a.y+=dy*.006;}
+      ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,82,255,.7)';ctx.fill();
+    }
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d<120){
+          ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle='rgba(0,82,255,'+(1-d/120)*.15+')';
+          ctx.lineWidth=.5;ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();init();draw();
+})();
+
+// ─── MINI CHART (phone) ───
+(function(){
+  var canvas=document.getElementById('mini-chart');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=canvas.offsetHeight*2;ctx.scale(2,2);}
+  function draw(){
+    var W=canvas.offsetWidth,H=canvas.offsetHeight;
+    ctx.clearRect(0,0,W,H);
+    var pts=[0.42,0.38,0.45,0.41,0.50,0.47,0.55,0.52,0.60,0.56,0.62,0.70,0.65,0.72,0.78,0.74,0.82,0.88,0.85,0.92,0.89,0.95,1.0];
+    ctx.beginPath();
+    pts.forEach(function(v,i){
+      var x=i/(pts.length-1)*W,y=(1-v)*H*0.9+H*0.05;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle='#0052FF';ctx.lineWidth=1.5;ctx.stroke();
+    // fill
+    ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+    ctx.fillStyle='rgba(0,82,255,.12)';ctx.fill();
+  }
+  resize();draw();
+  window.addEventListener('resize',function(){resize();draw();});
+})();
+
+// ─── CANDLESTICK CHART ───
+var currentAsset='BTC';
+var currentPeriod='1M';
+
+var ASSET_DATA={
+  BTC:{price:'67,420',change:'+4.72%',up:true,o:'65,200',h:'68,900',l:'64,100',c:'67,420',vol:'24.3B'},
+  ETH:{price:'3,541',change:'+3.18%',up:true,o:'3,420',h:'3,620',l:'3,380',c:'3,541',vol:'12.8B'},
+  SOL:{price:'182.4',change:'+6.91%',up:true,o:'170.5',h:'187.2',l:'168.0',c:'182.4',vol:'4.1B'},
+  PORT:{price:'24,318',change:'+18.7%',up:true,o:'20,500',h:'25,100',l:'19,800',c:'24,318',vol:'—'},
+};
+
+function generateCandles(n,startPrice,volatility,trend){
+  var candles=[];
+  var price=startPrice;
+  for(var i=0;i<n;i++){
+    var open=price;
+    var change=(Math.random()-.48)*volatility+trend;
+    var close=open+change;
+    var wick=Math.abs(change)*Math.random()*1.5;
+    var high=Math.max(open,close)+wick;
+    var low=Math.min(open,close)-wick*0.7;
+    var vol=Math.random()*0.8+0.3;
+    candles.push({open:open,close:close,high:high,low:low,vol:vol});
+    price=close;
+  }
+  return candles;
+}
+
+var PERIOD_CANDLES={
+  '1W':generateCandles(7,64000,800,50),
+  '1M':generateCandles(30,60000,1200,80),
+  '3M':generateCandles(90,50000,1500,90),
+  '6M':generateCandles(180,38000,2000,100),
+  '1Y':generateCandles(365,30000,2500,110),
+};
+
+function drawMainChart(){
+  var canvas=document.getElementById('main-chart');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var rect=canvas.getBoundingClientRect();
+  canvas.width=rect.width*dpr;
+  canvas.height=rect.height*dpr;
+  ctx.scale(dpr,dpr);
+  var W=rect.width,H=rect.height;
+  var chartH=H*0.75,volH=H*0.18,gap=H*0.07;
+
+  var candles=PERIOD_CANDLES[currentPeriod];
+  var minP=Infinity,maxP=-Infinity;
+  candles.forEach(function(c){minP=Math.min(minP,c.low);maxP=Math.max(maxP,c.high);});
+  var range=maxP-minP||1;
+
+  var padL=8,padR=8;
+  var cW=Math.max(2,(W-padL-padR)/candles.length);
+  var gapW=Math.max(0.5,cW*0.15);
+  var bodyW=cW-gapW;
+
+  // Grid lines
+  ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+  for(var i=0;i<5;i++){
+    var y=chartH*(i/4);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke();
+  }
+
+  // Candles
+  candles.forEach(function(c,i){
+    var x=padL+i*cW;
+    var isUp=c.close>=c.open;
+    var color=isUp?'#0052FF':'#e05252';
+
+    var oY=chartH-(c.open-minP)/range*chartH;
+    var cY=chartH-(c.close-minP)/range*chartH;
+    var hY=chartH-(c.high-minP)/range*chartH;
+    var lY=chartH-(c.low-minP)/range*chartH;
+
+    // Wick
+    ctx.strokeStyle=color;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x+bodyW/2,hY);ctx.lineTo(x+bodyW/2,lY);ctx.stroke();
+
+    // Body
+    ctx.fillStyle=color;
+    var bodyTop=Math.min(oY,cY);
+    var bodyHeight=Math.max(Math.abs(cY-oY),1);
+    ctx.fillRect(x,bodyTop,bodyW,bodyHeight);
+
+    // Volume
+    var volBarH=c.vol*volH;
+    ctx.fillStyle=isUp?'rgba(0,82,255,.25)':'rgba(224,82,82,.25)';
+    ctx.fillRect(x,chartH+gap+(volH-volBarH),bodyW,volBarH);
+  });
+
+  // Moving average (simple 20-period)
+  if(candles.length>=20){
+    ctx.strokeStyle='rgba(255,200,50,.6)';ctx.lineWidth=1.5;ctx.beginPath();
+    for(var i=19;i<candles.length;i++){
+      var sum=0;
+      for(var k=i-19;k<=i;k++) sum+=(candles[k].open+candles[k].close)/2;
+      var avg=sum/20;
+      var y=chartH-(avg-minP)/range*chartH;
+      var x=padL+i*cW+bodyW/2;
+      i===19?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+}
+
+function switchAsset(asset,btn){
+  currentAsset=asset;
+  document.querySelectorAll('.chart-asset-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var d=ASSET_DATA[asset];
+  document.getElementById('chart-price').textContent='$'+d.price;
+  var chgEl=document.getElementById('chart-change');
+  chgEl.textContent=d.change;
+  chgEl.className='chart-change '+(d.up?'up':'dn');
+  document.getElementById('ohlc-o').textContent='$'+d.o;
+  document.getElementById('ohlc-h').textContent='$'+d.h;
+  document.getElementById('ohlc-l').textContent='$'+d.l;
+  document.getElementById('ohlc-c').textContent='$'+d.c;
+  document.getElementById('ohlc-v').textContent=d.vol;
+  // Regenerate candles for asset
+  var base={BTC:64000,ETH:3200,SOL:160,PORT:20000}[asset]||64000;
+  var vol={BTC:1200,ETH:200,SOL:8,PORT:1500}[asset]||1200;
+  ['1W','1M','3M','6M','1Y'].forEach(function(p,pi){
+    PERIOD_CANDLES[p]=generateCandles([7,30,90,180,365][pi],base,vol,vol*0.04);
+  });
+  drawMainChart();
+}
+
+function switchPeriod(period,btn){
+  currentPeriod=period;
+  document.querySelectorAll('.chart-period-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  drawMainChart();
+}
+
+// ─── COUNTERS ───
+function animateCounter(el,target,suffix,decimals){
+  var start=0,duration=1800,startTime=null;
+  function step(t){
+    if(!startTime)startTime=t;
+    var progress=Math.min((t-startTime)/duration,1);
+    var eased=1-Math.pow(1-progress,3);
+    var val=start+(target-start)*eased;
+    el.textContent=(decimals?val.toFixed(1):Math.floor(val))+suffix;
+    if(progress<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ─── INTERSECTION OBSERVER ───
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      if(e.target.id==='hero'){
+        setTimeout(function(){
+          animateCounter(document.getElementById('c-rendimiento'),1000,'+');
+          animateCounter(document.getElementById('c-clientes'),15,'M+ USD');
+          animateCounter(document.getElementById('c-aum'),9,' años');
+        },300);
+      }
+    }
+  });
+},{threshold:0.12});
+
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+document.getElementById('hero') && io.observe(document.getElementById('hero'));
+
+// ─── CHART RESIZE ───
+window.addEventListener('resize',drawMainChart);
+
+// ─── INIT ───
+drawMainChart();
+
+// Animate portfolio value on phone
+(function(){
+  var base=24318.40;
+  setInterval(function(){
+    var delta=(Math.random()-.45)*30;
+    base+=delta;
+    var el=document.getElementById('phone-total');
+    if(el) el.textContent='$'+base.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  },3000);
+})();
+</script>
+<!-- ═══ COOKIE CONSENT BANNER ═══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 48px);max-width:760px;background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,.5);align-items:center;gap:20px;flex-wrap:wrap;">
+  <p style="flex:1;min-width:200px;font-size:13px;color:rgba(255,255,255,.7);margin:0;line-height:1.6;">Usamos cookies para analizar el tráfico y mejorar tu experiencia. Consulta nuestra <a href="politica-cookies.html" style="color:#4d8eff;text-decoration:none;">Política de Cookies</a> y <a href="politica-privacidad.html" style="color:#4d8eff;text-decoration:none;">Privacidad</a>.</p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 18px;font-size:13px;cursor:pointer;">Rechazar</button>
+    <button onclick="cookieAccept()" style="background:#4d8eff;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('cc_madrid'))return;
+  var b=document.getElementById('cookie-banner');
+  if(b){setTimeout(function(){b.style.display='flex';},800);}
+})();
+function cookieAccept(){localStorage.setItem('cc_madrid','1');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cc_madrid','0');document.getElementById('cookie-banner').style.display='none';}
+
+
+// ─── TICKER EN VIVO (Binance) ───────────────────────────────────────────────
+(function(){
+  var COINS=[
+    {s:'BTC',sym:'BTCUSDT'},{s:'ETH',sym:'ETHUSDT'},{s:'SOL',sym:'SOLUSDT'},
+    {s:'XRP',sym:'XRPUSDT'},{s:'BNB',sym:'BNBUSDT'},{s:'ADA',sym:'ADAUSDT'},
+    {s:'DOT',sym:'DOTUSDT'},{s:'LINK',sym:'LINKUSDT'}
+  ];
+  function fmt(n){
+    if(!n&&n!==0)return '---';
+    return n>=1000?'$'+Math.round(n).toLocaleString('en-US'):n>=1?'$'+n.toFixed(2):'$'+n.toFixed(4);
+  }
+  window._buildTicker=function(prices){
+    var track=document.getElementById('ticker-track');
+    if(!track)return;
+    if(track.children.length===0){
+      // Primera carga: construir HTML
+      var items=COINS.map(function(c){
+        var v=prices[c.sym]||{};
+        var price=v.price?fmt(v.price):'---';
+        var ch=v.ch||0;
+        var chgStr=v.price?((ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%'):'---';
+        return '<span class="t-item"><span class="t-sym">'+c.s+'</span>'
+          +'<span class="t-prc">'+price+'</span>'
+          +'<span class="t-chg '+(ch>=0?'up':'dn')+'">'+chgStr+'</span></span>';
+      }).join('');
+      track.innerHTML=items+items;
+    } else {
+      // Actualización: solo cambiar texto, sin tocar la animación
+      var prcs=track.querySelectorAll('.t-prc');
+      var chgs=track.querySelectorAll('.t-chg');
+      COINS.forEach(function(c,i){
+        var v=prices[c.sym];
+        if(!v||!v.price)return;
+        var price=fmt(v.price);
+        var ch=v.ch||0;
+        var chgStr=(ch>=0?'▲':'▼')+Math.abs(ch).toFixed(2)+'%';
+        var cls='t-chg '+(ch>=0?'up':'dn');
+        [i, i+COINS.length].forEach(function(idx){
+          if(prcs[idx])prcs[idx].textContent=price;
+          if(chgs[idx]){chgs[idx].textContent=chgStr;chgs[idx].className=cls;}
+        });
+      });
+    }
+  };
+  function fetchTicker(){
+    var syms=COINS.map(function(c){return '"'+c.sym+'"';}).join(',');
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']')
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        var prices={};
+        arr.forEach(function(t){
+          prices[t.symbol]={price:parseFloat(t.lastPrice),ch:parseFloat(t.priceChangePercent)};
+        });
+        window._buildTicker(prices);
+      }).catch(function(){});
+  }
+  fetchTicker();
+  setInterval(fetchTicker,30000);
+})();
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+</body>
+</html>
