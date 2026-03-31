@@ -512,7 +512,7 @@
           <span class="conf-ico">📧</span>
           <div class="conf-info">
             <strong id="conf-email"></strong>
-            <span>Te contactaremos para confirmar</span>
+            <span>Recibirás invitación de Google Meet en tu correo</span>
           </div>
         </div>
       </div>
@@ -948,26 +948,23 @@ async function confirmBooking() {
   btn.disabled    = true;
 
   try {
-    const body = [
-      'form-name=booking',
-      'name='        + encodeURIComponent(bk.name        || ''),
-      'email='       + encodeURIComponent(bk.email       || ''),
-      'phone='       + encodeURIComponent(bk.phone       || ''),
-      'date='        + encodeURIComponent(bk.date        || ''),
-      'time='        + encodeURIComponent(bk.time        || ''),
-      'clientType='  + encodeURIComponent(bk.clientType  || ''),
-      'situation='   + encodeURIComponent(bk.situation   || ''),
-      'goals='       + encodeURIComponent((bk.goals       || []).join(', ')),
-      'experience='  + encodeURIComponent(bk.experience  || ''),
-      'projectType=' + encodeURIComponent((bk.projectType || []).join(', ')),
-      'budget='      + encodeURIComponent(bk.budget      || ''),
-      'companyName=' + encodeURIComponent(bk.companyName || ''),
-    ].join('&');
-
-    await fetch('/', {
+    await fetch('/.netlify/functions/create-booking', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body:    body,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:        bk.name        || '',
+        email:       bk.email       || '',
+        phone:       bk.phone       || '',
+        date:        bk.date        || '',
+        time:        bk.time        || '',
+        clientType:  bk.clientType  || '',
+        situation:   bk.situation   || '',
+        goals:       (bk.goals       || []).join(', '),
+        experience:  bk.experience  || '',
+        projectType: (bk.projectType || []).join(', '),
+        budget:      bk.budget      || '',
+        companyName: bk.companyName || '',
+      }),
     });
 
     // Mostrar confirmación
